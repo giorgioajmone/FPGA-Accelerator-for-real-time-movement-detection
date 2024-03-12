@@ -30,6 +30,12 @@ int main () {
   while(1) {
     uint32_t * gray = (uint32_t *) &grayscale[0];
     takeSingleImageBlocking((uint32_t) &rgb565[0]);
+    
+    //reset counters
+    asm volatile ("l.nios_rrr r0, r0, %[in2], 0x3E" :: [in2] "r" ((uint32_t)7<<4));
+    //start counting
+    asm volatile ("l.nios_rrr r0, r0, %[in2], 0x3E" :: [in2] "r" ((uint32_t)7));
+
     for (int line = 0; line < camParams.nrOfLinesPerImage; line++) {
       for (int pixel = 0; pixel < camParams.nrOfPixelsPerLine; pixel++) {
         uint16_t rgb = swap_u16(rgb565[line*camParams.nrOfPixelsPerLine+pixel]);
@@ -40,5 +46,12 @@ int main () {
         grayscale[line*camParams.nrOfPixelsPerLine+pixel] = gray;
       }
     }
+    //read counters
+    asm volatile ("l.nios_rrr %[out1], %[in1], r0, 0x3E" : [out1] "=r" (cycles) : [in1] "r" ((uint32_t)0)) ;
+    printf("Execution cycles: %d\n", cycles);
+    asm volatile ("l.nios_rrr %[out1], %[in1], r0, 0x3E" : [out1] "=r" (stall) : [in1] "r" ((uint32_t)1)) ;
+    printf("Stall cycles: %d\n", stall);
+    asm volatile ("l.nios_rrr %[out1], %[in1], r0, 0x3E" : [out1] "=r" (idle) : [in1] "r" ((uint32_t)2)) ;
+    printf("Bus idle cycles: %d\n", idle);
   }
 }
