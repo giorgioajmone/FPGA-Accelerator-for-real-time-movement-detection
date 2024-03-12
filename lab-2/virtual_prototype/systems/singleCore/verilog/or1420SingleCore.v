@@ -325,15 +325,21 @@ module or1420SingleCore ( input wire         clock12MHz,
   wire        s_cpu1DataValid;
   wire [7:0]  s_cpu1BurstSize;
   wire        s_spm1Irq;
+
+  //Hardware counters
+
+  wire        s_counterDone;
+  wire        s_counterResult;
+  wire        s_cpu1IsStalled;
   
-  assign s_cpu1CiDone = s_hdmiDone | s_swapByteDone | s_flashDone | s_cpuFreqDone | s_i2cCiDone | s_delayCiDone | s_camCiDone;
-  assign s_cpu1CiResult = s_hdmiResult | s_swapByteResult | s_flashResult | s_cpuFreqResult | s_i2cCiResult | s_camCiResult | s_delayResult; 
+  assign s_cpu1CiDone = s_hdmiDone | s_swapByteDone | s_flashDone | s_cpuFreqDone | s_i2cCiDone | s_delayCiDone | s_camCiDone | s_counterDone;
+  assign s_cpu1CiResult = s_hdmiResult | s_swapByteResult | s_flashResult | s_cpuFreqResult | s_i2cCiResult | s_camCiResult | s_delayResult | s_counterResult; 
 
   or1420Top #( .NOP_INSTRUCTION(32'h1500FFFF)) cpu1
              (.cpuClock(s_systemClock),
               .cpuReset(s_cpuReset),
               .irq(1'b0),
-              .cpuIsStalled(),
+              .cpuIsStalled(a_cpu1IsStalled),
               .iCacheReqBus(s_cpu1IcacheRequestBus),
               .dCacheReqBus(s_cpu1DcacheRequestBus),
               .iCacheBusGrant(s_cpu1IcacheBusAccessGranted),
@@ -649,10 +655,17 @@ module or1420SingleCore ( input wire         clock12MHz,
 
  //Hardware counters
 
- profileCi #(.customId(8'h62)) hardwareCounters (
+ profileCi #(.customId(8'd62)) hardwareCounters (
     .start(s_cpu1CiStart),
     .clock(s_systemClock),
-    
- )
+    .reset(s_cpuReset),
+    .stall(s_cpu1IsStalled),
+    .busIdle(s_busIdle),
+    .valueA(s_cpu1CiDataA),
+    .valueB(s_cpu1CiDataB),
+    .cIn(s_cpu1CiN),
+    .done(s_counterDone),
+    .result(s_counterResult)
+ );
  
 endmodule
