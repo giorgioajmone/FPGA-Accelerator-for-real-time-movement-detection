@@ -12,7 +12,7 @@ module profileCi #(parameter[7:0] customId = 8'h00)
     wire [31:0] counterValue2;
     wire [31:0] counterValue3;
 
-    reg en0  = 0, en1 = 0, en2 = 0, en3 = 0;
+    reg en0  = 1'b0, en1 = 1'b0, en2 = 1'b0, en3 = 1'b0;
 
 
     counter #(.WIDTH(32)) counter0 (
