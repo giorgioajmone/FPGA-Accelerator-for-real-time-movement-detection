@@ -17,7 +17,7 @@ module profileCi #(parameter[7:0] customId = 8'h00)
     counter #(.WIDTH(32)) counter0 (
         .clock(clock),
         .reset(reset || stableB[8]),
-        .enable(start && stableB[0]),
+        .enable(start && stableB[0] && !stableB[4]),
         .direction(1'b1),
         .counterValue(counterValue0)
     );
@@ -25,7 +25,7 @@ module profileCi #(parameter[7:0] customId = 8'h00)
     counter #(.WIDTH(32)) counter1 (
         .clock(clock),
         .reset(reset || stableB[9]),
-        .enable(stall && stableB[1]),
+        .enable(stall && stableB[1] && !stableB[5]),
         .direction(1'b1),
         .counterValue(counterValue1)
     );
@@ -33,7 +33,7 @@ module profileCi #(parameter[7:0] customId = 8'h00)
     counter #(.WIDTH(32)) counter2 (
         .clock(clock),
         .reset(reset || stableB[10]),
-        .enable(busIdle && stableB[2]),
+        .enable(busIdle && stableB[2] && !stableB[6]),
         .direction(1'b1),
         .counterValue(counterValue2)
     );
@@ -41,7 +41,7 @@ module profileCi #(parameter[7:0] customId = 8'h00)
     counter #(.WIDTH(32)) counter3 (
         .clock(clock),
         .reset(reset || stableB[11]),
-        .enable(start && stableB[3]),
+        .enable(start && stableB[3] && !stableB[7]),
         .direction(1'b1),
         .counterValue(counterValue3)
     );

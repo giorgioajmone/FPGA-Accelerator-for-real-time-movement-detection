@@ -32,7 +32,7 @@ int main () {
     takeSingleImageBlocking((uint32_t) &rgb565[0]);
     
     //reset counters
-    asm volatile ("l.nios_rrr r0, r0, %[in2], 0x3E" :: [in2] "r" ((uint32_t)15<<4));
+    asm volatile ("l.nios_rrr r0, r0, %[in2], 0x3E" :: [in2] "r" ((uint32_t)3840));
     //start counting
     asm volatile ("l.nios_rrr r0, r0, %[in2], 0x3E" :: [in2] "r" ((uint32_t)7));
 
