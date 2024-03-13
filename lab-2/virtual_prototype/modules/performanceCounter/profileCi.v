@@ -52,9 +52,7 @@ module profileCi #(parameter[7:0] customId = 8'h00)
 
     always @(posedge clock) begin
 
-        if(cIn == customId && start == 1'b1) begin
-            stableB <= valueB;
-        end
+        stableB <= (cIn == customId && start == 1'b1) ? valueB : stableB;
 
     end
 
