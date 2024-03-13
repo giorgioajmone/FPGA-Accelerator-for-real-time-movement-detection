@@ -655,7 +655,7 @@ module or1420SingleCore ( input wire         clock12MHz,
 
  //Hardware counters
 
- profileCi #(.customId(8'd62)) hardwareCounters (
+ profileCi #(.customId(8'hB)) hardwareCounters (
     .start(s_cpu1CiStart),
     .clock(s_systemClock),
     .reset(s_cpuReset),
