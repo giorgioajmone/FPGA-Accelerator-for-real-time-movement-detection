@@ -32,7 +32,7 @@ int main () {
     takeSingleImageBlocking((uint32_t) &rgb565[0]);
     
     //reset counters
-    asm volatile ("l.nios_rrr r0, r0, %[in2], 0xB" :: [in2] "r" ((uint32_t)3840));
+    asm volatile ("l.nios_rrr r0, r0, %[in2], 0xB" :: [in2] "r" ((uint32_t)15<<8));
     //start counting
     asm volatile ("l.nios_rrr r0, r0, %[in2], 0xB" :: [in2] "r" ((uint32_t)7));
 
@@ -46,6 +46,9 @@ int main () {
         grayscale[line*camParams.nrOfPixelsPerLine+pixel] = gray;
       }
     }
+
+    //stop counters
+    asm volatile ("l.nios_rrr r0, r0, %[in2], 0xB" :: [in2] "r" ((uint32_t)7<<4));
     //read counters
     asm volatile ("l.nios_rrr %[out1], %[in1], r0, 0xB" : [out1] "=r" (cycles) : [in1] "r" ((uint32_t)0)) ;
     printf("Execution cycles: %d\n", cycles);
