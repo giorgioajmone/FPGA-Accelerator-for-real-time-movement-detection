@@ -63,6 +63,8 @@ module profileCi_tb;
 
         repeat(3) @(negedge clock);
 
+        cIn = 8'd0;
+
         stall = 1'b1;
 
         // Read cnt 1
@@ -72,6 +74,11 @@ module profileCi_tb;
 
         // Read cnt 2
         valueA = 32'd0;
+
+        valueB = 32'd240;
+
+        cIn = 8'd62;
+
 
         repeat(2) @(negedge clock);
 

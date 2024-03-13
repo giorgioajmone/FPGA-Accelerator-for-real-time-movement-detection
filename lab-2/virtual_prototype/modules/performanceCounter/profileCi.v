@@ -58,8 +58,8 @@ module profileCi #(parameter[7:0] customId = 8'h00)
             if(cIn == customId && start == 1'b1) begin
                 en0 <= (valueB[4] == 1'b1) ? 0 : (valueB[0] == 1'b1) ? 1 : en0;
                 en1 <= (valueB[5] == 1'b1) ? 0 : (valueB[1] == 1'b1) ? 1 : en1;
-                en0 <= (valueB[6] == 1'b1) ? 0 : (valueB[2] == 1'b1) ? 1 : en2;
-                en0 <= (valueB[7] == 1'b1) ? 0 : (valueB[3] == 1'b1) ? 1 : en3;
+                en2 <= (valueB[6] == 1'b1) ? 0 : (valueB[2] == 1'b1) ? 1 : en2;
+                en3 <= (valueB[7] == 1'b1) ? 0 : (valueB[3] == 1'b1) ? 1 : en3;
             end
         end
     end
