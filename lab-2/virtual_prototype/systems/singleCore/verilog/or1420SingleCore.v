@@ -329,7 +329,7 @@ module or1420SingleCore ( input wire         clock12MHz,
   //Hardware counters
 
   wire        s_counterDone;
-  wire        s_counterResult;
+  wire[31:0]  s_counterResult;
   wire        s_cpu1IsStalled;
   
   assign s_cpu1CiDone = s_hdmiDone | s_swapByteDone | s_flashDone | s_cpuFreqDone | s_i2cCiDone | s_delayCiDone | s_camCiDone | s_counterDone;
