@@ -1,3 +1,6 @@
+
+// Giorgio Ajmone 368146, Alessandro Cardinale 368411
+
 #include <stdio.h>
 #include <ov7670.h>
 #include <swap.h>

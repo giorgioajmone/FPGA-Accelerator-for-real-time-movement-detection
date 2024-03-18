@@ -1,4 +1,7 @@
-`timescale 1ps/1ps
+
+// Giorgio Ajmone 368146, Alessandro Cardinale 368411`
+
+timescale 1ps/1ps
 
 module profileCi_tb;
 

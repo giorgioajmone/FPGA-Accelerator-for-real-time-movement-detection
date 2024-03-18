@@ -1,3 +1,6 @@
+
+// Giorgio Ajmone 368146, Alessandro Cardinale 368411
+
 module profileCi #(parameter[7:0] customId = 8'h00)
     (
         input wire start, clock, reset, stall, busIdle, 
@@ -50,10 +53,9 @@ module profileCi #(parameter[7:0] customId = 8'h00)
         .counterValue(counterValue3)
     );
 
-    //assign result = (cIn != customId || start == 1'b0) ? 32'b0: (valueA[1:0] == 2'd0) ? counterValue0 : (valueA[1:0] == 2'd1) ? counterValue1 : (valueA[1:0] == 2'd2) ? counterValue2 : counterValue3;
+    
     assign result = (instruction_true == 1'b1) ? ((valueA[1:0] == 2'd0) ? counterValue0 : (valueA[1:0] == 2'd1) ? counterValue1 : (valueA[1:0] == 2'd2) ? counterValue2 : counterValue3) : 32'b0;
 
-    //assign done = (cIn != customId || start == 1'b0) ? 1'b0 : 1'b1;
     assign done = (instruction_true == 1'b1) ? 1'b1 : 1'b0;
 
     always @(posedge clock) begin
