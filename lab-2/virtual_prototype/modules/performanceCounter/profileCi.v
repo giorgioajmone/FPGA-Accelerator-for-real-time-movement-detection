@@ -10,8 +10,7 @@ module profileCi #(parameter[7:0] customId = 8'h00)
         output wire[31:0] result
     );
 
-    wire instruction_true;
-    assign instruction_true = cIn == customId && start == 1'b1;
+    wire is_valid;
 
     wire [31:0] counterValue0;
     wire [31:0] counterValue1;
@@ -23,7 +22,7 @@ module profileCi #(parameter[7:0] customId = 8'h00)
 
     counter #(.WIDTH(32)) counter0 (
         .clock(clock),
-        .reset(reset || (valueB[8] && instruction_true)),
+        .reset(reset || (valueB[8] && is_valid)),
         .enable(en0),
         .direction(1'b1),
         .counterValue(counterValue0)
@@ -31,7 +30,7 @@ module profileCi #(parameter[7:0] customId = 8'h00)
 
     counter #(.WIDTH(32)) counter1 (
         .clock(clock),
-        .reset(reset || (valueB[9] && instruction_true)),
+        .reset(reset || (valueB[9] && is_valid)),
         .enable(stall && en1),
         .direction(1'b1),
         .counterValue(counterValue1)
@@ -39,7 +38,7 @@ module profileCi #(parameter[7:0] customId = 8'h00)
 
     counter #(.WIDTH(32)) counter2 (
         .clock(clock),
-        .reset(reset || (valueB[10] && instruction_true)),
+        .reset(reset || (valueB[10] && is_valid)),
         .enable(busIdle && en2),
         .direction(1'b1),
         .counterValue(counterValue2)
@@ -47,16 +46,18 @@ module profileCi #(parameter[7:0] customId = 8'h00)
 
     counter #(.WIDTH(32)) counter3 (
         .clock(clock),
-        .reset(reset || (valueB[11] && instruction_true)),
+        .reset(reset || (valueB[11] && is_valid)),
         .enable(en3),
         .direction(1'b1),
         .counterValue(counterValue3)
     );
 
     
-    assign result = (instruction_true == 1'b1) ? ((valueA[1:0] == 2'd0) ? counterValue0 : (valueA[1:0] == 2'd1) ? counterValue1 : (valueA[1:0] == 2'd2) ? counterValue2 : counterValue3) : 32'b0;
+    assign result = (is_valid == 1'b1) ? ((valueA[1:0] == 2'd0) ? counterValue0 : (valueA[1:0] == 2'd1) ? counterValue1 : (valueA[1:0] == 2'd2) ? counterValue2 : counterValue3) : 32'b0;
 
-    assign done = (instruction_true == 1'b1) ? 1'b1 : 1'b0;
+    assign done = (is_valid == 1'b1) ? 1'b1 : 1'b0;
+
+    assign is_valid = (cIn == customId && start == 1'b1);
 
     always @(posedge clock) begin
         if(reset) begin
