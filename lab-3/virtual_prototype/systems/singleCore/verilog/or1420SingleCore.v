@@ -678,8 +678,8 @@ rgb565grayscaleIse #(.customId(8'hC)) grayPixel (
     .valueA(s_cpu1CiDataA),
     .valueB(s_cpu1CiDataB),
     .iseId(s_cpu1CiN),
-    .done(s_Done),
-    .result(s_counterResult)
+    .done(s_grayDone),
+    .result(s_grayResult)
  );
  
 endmodule
