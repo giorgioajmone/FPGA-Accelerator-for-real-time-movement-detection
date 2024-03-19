@@ -1,7 +1,7 @@
 module singlePixel (
-    input wire[4:0] red, blue;
-    input wire[5:0] green;
-    output wire[31:0] result;
+    input wire[4:0] red, blue,
+    input wire[5:0] green,
+    output wire[31:0] result
 );
 
 // RED
