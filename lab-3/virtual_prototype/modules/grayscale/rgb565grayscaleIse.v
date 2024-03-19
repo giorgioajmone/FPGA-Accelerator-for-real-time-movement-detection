@@ -24,6 +24,6 @@ module rgb565grayscaleIse #(parameter[7:0] customId = 8'h00)
 
     assign done = (is_valid == 1'b1) ? 1'b1 : 1'b0;
 
-    assign is_valid = (cIn == customId && start == 1'b1);
+    assign is_valid = (iseId == customId && start == 1'b1);
 
 endmodule
