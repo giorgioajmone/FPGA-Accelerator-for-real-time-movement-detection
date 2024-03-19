@@ -48,6 +48,6 @@ wire[31:0] result0;
 
 assign result0 = g_red + g_green;
 
-assign result = result0 + g_blue;
+assign result = (result0 + g_blue) & 32'h0000FFFF;
     
 endmodule
