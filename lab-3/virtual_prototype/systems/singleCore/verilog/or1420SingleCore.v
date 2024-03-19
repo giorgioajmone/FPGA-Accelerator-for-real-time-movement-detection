@@ -673,7 +673,7 @@ module or1420SingleCore ( input wire         clock12MHz,
     .result(s_counterResult)
  );
 
-rgb565grayscaleIse #(.customId(8'h3E)) grayPixel (
+rgb565grayscaleIse #(.customId(8'hC)) grayPixel (
     .start(s_cpu1CiStart),
     .valueA(s_cpu1CiDataA),
     .valueB(s_cpu1CiDataB),
