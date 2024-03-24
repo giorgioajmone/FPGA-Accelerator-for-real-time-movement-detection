@@ -1,3 +1,5 @@
+//Giorgio Ajmome 368146, Alessandro Cardinale 368411
+
 module singlePixel (
     input wire[4:0] red, blue,
     input wire[5:0] green,

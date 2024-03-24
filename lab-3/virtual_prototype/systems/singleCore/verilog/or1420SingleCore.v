@@ -1,3 +1,5 @@
+//Giorgio Ajmome 368146, Alessandro Cardinale 368411
+
 module or1420SingleCore ( input wire         clock12MHz,
                                              clock50MHz,
                                              nReset,
