@@ -30,7 +30,7 @@ assign error = (state == ERROR ? 1'b1 : 1'b0);
 
 assign outputs[32*((address - baseAddress)+1)-1-1024:32*((address - baseAddress))-1024] = state == WRITE && data_valid_r == 1'b1 ? address_data_r : 32'b0;
 
-assign address_data = state == READ && (address-baseAddress) < inPorts ? inputs[[32*((address - baseAddress)+1)-1:32*((address - baseAddress))]] : 32'b0;
+assign address_data[0:31] = state == READ && (address-baseAddress) < inPorts ? inputs[[32*((address - baseAddress)+1)-1:32*((address - baseAddress))]] : 32'b0;
 
 assign end_transaction = state == END_READ ? 1'b1 : 1'b0;
 
