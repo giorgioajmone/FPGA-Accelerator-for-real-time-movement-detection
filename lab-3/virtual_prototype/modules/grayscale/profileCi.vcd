@@ -1,0 +1,47 @@
+$date
+	Tue Mar 19 15:21:11 2024
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module rgb565grayscaleIse_tb $end
+$scope module dut $end
+$var wire 1 ! is_valid $end
+$var wire 8 " iseId [7:0] $end
+$var wire 1 # start $end
+$var wire 32 $ valueA [31:0] $end
+$var wire 32 % valueB [31:0] $end
+$var wire 32 & result [31:0] $end
+$var wire 32 ' gray [31:0] $end
+$var wire 1 ( done $end
+$var parameter 8 ) customId $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+b1100 )
+$end
+#0
+$dumpvars
+1(
+b11110100 '
+b11110100 &
+b1111 %
+b1111011111011110 $
+1#
+b1100 "
+1!
+$end
+#70
+b1110101 &
+b1110101 '
+b10110000111010 $
+#120
+b10100010 &
+b10100010 '
+b10011000111100 $
+#240
