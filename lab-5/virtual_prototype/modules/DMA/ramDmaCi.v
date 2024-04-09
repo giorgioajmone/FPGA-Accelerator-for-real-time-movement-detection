@@ -19,20 +19,34 @@ module moduleName #(
     wire is_valid;
     wire[1:0] status;
 
-    assign result = (is_valid == 1'b1) ? (gray) : 32'b0;
-    assign is_valid = (iseId == customId && start == 1'b1);
+    wire[31:0] dataOutA, resultMem, resultDMA;
+    wire doneMem, doneDMA; //add some delay
+
+    wire[8:0] memAddress;
+    wire[31:0] memDataIn, memDataOut;
+    wire memWriteEnable;
+
+    assign doneDMA = (is_valid == 1'b1) ? 1'b1 : 1'b0;
+
+    assign resultMem = (is_valid == 1'b1 && valueA[12:10] == 3'b0) ? dataOutA : 32'b0;
+
+    assign done = doneDMA | doneMem;
+
+    assign result = (is_valid) ? 32'b0 : resultMem | resultDMA;
+
+    assign is_valid = (ciN == customId && start == 1'b1);
 
     Memory #(.bitwidth(32), .nrOfEntries(512), .readAfterWrite(0)) memory(
         .clockA(clock),
-        .clockB(clock),
-        .writeEnableA(),
-        .writeEnableB(),
-        .addressA(),
-        .addressB(),
-        .dataInA(),
-        .dataInB(),
-        .dataOutA(),
-        .dataOutB()
+        .clockB(~clock),
+        .writeEnableA(is_valid && valueA[9]),
+        .writeEnableB(memWriteEnable),
+        .addressA(valueA[8:0]),
+        .addressB(memAddress),
+        .dataInA(valueB),
+        .dataInB(memDataOut),
+        .dataOutA(dataOutA),
+        .dataOutB(memDataIn)
     )
 
     DMAController dmaController(
@@ -41,9 +55,15 @@ module moduleName #(
         .clock(clock),
         .reset(reset),
         .configurationBits(valueA[12:10]),
-        .readSettings(result),
+        .readSettings(resultDMA),
         .writeSettings(valueB),
         .status(status),
+        //memory ports
+        .memAddress(memAddress),
+        .memDataIn(memDataIn),
+        .memDataOut(memDataOut),
+        .memWriteEnable(memWriteEnable),
+        //bus ports
         .address_data(address_data),
         .byte_enables(byte_enables),
         .burst_size(burst_size),
