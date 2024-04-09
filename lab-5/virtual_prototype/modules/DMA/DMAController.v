@@ -26,7 +26,6 @@ module DMAController (
     parameter READ = 3'd3;
     parameter ERROR = 3'd4;
     
-
     reg[31:0] busStart;
     reg[8:0] memoryStart;
     reg[9:0] blockSize;
@@ -34,9 +33,10 @@ module DMAController (
     reg[1:0] statusRegister;
     reg[1:0] controlRegister;
 
-    reg[31:0] addressBus; //incrementare
-
-    reg [8:0] memAddress; //incrementare
+    reg[31:0] busAddress; 
+    reg[8:0] memAddress;
+    reg[7:0] burstCounter;
+    reg[9:0] blockCounter;
 
     assign readSettings = (validInstruction == 0 || writeEnable == 1) ? 32'b0 : 
                             (configurationBits == 3'b001) ? busStart : 
@@ -50,7 +50,7 @@ module DMAController (
 
     assign begin_transaction = (state == INIT) ? 1'b1 : 1'b0;
     assign read_n_write = (state == INIT) ? (controlRegister[0] == 1) ? 1'b1 : 1'b0;
-    assign address_data = (state == INIT) ? addressBus : 32'b0;
+    assign address_data = (state == INIT) ? busAddress : 32'b0;
     assign burst_size = //to do
 
     assign memAddress = memAddress;
@@ -60,6 +60,30 @@ module DMAController (
     assign end_transaction = (state == ERROR) ? 1'b1 : 1'b0;
 
     assign status = statusRegister;
+
+    always @(posedge clock) begin
+        if(reset == 1) begin 
+            burstCounter <= 8'b0;
+            blockCounter <= 10'0;
+            busAddress <= 32'b0;
+            memAddress <= 9'b0;
+        end else if(state == READ && data_valid == 1) begin
+            burstCounter <= (burstCounter == burstSize) ? 0 : burstCounter + 1;
+            blockCounter <= (blockCounter == blockSize) ? 0 : blockCounter + 1;
+            busAddress <= busAddress + 1;
+            memAddress <= memAddress + 1;
+        end else if (state == INIT) begin
+            burstCounter <= 8'b0;
+            blockCounter <= 10'0;
+            busAddress <= busStart;
+            memAddress <= memoryStart;
+        end else begin
+            burstCounter <= burstCounter;
+            blockCounter <= blockCounter;
+            busAddress <= busAddress;
+            memAddress <= memAddress;
+        end
+    end
 
     always @(posedge clock) begin
         if(reset == 1) begin
