@@ -16,30 +16,31 @@ module moduleName #(
     inout wire read_n_write, begin_transaction, end_transaction, data_valid, busy, error
 );
 
-    wire is_valid;
+    wire is_valid, is_memory;
     wire[1:0] status;
 
     wire[31:0] dataOutA, resultMem, resultDMA;
-    wire doneMem, doneDMA; //add some delay
+    wire doneMem, doneDMA;
 
     wire[8:0] memAddress;
     wire[31:0] memDataIn, memDataOut;
     wire memWriteEnable;
 
-    assign doneDMA = (is_valid == 1'b1) ? 1'b1 : 1'b0;
+    assign doneDMA = (is_valid == 1'b1 && ~is_memory) ? 1'b1 : 1'b0;
+    assign doneMem = (is_valid == 1'b1 && is_memory && (counter || valueA[9] == 1'b1) )? 1'b1 : 1'b0; //se scrittura subito up altrimenti dopo due clock
 
-    assign resultMem = (is_valid == 1'b1 && valueA[12:10] == 3'b0) ? dataOutA : 32'b0;
+    assign resultMem = (is_valid == 1'b1 && is_memory) ? dataOutA : 32'b0;
 
     assign done = doneDMA | doneMem;
-
-    assign result = (is_valid) ? 32'b0 : resultMem | resultDMA;
+    assign result = resultMem | resultDMA;
 
     assign is_valid = (ciN == customId && start == 1'b1);
+    assign is_memory = (valueA[12:10] == 3'b0);
 
     Memory #(.bitwidth(32), .nrOfEntries(512), .readAfterWrite(0)) memory(
         .clockA(clock),
         .clockB(~clock),
-        .writeEnableA(is_valid && valueA[9]),
+        .writeEnableA(is_valid && valueA[9] && is_memory),
         .writeEnableB(memWriteEnable),
         .addressA(valueA[8:0]),
         .addressB(memAddress),
