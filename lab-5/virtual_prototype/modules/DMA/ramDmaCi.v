@@ -59,12 +59,12 @@ module moduleName #(
         .readSettings(resultDMA),
         .writeSettings(valueB),
         .status(status),
-        //memory ports
+
         .memAddress(memAddress),
         .memDataIn(memDataIn),
         .memDataOut(memDataOut),
         .memWriteEnable(memWriteEnable),
-        //bus ports
+
         .address_data(address_data),
         .byte_enables(byte_enables),
         .burst_size(burst_size),
