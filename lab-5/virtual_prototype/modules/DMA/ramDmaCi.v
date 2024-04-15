@@ -1,4 +1,4 @@
-module moduleName #(
+module ramDmaCi #(
     parameter[7:0] customId = 8'h00
 ) (
     input wire      start,
@@ -16,6 +16,8 @@ module moduleName #(
     inout wire read_n_write, begin_transaction, end_transaction, data_valid, busy, error
 );
 
+    reg[1:0] counter; // modification
+
     wire is_valid, is_memory;
     wire[1:0] status;
 
@@ -27,7 +29,7 @@ module moduleName #(
     wire memWriteEnable;
 
     assign doneDMA = (is_valid == 1'b1 && ~is_memory) ? 1'b1 : 1'b0;
-    assign doneMem = (is_valid == 1'b1 && is_memory && (counter || valueA[9] == 1'b1) )? 1'b1 : 1'b0; //se scrittura subito up altrimenti dopo due clock
+    assign doneMem = (is_valid == 1'b1 && is_memory && (counter == 2'd2 || valueA[9] == 1'b1) )? 1'b1 : 1'b0; //se scrittura subito up altrimenti dopo due clock
 
     assign resultMem = (is_valid == 1'b1 && is_memory) ? dataOutA : 32'b0;
 
@@ -37,7 +39,17 @@ module moduleName #(
     assign is_valid = (ciN == customId && start == 1'b1);
     assign is_memory = (valueA[12:10] == 3'b0);
 
-    Memory #(.bitwidth(32), .nrOfEntries(512), .readAfterWrite(0)) memory(
+    // modification: logic for counter
+    always@(posedge clock) begin
+        if(reset == 1'b1) begin
+            counter = 0;
+        end else begin
+            counter <= (counter == 2'd2) ? 2'd0 : counter + 1;
+        end
+
+    end
+
+    dualPortSSRAM #(.bitwidth(32), .nrOfEntries(512), .readAfterWrite(0)) memory(
         .clockA(clock),
         .clockB(~clock),
         .writeEnableA(is_valid && valueA[9] && is_memory),
@@ -48,7 +60,7 @@ module moduleName #(
         .dataInB(memDataOut),
         .dataOutA(dataOutA),
         .dataOutB(memDataIn)
-    )
+    );
 
     DMAController dmaController(
         .validInstruction(is_valid),

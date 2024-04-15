@@ -54,4 +54,7 @@
 ../../../modules/performanceCounter/profileCi.v
 ../../../modules/grayscale/singlePixel.v
 ../../../modules/grayscale/rgb565grayscaleIse.v
+../../../modules/DMA/DMAController.v
+../../../modules/DMA/dualPortSSRAM.v
+../../../modules/DMA/ramDmaCi.v
 ../verilog/or1420SingleCore.v

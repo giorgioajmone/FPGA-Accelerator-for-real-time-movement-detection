@@ -1,0 +1,501 @@
+$date
+	Mon Apr 15 13:01:33 2024
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module ramDmaCi_tb $end
+$scope module dut $end
+$var wire 32 ! address_data [31:0] $end
+$var wire 1 " busy $end
+$var wire 4 # byte_enables [3:0] $end
+$var wire 8 $ ciN [7:0] $end
+$var wire 1 % clock $end
+$var wire 1 & data_valid $end
+$var wire 1 ' done $end
+$var wire 1 ( end_transaction $end
+$var wire 1 ) error $end
+$var wire 1 * is_valid $end
+$var wire 1 + reset $end
+$var wire 32 , result [31:0] $end
+$var wire 1 - start $end
+$var wire 32 . valueA [31:0] $end
+$var wire 32 / valueB [31:0] $end
+$var wire 2 0 status [1:0] $end
+$var wire 32 1 resultMem [31:0] $end
+$var wire 32 2 resultDMA [31:0] $end
+$var wire 1 3 read_n_write $end
+$var wire 1 4 memWriteEnable $end
+$var wire 32 5 memDataOut [31:0] $end
+$var wire 32 6 memDataIn [31:0] $end
+$var wire 9 7 memAddress [8:0] $end
+$var wire 1 8 is_memory $end
+$var wire 1 9 doneMem $end
+$var wire 1 : doneDMA $end
+$var wire 32 ; dataOutA [31:0] $end
+$var wire 8 < burst_size [7:0] $end
+$var wire 1 = begin_transaction $end
+$var parameter 8 > customId $end
+$var reg 2 ? counter [1:0] $end
+$scope module dmaController $end
+$var wire 32 @ address_data [31:0] $end
+$var wire 1 " busy $end
+$var wire 4 A byte_enables [3:0] $end
+$var wire 1 % clock $end
+$var wire 3 B configurationBits [2:0] $end
+$var wire 1 & data_valid $end
+$var wire 1 ( end_transaction $end
+$var wire 1 ) error $end
+$var wire 1 C grantRequest $end
+$var wire 9 D memAddress [8:0] $end
+$var wire 32 E memDataOut [31:0] $end
+$var wire 1 + reset $end
+$var wire 2 F status [1:0] $end
+$var wire 1 * validInstruction $end
+$var wire 1 G writeEnable $end
+$var wire 32 H writeSettings [31:0] $end
+$var wire 1 3 read_n_write $end
+$var wire 32 I readSettings [31:0] $end
+$var wire 1 4 memWriteEnable $end
+$var wire 32 J memDataIn [31:0] $end
+$var wire 1 K busRequest $end
+$var wire 8 L burst_size [7:0] $end
+$var wire 1 = begin_transaction $end
+$var parameter 3 M C2R $end
+$var parameter 3 N CLOSE $end
+$var parameter 3 O IDLE $end
+$var parameter 3 P INIT $end
+$var parameter 3 Q READ $end
+$var parameter 3 R REQUEST $end
+$var parameter 3 S WRITE $end
+$var reg 10 T blockCounter [9:0] $end
+$var reg 10 U blockCounterCurr [9:0] $end
+$var reg 10 V blockSize [9:0] $end
+$var reg 9 W burstCounter [8:0] $end
+$var reg 9 X burstSize [8:0] $end
+$var reg 32 Y busAddress [31:0] $end
+$var reg 32 Z busStart [31:0] $end
+$var reg 2 [ controlRegister [1:0] $end
+$var reg 9 \ memAddress_r [8:0] $end
+$var reg 3 ] memCounter [0:2] $end
+$var reg 9 ^ memoryStart [8:0] $end
+$var reg 3 _ state [2:0] $end
+$var reg 2 ` statusRegister [1:0] $end
+$upscope $end
+$scope module memory $end
+$var wire 9 a addressA [8:0] $end
+$var wire 9 b addressB [8:0] $end
+$var wire 1 % clockA $end
+$var wire 1 c clockB $end
+$var wire 32 d dataInA [31:0] $end
+$var wire 32 e dataInB [31:0] $end
+$var wire 1 f writeEnableA $end
+$var wire 1 4 writeEnableB $end
+$var parameter 32 g bitwidth $end
+$var parameter 32 h nrOfEntries $end
+$var parameter 32 i readAfterWrite $end
+$var reg 32 j dataOutA [31:0] $end
+$var reg 32 k dataOutB [31:0] $end
+$upscope $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+b0 i
+b1000000000 h
+b100000 g
+b101 S
+b1 R
+b11 Q
+b10 P
+b0 O
+b100 N
+b110 M
+b11011 >
+$end
+#0
+$dumpvars
+bx k
+bx j
+0f
+bx e
+bx0000000101 d
+1c
+bx b
+bx a
+bx `
+bx _
+bx ^
+b0 ]
+bx \
+bx [
+bx Z
+bx Y
+bx X
+bx W
+bx V
+bx U
+bx T
+bx L
+xK
+bx J
+b0xxxxxxxxxx I
+bx0000000101 H
+1G
+bx F
+bx E
+bx D
+zC
+b11 B
+bz A
+bx @
+bx ?
+x=
+bx <
+bx ;
+1:
+09
+08
+bx 7
+bx 6
+bx 5
+04
+x3
+b0xxxxxxxxxx 2
+b0 1
+bx 0
+bx0000000101 /
+bx0111xxxxxxxxx .
+1-
+b0xxxxxxxxxx ,
+1+
+1*
+z)
+x(
+1'
+0&
+0%
+b11011 $
+bz #
+z"
+bx !
+$end
+#5
+b0 ,
+b0 2
+b0 I
+b0 <
+b0 L
+0(
+0K
+0=
+03
+b0 5
+b0 E
+b0 e
+b0 !
+b0 @
+b0 [
+b0 0
+b0 F
+b0 `
+b0 X
+b0 V
+b0 ^
+b0 Z
+b0 7
+b0 D
+b0 b
+b0 \
+b0 Y
+b0 T
+b0 W
+b0 _
+0c
+b0 ?
+1%
+#10
+1c
+0%
+#15
+0c
+1%
+#20
+1c
+0+
+0%
+#25
+b101 ,
+b101 2
+b101 I
+b101 V
+b1 ?
+0c
+1%
+#30
+b0 ,
+b0 2
+b0 I
+b100 B
+1c
+bx0000000001 /
+bx0000000001 H
+bx0000000001 d
+bx1001xxxxxxxxx .
+0%
+#35
+b10 ,
+b10 2
+b10 I
+b10 ?
+b10 X
+0c
+1%
+#40
+1c
+0%
+#45
+b0 ?
+0c
+1%
+#50
+1c
+0%
+#55
+b1 ?
+0c
+1%
+#60
+b0 ,
+b0 2
+b0 I
+b10 B
+1c
+bx0000000000 /
+bx0000000000 H
+bx0000000000 d
+bx0101xxxxxxxxx .
+0%
+#65
+b10 ?
+0c
+1%
+#70
+1c
+0%
+#75
+b0 ?
+0c
+1%
+#80
+1c
+0%
+#85
+b1 ?
+0c
+1%
+#90
+b1 B
+1c
+b0 /
+b0 H
+b0 d
+bx0011xxxxxxxxx .
+0%
+#95
+b10 ?
+0c
+1%
+#100
+1c
+0%
+#105
+b0 ?
+0c
+1%
+#110
+1c
+0%
+#115
+b1 ?
+0c
+1%
+#120
+b101 B
+1c
+b1 /
+b1 H
+b1 d
+bx1011xxxxxxxxx .
+0%
+#125
+b1 [
+b10 ?
+0c
+1%
+#130
+1c
+0%
+#135
+b1 ,
+b1 2
+b1 I
+1K
+b0 ?
+b1 _
+b1 0
+b1 F
+b1 `
+0c
+1%
+#140
+1c
+0%
+#145
+b1 ?
+0c
+1%
+#150
+b0 2
+b0 I
+0'
+bx ,
+09
+0:
+bx 1
+18
+b0 a
+0G
+b0 B
+1c
+b0x 5
+b0x E
+b0x e
+b0x !
+b0x @
+x&
+b0 /
+b0 H
+b0 d
+b0 .
+0%
+#155
+1'
+19
+b10 ?
+0c
+1%
+#160
+1c
+b0x0 5
+b0x0 E
+b0x0 e
+b0x0 !
+b0x0 @
+0%
+#165
+0'
+09
+b0 ?
+0c
+1%
+#170
+1c
+b0xx 5
+b0xx E
+b0xx e
+b0xx !
+b0xx @
+0%
+#175
+b1 ?
+0c
+1%
+#180
+1c
+b0x00 5
+b0x00 E
+b0x00 e
+b0x00 !
+b0x00 @
+0%
+#185
+1'
+19
+b10 ?
+0c
+1%
+#190
+1c
+b0x0x 5
+b0x0x E
+b0x0x e
+b0x0x !
+b0x0x @
+0%
+#195
+0'
+09
+b0 ?
+0c
+x(
+0&
+1%
+#200
+1c
+0%
+#205
+b1 ?
+0c
+0(
+1%
+#210
+1c
+0%
+#215
+1'
+19
+b10 ?
+0c
+1%
+#220
+1c
+0%
+#225
+0'
+09
+b0 ?
+0c
+1%
+#230
+b0 ,
+b0 1
+0*
+1c
+0-
+0%
+#235
+b1 ?
+0c
+1%
+#240
+1c
+0%
+#245
+b10 ?
+0c
+1%
+#250
+1c
+0%
+#255
+b0 ?
+0c
+1%
+#260
+1c
+0%
