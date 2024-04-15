@@ -10,10 +10,14 @@ module ramDmaCi #(
     output wire[31:0] result,
 
     //bus ports
-    inout wire[31:0] address_data,
-    inout wire[3:0] byte_enables,
-    inout wire[7:0] burst_size,
-    inout wire read_n_write, begin_transaction, end_transaction, data_valid, busy, error
+    input wire[31:0] address_data_in,
+    output wire[31:0] address_data_out,
+    output wire[3:0] byte_enables_out,
+    output wire[7:0] burst_size_out,
+    output wire read_n_write_out, begin_transaction_out, end_transaction_out, data_valid_out,
+    input wire end_transaction_in, data_valid_in, busy_in, error_in,
+    input wire grantRequest,
+    output wire busRequest
 );
 
     reg[1:0] counter; // modification
@@ -77,15 +81,21 @@ module ramDmaCi #(
         .memDataOut(memDataOut),
         .memWriteEnable(memWriteEnable),
 
-        .address_data(address_data),
-        .byte_enables(byte_enables),
-        .burst_size(burst_size),
-        .read_n_write(read_n_write),
-        .begin_transaction(begin_transaction),
-        .end_transaction(end_transaction),
-        .data_valid(data_valid),
-        .busy(busy),
-        .error(error)
+        //bus ports
+    .address_data_in(address_data_in),
+    .address_data_out(address_data_out),
+    .byte_enables_out(byte_enables_out),
+    .burst_size_out(burst_size_out),
+    .read_n_write_out(read_n_write_out), 
+    .begin_transaction_out(begin_transaction_out), 
+    .end_transaction_out(end_transaction_out), 
+    .data_valid_out(data_valid_out),
+    .end_transaction_in(end_transaction_in), 
+    .data_valid_in(data_valid_in), 
+    .busy_in(busy_in), 
+    .error_in(error_in),
+    .grantRequest(grantRequest),
+    .busRequest(busRequest)
     );
     
 endmodule
