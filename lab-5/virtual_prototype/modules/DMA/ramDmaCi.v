@@ -20,7 +20,7 @@ module ramDmaCi #(
     output wire busRequest
 );
 
-    reg[1:0] counter; // modification
+    reg[1:0] counter;
 
     wire is_valid, is_memory;
     wire[1:0] status;
@@ -33,7 +33,7 @@ module ramDmaCi #(
     wire memWriteEnable;
 
     assign doneDMA = (is_valid == 1'b1 && ~is_memory) ? 1'b1 : 1'b0;
-    assign doneMem = (is_valid == 1'b1 && is_memory && (counter == 2'd2 || valueA[9] == 1'b1) )? 1'b1 : 1'b0; //se scrittura subito up altrimenti dopo due clock
+    assign doneMem = (is_valid == 1'b1 && is_memory && (counter == 2'd2 || valueA[9] == 1'b1) )? 1'b1 : 1'b0;
 
     assign resultMem = (is_valid == 1'b1 && is_memory) ? dataOutA : 32'b0;
 
@@ -48,7 +48,7 @@ module ramDmaCi #(
         if(reset == 1'b1) begin
             counter = 0;
         end else begin
-            counter <= (counter == 2'd2) ? 2'd0 : counter + 1;
+            counter <= (counter == 2'd2 || !is_valid || valueA[9] == 1'b0) ? 2'd0 : counter + 1;
         end
 
     end
