@@ -22,6 +22,10 @@ module ramDmaCi #(
 
     reg[1:0] counter;
 
+    reg[31:0] address_data_in_r;
+    reg end_transaction_in_r, data_valid_in_r, busy_in_r, error_in_r,
+        grantRequest_r;
+
     wire is_valid, is_memory;
     wire[1:0] status;
 
@@ -43,12 +47,30 @@ module ramDmaCi #(
     assign is_valid = (ciN == customId && start == 1'b1);
     assign is_memory = (valueA[12:10] == 3'b0);
 
+    always @(posedge clock) begin
+        if (reset == 1'b1) begin
+            end_transaction_in_r <= 0;
+            data_valid_in_r <= 0;
+            busy_in_r <= 0;
+            error_in_r <= 0;
+            grantRequest_r <= 0;
+            address_data_in_r <= 0;
+        end else begin
+            end_transaction_in_r <= end_transaction_in;
+            data_valid_in_r <= data_valid_in;
+            busy_in_r <= busy_in;
+            error_in_r <= error_in;
+            grantRequest_r <= grantRequest;
+            address_data_in_r <= address_data_in;
+        end
+    end
+
     // modification: logic for counter
     always@(posedge clock) begin
         if(reset == 1'b1) begin
             counter = 0;
         end else begin
-            counter <= (counter == 2'd2 || !is_valid || valueA[9] == 1'b0) ? 2'd0 : counter + 1;
+            counter <= (counter == 2'd2 || !is_valid || valueA[9] == 1'b1) ? 2'd0 : counter + 1;
         end
 
     end
@@ -82,7 +104,7 @@ module ramDmaCi #(
         .memWriteEnable(memWriteEnable),
 
         //bus ports
-    .address_data_in(address_data_in),
+    .address_data_in(address_data_in_r),
     .address_data_out(address_data_out),
     .byte_enables_out(byte_enables_out),
     .burst_size_out(burst_size_out),
@@ -90,11 +112,11 @@ module ramDmaCi #(
     .begin_transaction_out(begin_transaction_out), 
     .end_transaction_out(end_transaction_out), 
     .data_valid_out(data_valid_out),
-    .end_transaction_in(end_transaction_in), 
-    .data_valid_in(data_valid_in), 
-    .busy_in(busy_in), 
-    .error_in(error_in),
-    .grantRequest(grantRequest),
+    .end_transaction_in(end_transaction_in_r), 
+    .data_valid_in(data_valid_in_r), 
+    .busy_in(busy_in_r), 
+    .error_in(error_in_r),
+    .grantRequest(grantRequest_r),
     .busRequest(busRequest)
     );
     

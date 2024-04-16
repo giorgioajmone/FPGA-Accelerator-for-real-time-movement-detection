@@ -26,7 +26,7 @@ module ramDmaCi_tb;
             .reset(reset),
             .clock(clock),
             .start(start),
-            .valueA(valueA),
+            .valueA(valueA & 32'b1),
             .valueB(valueB),
             .ciN(CiN),
             .address_data_in(address_data_in),  // no need to do the or beacuse, in this simulation, only one slave talks to the dma
@@ -96,40 +96,40 @@ module ramDmaCi_tb;
         repeat(3) @(negedge clock);
         valueA[31:0] = 32'b0;
         valueB[31:0] = 32'b0;
-        repeat(1) @(posedge clock);
+        repeat(1) @(negedge clock);
 
         // start sending data to the dma
         data_valid_in = 1'b1; // driven by two drives. In DMAController is set to zero.
         address_data_in = 32'd1;
-        repeat(1) @(posedge clock);
+        repeat(1) @(negedge clock);
         address_data_in = 32'd2;
-        repeat(1) @(posedge clock);
+        repeat(1) @(negedge clock);
 
         data_valid_in = 1'b0;
         end_transaction_in = 1'b1;
-        repeat(1) @(posedge clock);
+        repeat(1) @(negedge clock);
         end_transaction_in = 1'b0;
-        repeat(1) @(posedge clock);
+        repeat(2) @(negedge clock);
 
         data_valid_in = 1'b1;
         address_data_in = 32'd3;
-        repeat(1) @(posedge clock);
+        repeat(1) @(negedge clock);
         address_data_in = 32'd4;
-        repeat(1) @(posedge clock);
+        repeat(1) @(negedge clock);
 
         data_valid_in = 1'b0;
         end_transaction_in = 1'b1;
-        repeat(1) @(posedge clock);
+        repeat(1) @(negedge clock);
         end_transaction_in = 1'b0;
-        repeat(1) @(posedge clock);
+        repeat(2) @(negedge clock);
 
         data_valid_in = 1'b1;
         address_data_in = 32'd5;
-        repeat(1) @(posedge clock);
+        repeat(1) @(negedge clock);
 
         data_valid_in = 1'b0;
         end_transaction_in = 1'b1;
-        repeat(1) @(posedge clock);
+        repeat(1) @(negedge clock);
         end_transaction_in = 1'b0;
         repeat(3) @(negedge clock);
         
