@@ -125,18 +125,19 @@ module DMAController (
         if(reset == 1) begin
             burstCounter <= 9'b0;
             blockCounter <= 10'b0;
+            blockCounterCurr <= 10'b0;
             busAddress <= 32'b0;
-        end else if((state == READ || state == WRITE) && data_valid_in == 1) begin
-            burstCounter <= burstCounter + 1;
-            blockCounter <= blockCounter + 1;
+        end else if((state == READ || state == WRITE) && data_valid_in == 1) begin  // maybe only put data valid to not lose a clk cycle
+            burstCounter <= burstCounter + 1;                                       
+            blockCounter <= blockCounter + 1;                                       
+            blockCounterCurr <= blockCounterCurr + 1;
             busAddress <= busAddress + 4; //byte addressable
         end else if (state == INIT) begin
-            // modification
-            blockCounterCurr <= blockCounter;
             burstCounter <= 9'b0;
             blockCounter <= 10'b0;
             busAddress <= busStart;
         end else begin
+            blockCounterCurr <= blockCounterCurr;
             burstCounter <= burstCounter;
             blockCounter <= blockCounter;
             busAddress <= busAddress;
@@ -169,6 +170,7 @@ module DMAController (
                 INIT: begin
                     controlRegister <= 2'b0;
                     state <= READ;
+                
                 end
                 READ: begin
                     if(error_in == 1) begin 

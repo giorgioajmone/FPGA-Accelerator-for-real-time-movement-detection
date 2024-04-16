@@ -6,25 +6,19 @@ module ramDmaCi_tb;
     reg clock, reset, start;
     reg[31:0] valueA, valueB;
     reg[7:0] CiN;
-    wire[31:0] address_data;
-    wire[3:0] byte_enables;
-    wire[7:0] burst_size;
-    wire read_n_write, 
-         begin_transaction, end_transaction, data_valid, busy, error;
-
-    // define regs as a workaround of the inout pin
-    reg[31:0] address_data_reg;
-    reg data_valid_reg;
-    reg end_transaction_reg;
-
-    // assign values of the driver regs to the wires that will then be mapped to the inout ports
-    assign address_data = address_data_reg;
-    assign data_valid = data_valid_reg;
-    assign end_transaction = end_transaction_reg;
+    reg[31:0] address_data_in;
+    reg data_valid_in, end_transaction_in;
+    reg grantRequest;
  
     // define out signals as wires
-    output wire done;
-    output wire[31:0] result;
+    wire done;
+    wire[31:0] result;
+    wire[31:0] address_data_out;
+    wire[3:0]  byte_enables_out;
+    wire[7:0]  burst_size_out;
+    wire begin_transaction_out, data_valid_out, end_transaction_out,
+         read_n_write_out, busy_in, error_in;
+    wire busRequest;
     
     // instantiate component
     ramDmaCi #(.customId(8'd27)) dut
@@ -35,17 +29,22 @@ module ramDmaCi_tb;
             .valueA(valueA),
             .valueB(valueB),
             .ciN(CiN),
-            .address_data(address_data),
-            .byte_enables(byte_enables),
-            .burst_size(burst_size),
-            .read_n_write(read_n_write),
-            .begin_transaction(begin_transaction),
-            .end_transaction(end_transaction),
-            .data_valid(data_valid),
-            .busy(busy),
-            .error(error),
+            .address_data_in(address_data_in),  // no need to do the or beacuse, in this simulation, only one slave talks to the dma
+            .address_data_out(address_data_out),
+            .byte_enables_out(byte_enables_out),
+            .burst_size_out(burst_size_out),
+            .read_n_write_out(read_n_write_out),
+            .begin_transaction_out(begin_transaction_out),
+            .end_transaction_in(end_transaction_in),
+            .end_transaction_out(end_transaction_out),
+            .data_valid_in(data_valid_in),
+            .data_valid_out(data_valid_out),
+            .busy_in(busy_in),
+            .error_in(error_in),
             .done(done),
-            .result(result)
+            .result(result),
+            .grantRequest(grantRequest),
+            .busRequest(busRequest)
         );
 
     // Set the rst to 1. keep the rst to 1 for 4 cycles. Set the reset to 0. Start "forever" with the clock
@@ -64,15 +63,16 @@ module ramDmaCi_tb;
         // set CiN to the custom instruction and start to 1
         start = 1;
         CiN = 8'd27;
+        grantRequest = 1'b1;
 
         // Configurations:
         // set the Block size
         valueA[9] = 1;
         valueA[12:10] = 3'd3;
         valueB[9:0] = 10'd5;
-        data_valid_reg = 1'b0;
-        address_data_reg = 32'b0;
-        end_transaction_reg = 1'b0; 
+        data_valid_in = 1'b0;
+        address_data_in = 32'b0;
+        end_transaction_in = 1'b0; 
         repeat(3) @(negedge clock);
 
         // set the burst size
@@ -96,23 +96,41 @@ module ramDmaCi_tb;
         repeat(3) @(negedge clock);
         valueA[31:0] = 32'b0;
         valueB[31:0] = 32'b0;
+        repeat(1) @(posedge clock);
 
         // start sending data to the dma
-        data_valid_reg = 1'b1; // driven by two drives. In DMAController is set to zero.
-        address_data_reg = 32'd1;
-        repeat(1) @(negedge clock);
-        address_data_reg = 32'd2;
-        repeat(1) @(negedge clock);
-        address_data_reg = 32'd3;
-        repeat(1) @(negedge clock);
-        address_data_reg = 32'd4;
-        repeat(1) @(negedge clock);
-        address_data_reg = 32'd5;
+        data_valid_in = 1'b1; // driven by two drives. In DMAController is set to zero.
+        address_data_in = 32'd1;
         repeat(1) @(posedge clock);
-        data_valid_reg = 1'b0;
-        end_transaction_reg = 1'b1;
+        address_data_in = 32'd2;
         repeat(1) @(posedge clock);
-        end_transaction_reg = 1'b0;
+
+        data_valid_in = 1'b0;
+        end_transaction_in = 1'b1;
+        repeat(1) @(posedge clock);
+        end_transaction_in = 1'b0;
+        repeat(1) @(posedge clock);
+
+        data_valid_in = 1'b1;
+        address_data_in = 32'd3;
+        repeat(1) @(posedge clock);
+        address_data_in = 32'd4;
+        repeat(1) @(posedge clock);
+
+        data_valid_in = 1'b0;
+        end_transaction_in = 1'b1;
+        repeat(1) @(posedge clock);
+        end_transaction_in = 1'b0;
+        repeat(1) @(posedge clock);
+
+        data_valid_in = 1'b1;
+        address_data_in = 32'd5;
+        repeat(1) @(posedge clock);
+
+        data_valid_in = 1'b0;
+        end_transaction_in = 1'b1;
+        repeat(1) @(posedge clock);
+        end_transaction_in = 1'b0;
         repeat(3) @(negedge clock);
         
         // set start to zero

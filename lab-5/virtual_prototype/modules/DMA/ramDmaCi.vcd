@@ -1,5 +1,5 @@
 $date
-	Mon Apr 15 13:01:33 2024
+	Tue Apr 16 09:59:09 2024
 $end
 $version
 	Icarus Verilog
@@ -9,493 +9,635 @@ $timescale
 $end
 $scope module ramDmaCi_tb $end
 $scope module dut $end
-$var wire 32 ! address_data [31:0] $end
-$var wire 1 " busy $end
-$var wire 4 # byte_enables [3:0] $end
+$var wire 32 ! address_data_in [31:0] $end
+$var wire 1 " busy_in $end
+$var wire 4 # byte_enables_out [3:0] $end
 $var wire 8 $ ciN [7:0] $end
 $var wire 1 % clock $end
-$var wire 1 & data_valid $end
+$var wire 1 & data_valid_in $end
 $var wire 1 ' done $end
-$var wire 1 ( end_transaction $end
-$var wire 1 ) error $end
-$var wire 1 * is_valid $end
-$var wire 1 + reset $end
-$var wire 32 , result [31:0] $end
-$var wire 1 - start $end
-$var wire 32 . valueA [31:0] $end
-$var wire 32 / valueB [31:0] $end
-$var wire 2 0 status [1:0] $end
-$var wire 32 1 resultMem [31:0] $end
-$var wire 32 2 resultDMA [31:0] $end
-$var wire 1 3 read_n_write $end
-$var wire 1 4 memWriteEnable $end
-$var wire 32 5 memDataOut [31:0] $end
-$var wire 32 6 memDataIn [31:0] $end
-$var wire 9 7 memAddress [8:0] $end
-$var wire 1 8 is_memory $end
-$var wire 1 9 doneMem $end
-$var wire 1 : doneDMA $end
-$var wire 32 ; dataOutA [31:0] $end
-$var wire 8 < burst_size [7:0] $end
-$var wire 1 = begin_transaction $end
-$var parameter 8 > customId $end
-$var reg 2 ? counter [1:0] $end
+$var wire 1 ( end_transaction_in $end
+$var wire 1 ) error_in $end
+$var wire 1 * grantRequest $end
+$var wire 1 + is_valid $end
+$var wire 1 , reset $end
+$var wire 32 - result [31:0] $end
+$var wire 1 . start $end
+$var wire 32 / valueA [31:0] $end
+$var wire 32 0 valueB [31:0] $end
+$var wire 2 1 status [1:0] $end
+$var wire 32 2 resultMem [31:0] $end
+$var wire 32 3 resultDMA [31:0] $end
+$var wire 1 4 read_n_write_out $end
+$var wire 1 5 memWriteEnable $end
+$var wire 32 6 memDataOut [31:0] $end
+$var wire 32 7 memDataIn [31:0] $end
+$var wire 9 8 memAddress [8:0] $end
+$var wire 1 9 is_memory $end
+$var wire 1 : end_transaction_out $end
+$var wire 1 ; doneMem $end
+$var wire 1 < doneDMA $end
+$var wire 1 = data_valid_out $end
+$var wire 32 > dataOutA [31:0] $end
+$var wire 1 ? busRequest $end
+$var wire 8 @ burst_size_out [7:0] $end
+$var wire 1 A begin_transaction_out $end
+$var wire 32 B address_data_out [31:0] $end
+$var parameter 8 C customId $end
+$var reg 2 D counter [1:0] $end
 $scope module dmaController $end
-$var wire 32 @ address_data [31:0] $end
-$var wire 1 " busy $end
-$var wire 4 A byte_enables [3:0] $end
+$var wire 32 E address_data_in [31:0] $end
+$var wire 1 " busy_in $end
+$var wire 4 F byte_enables_out [3:0] $end
 $var wire 1 % clock $end
-$var wire 3 B configurationBits [2:0] $end
-$var wire 1 & data_valid $end
-$var wire 1 ( end_transaction $end
-$var wire 1 ) error $end
-$var wire 1 C grantRequest $end
-$var wire 9 D memAddress [8:0] $end
-$var wire 32 E memDataOut [31:0] $end
-$var wire 1 + reset $end
-$var wire 2 F status [1:0] $end
-$var wire 1 * validInstruction $end
-$var wire 1 G writeEnable $end
-$var wire 32 H writeSettings [31:0] $end
-$var wire 1 3 read_n_write $end
-$var wire 32 I readSettings [31:0] $end
-$var wire 1 4 memWriteEnable $end
-$var wire 32 J memDataIn [31:0] $end
-$var wire 1 K busRequest $end
-$var wire 8 L burst_size [7:0] $end
-$var wire 1 = begin_transaction $end
-$var parameter 3 M C2R $end
-$var parameter 3 N CLOSE $end
-$var parameter 3 O IDLE $end
-$var parameter 3 P INIT $end
-$var parameter 3 Q READ $end
-$var parameter 3 R REQUEST $end
-$var parameter 3 S WRITE $end
-$var reg 10 T blockCounter [9:0] $end
-$var reg 10 U blockCounterCurr [9:0] $end
-$var reg 10 V blockSize [9:0] $end
-$var reg 9 W burstCounter [8:0] $end
-$var reg 9 X burstSize [8:0] $end
-$var reg 32 Y busAddress [31:0] $end
-$var reg 32 Z busStart [31:0] $end
-$var reg 2 [ controlRegister [1:0] $end
-$var reg 9 \ memAddress_r [8:0] $end
-$var reg 3 ] memCounter [0:2] $end
-$var reg 9 ^ memoryStart [8:0] $end
-$var reg 3 _ state [2:0] $end
-$var reg 2 ` statusRegister [1:0] $end
+$var wire 3 G configurationBits [2:0] $end
+$var wire 1 & data_valid_in $end
+$var wire 1 ( end_transaction_in $end
+$var wire 1 ) error_in $end
+$var wire 1 * grantRequest $end
+$var wire 9 H memAddress [8:0] $end
+$var wire 32 I memDataOut [31:0] $end
+$var wire 1 , reset $end
+$var wire 2 J status [1:0] $end
+$var wire 1 + validInstruction $end
+$var wire 1 K writeEnable $end
+$var wire 32 L writeSettings [31:0] $end
+$var wire 1 4 read_n_write_out $end
+$var wire 32 M readSettings [31:0] $end
+$var wire 1 5 memWriteEnable $end
+$var wire 32 N memDataIn [31:0] $end
+$var wire 1 : end_transaction_out $end
+$var wire 1 = data_valid_out $end
+$var wire 1 ? busRequest $end
+$var wire 8 O burst_size_out [7:0] $end
+$var wire 1 A begin_transaction_out $end
+$var wire 32 P address_data_out [31:0] $end
+$var parameter 3 Q C2R $end
+$var parameter 3 R CLOSE $end
+$var parameter 3 S IDLE $end
+$var parameter 3 T INIT $end
+$var parameter 3 U READ $end
+$var parameter 3 V REQUEST $end
+$var parameter 3 W WRITE $end
+$var reg 10 X blockCounter [9:0] $end
+$var reg 10 Y blockCounterCurr [9:0] $end
+$var reg 10 Z blockSize [9:0] $end
+$var reg 9 [ burstCounter [8:0] $end
+$var reg 9 \ burstSize [8:0] $end
+$var reg 32 ] busAddress [31:0] $end
+$var reg 32 ^ busStart [31:0] $end
+$var reg 2 _ controlRegister [1:0] $end
+$var reg 9 ` memAddress_r [8:0] $end
+$var reg 3 a memCounter [0:2] $end
+$var reg 9 b memoryStart [8:0] $end
+$var reg 3 c state [2:0] $end
+$var reg 2 d statusRegister [1:0] $end
 $upscope $end
 $scope module memory $end
-$var wire 9 a addressA [8:0] $end
-$var wire 9 b addressB [8:0] $end
+$var wire 9 e addressA [8:0] $end
+$var wire 9 f addressB [8:0] $end
 $var wire 1 % clockA $end
-$var wire 1 c clockB $end
-$var wire 32 d dataInA [31:0] $end
-$var wire 32 e dataInB [31:0] $end
-$var wire 1 f writeEnableA $end
-$var wire 1 4 writeEnableB $end
-$var parameter 32 g bitwidth $end
-$var parameter 32 h nrOfEntries $end
-$var parameter 32 i readAfterWrite $end
-$var reg 32 j dataOutA [31:0] $end
-$var reg 32 k dataOutB [31:0] $end
+$var wire 1 g clockB $end
+$var wire 32 h dataInA [31:0] $end
+$var wire 32 i dataInB [31:0] $end
+$var wire 1 j writeEnableA $end
+$var wire 1 5 writeEnableB $end
+$var parameter 32 k bitwidth $end
+$var parameter 32 l nrOfEntries $end
+$var parameter 32 m readAfterWrite $end
+$var reg 32 n dataOutA [31:0] $end
+$var reg 32 o dataOutB [31:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
 $enddefinitions $end
 $comment Show the parameter values. $end
 $dumpall
-b0 i
-b1000000000 h
-b100000 g
-b101 S
-b1 R
-b11 Q
-b10 P
-b0 O
-b100 N
-b110 M
-b11011 >
+b0 m
+b1000000000 l
+b100000 k
+b101 W
+b1 V
+b11 U
+b10 T
+b0 S
+b100 R
+b110 Q
+b11011 C
 $end
 #0
 $dumpvars
-bx k
-bx j
-0f
+bx o
+bx n
+0j
+b0 i
+bx0000000101 h
+1g
+bx f
 bx e
-bx0000000101 d
-1c
+bx d
+bx c
 bx b
-bx a
+b0 a
 bx `
 bx _
 bx ^
-b0 ]
+bx ]
 bx \
 bx [
 bx Z
 bx Y
 bx X
-bx W
-bx V
-bx U
-bx T
-bx L
-xK
+bx P
+bx O
+bx N
+b0xxxxxxxxxx M
+bx0000000101 L
+1K
 bx J
-b0xxxxxxxxxx I
-bx0000000101 H
-1G
-bx F
-bx E
+b0 I
+bx H
+b11 G
+bz F
+b0 E
 bx D
-zC
-b11 B
-bz A
+bx B
+xA
 bx @
-bx ?
-x=
-bx <
-bx ;
-1:
+x?
+bx >
+0=
+1<
+0;
+x:
 09
-08
+bx 8
 bx 7
-bx 6
-bx 5
-04
-x3
-b0xxxxxxxxxx 2
-b0 1
-bx 0
-bx0000000101 /
-bx0111xxxxxxxxx .
-1-
-b0xxxxxxxxxx ,
+b0 6
+05
+x4
+b0xxxxxxxxxx 3
+b0 2
+bx 1
+bx0000000101 0
+bx0111xxxxxxxxx /
+1.
+b0xxxxxxxxxx -
+1,
 1+
 1*
 z)
-x(
+0(
 1'
 0&
 0%
 b11011 $
 bz #
 z"
-bx !
+b0 !
 $end
 #5
-b0 ,
-b0 2
-b0 I
-b0 <
-b0 L
-0(
-0K
-0=
-03
-b0 5
-b0 E
-b0 e
-b0 !
+b0 -
+b0 3
+b0 M
 b0 @
-b0 [
-b0 0
-b0 F
-b0 `
-b0 X
-b0 V
-b0 ^
-b0 Z
-b0 7
-b0 D
-b0 b
-b0 \
-b0 Y
-b0 T
-b0 W
+b0 O
+0:
+0?
+0A
+04
+b0 B
+b0 P
 b0 _
-0c
-b0 ?
+b0 1
+b0 J
+b0 d
+b0 \
+b0 Z
+b0 b
+b0 ^
+b0 8
+b0 H
+b0 f
+b0 `
+b0 ]
+b0 Y
+b0 X
+b0 [
+b0 c
+0g
+b0 D
 1%
 #10
-1c
+1g
 0%
 #15
-0c
+0g
 1%
 #20
-1c
-0+
+1g
+0,
 0%
 #25
-b101 ,
-b101 2
-b101 I
-b101 V
-b1 ?
-0c
+b101 -
+b101 3
+b101 M
+b101 Z
+b1 D
+0g
 1%
 #30
-b0 ,
-b0 2
-b0 I
-b100 B
-1c
-bx0000000001 /
-bx0000000001 H
-bx0000000001 d
-bx1001xxxxxxxxx .
+b0 -
+b0 3
+b0 M
+b100 G
+1g
+bx0000000001 0
+bx0000000001 L
+bx0000000001 h
+bx1001xxxxxxxxx /
 0%
 #35
-b10 ,
-b10 2
-b10 I
-b10 ?
-b10 X
-0c
+b10 -
+b10 3
+b10 M
+b10 D
+b10 \
+0g
 1%
 #40
-1c
+1g
 0%
 #45
-b0 ?
-0c
+b0 D
+0g
 1%
 #50
-1c
+1g
 0%
 #55
-b1 ?
-0c
+b1 D
+0g
 1%
 #60
-b0 ,
-b0 2
-b0 I
-b10 B
-1c
-bx0000000000 /
-bx0000000000 H
-bx0000000000 d
-bx0101xxxxxxxxx .
+b0 -
+b0 3
+b0 M
+b10 G
+1g
+bx0000000000 0
+bx0000000000 L
+bx0000000000 h
+bx0101xxxxxxxxx /
 0%
 #65
-b10 ?
-0c
+b10 D
+0g
 1%
 #70
-1c
+1g
 0%
 #75
-b0 ?
-0c
+b0 D
+0g
 1%
 #80
-1c
+1g
 0%
 #85
-b1 ?
-0c
+b1 D
+0g
 1%
 #90
-b1 B
-1c
-b0 /
-b0 H
-b0 d
-bx0011xxxxxxxxx .
+b1 G
+1g
+b0 0
+b0 L
+b0 h
+bx0011xxxxxxxxx /
 0%
 #95
-b10 ?
-0c
+b10 D
+0g
 1%
 #100
-1c
+1g
 0%
 #105
-b0 ?
-0c
+b0 D
+0g
 1%
 #110
-1c
+1g
 0%
 #115
-b1 ?
-0c
+b1 D
+0g
 1%
 #120
-b101 B
-1c
-b1 /
-b1 H
-b1 d
-bx1011xxxxxxxxx .
+b101 G
+1g
+b1 0
+b1 L
+b1 h
+bx1011xxxxxxxxx /
 0%
 #125
-b1 [
-b10 ?
-0c
+b1 _
+b10 D
+0g
 1%
 #130
-1c
+1g
 0%
 #135
-b1 ,
-b1 2
-b1 I
-1K
-b0 ?
-b1 _
-b1 0
-b1 F
-b1 `
-0c
+b1 -
+b1 3
+b1 M
+1?
+b0 D
+b1 c
+b1 1
+b1 J
+b1 d
+0g
 1%
 #140
-1c
+1g
 0%
 #145
-b1 ?
-0c
+b10 @
+b10 O
+0?
+1A
+14
+b10 c
+b1 D
+0g
 1%
 #150
-b0 2
-b0 I
+b0 3
+b0 M
 0'
-bx ,
-09
-0:
-bx 1
-18
-b0 a
-0G
-b0 B
-1c
-b0x 5
-b0x E
-b0x e
-b0x !
-b0x @
-x&
+bx -
+0;
+0<
+bx 2
+19
+b0 e
+0K
+b0 G
+1g
+b0 0
+b0 L
+b0 h
 b0 /
-b0 H
-b0 d
-b0 .
 0%
 #155
-1'
-19
-b10 ?
-0c
+15
+b0 @
+b0 O
+0A
+04
+b0 D
+b11 c
+b0 _
+0g
+b1 6
+b1 I
+b1 i
+b1 !
+b1 E
+1&
 1%
 #160
-1c
-b0x0 5
-b0x0 E
-b0x0 e
-b0x0 !
-b0x0 @
+b1 7
+b1 N
+b1 o
+1g
 0%
 #165
-0'
-09
-b0 ?
-0c
+b1 8
+b1 H
+b1 f
+b1 `
+b100 ]
+b1 Y
+b1 X
+b1 [
+b1 -
+b1 2
+0g
+b10 6
+b10 I
+b10 i
+b10 !
+b10 E
+b1 >
+b1 n
 1%
 #170
-1c
-b0xx 5
-b0xx E
-b0xx e
-b0xx !
-b0xx @
+b10 7
+b10 N
+b10 o
+1g
 0%
 #175
-b1 ?
-0c
-1%
-#180
-1c
-b0x00 5
-b0x00 E
-b0x00 e
-b0x00 !
-b0x00 @
-0%
-#185
-1'
-19
-b10 ?
-0c
-1%
-#190
-1c
-b0x0x 5
-b0x0x E
-b0x0x e
-b0x0x !
-b0x0x @
-0%
-#195
-0'
-09
-b0 ?
-0c
-x(
+1?
+b1 c
+05
+0g
+1(
 0&
 1%
-#200
-1c
+#180
+1g
 0%
-#205
-b1 ?
-0c
+#185
+b10 @
+b10 O
+0?
+1A
+b100 B
+b100 P
+b10 c
+0g
 0(
 1%
+#190
+1g
+0%
+#195
+15
+b0 @
+b0 O
+0A
+b0 B
+b0 P
+b11 c
+b0 ]
+b0 X
+b0 [
+b0 8
+b0 H
+b0 f
+b0 `
+0g
+b11 6
+b11 I
+b11 i
+b11 !
+b11 E
+1&
+1%
+#200
+b11 7
+b11 N
+b11 o
+1g
+0%
+#205
+b1 8
+b1 H
+b1 f
+b1 `
+b100 ]
+b10 Y
+b1 X
+b1 [
+b11 -
+b11 2
+0g
+b100 6
+b100 I
+b100 i
+b100 !
+b100 E
+b11 >
+b11 n
+1%
 #210
-1c
+b100 7
+b100 N
+b100 o
+1g
 0%
 #215
-1'
-19
-b10 ?
-0c
+1?
+b1 c
+05
+0g
+1(
+0&
 1%
 #220
-1c
+1g
 0%
 #225
-0'
-09
-b0 ?
-0c
+b10 @
+b10 O
+0?
+1A
+b100 B
+b100 P
+b10 c
+0g
+0(
 1%
 #230
-b0 ,
-b0 1
-0*
-1c
-0-
+1g
 0%
 #235
-b1 ?
-0c
+15
+b0 @
+b0 O
+0A
+b0 B
+b0 P
+b11 c
+b0 ]
+b0 X
+b0 [
+b0 8
+b0 H
+b0 f
+b0 `
+0g
+b101 6
+b101 I
+b101 i
+b101 !
+b101 E
+1&
 1%
 #240
-1c
+b101 7
+b101 N
+b101 o
+1g
 0%
 #245
-b10 ?
-0c
+b1 8
+b1 H
+b1 f
+b1 `
+b100 ]
+b11 Y
+b1 X
+b1 [
+05
+b101 -
+b101 2
+0g
+1(
+0&
+b101 >
+b101 n
 1%
 #250
-1c
+b100 7
+b100 N
+b100 o
+1g
 0%
 #255
-b0 ?
-0c
+0g
+0(
 1%
 #260
-1c
+1g
+0%
+#265
+0g
+1%
+#270
+1g
+0%
+#275
+0g
+1%
+#280
+b0 -
+b0 2
+0+
+1g
+0.
+0%
+#285
+0g
+1%
+#290
+1g
+0%
+#295
+0g
+1%
+#300
+1g
+0%
+#305
+0g
+1%
+#310
+1g
 0%
