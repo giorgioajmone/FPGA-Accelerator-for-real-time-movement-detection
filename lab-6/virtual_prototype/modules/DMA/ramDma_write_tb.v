@@ -92,7 +92,8 @@ initial begin
     addressDataIn = 0;
     transactionGranted = 1'b1;
     // Wait 100 ns for global reset to finish
-    #105;
+    #100;
+    @(negedge clock);
     //initialize memory
     reset = 0;
     start=1;

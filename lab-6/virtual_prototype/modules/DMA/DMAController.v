@@ -50,7 +50,7 @@ module DMAController (
 
     //CPU
 
-    assign readSettings = (validInstruction == 0) ? 32'b0 : 
+    assign readSettings = (validInstruction == 0 || writeEnable == 1) ? 32'b0 : 
                             (configurationBits == 3'b001) ? busStart : 
                                 (configurationBits == 3'b010) ? memoryStart : 
                                     (configurationBits == 3'b011) ? blockSize :
@@ -106,8 +106,8 @@ module DMAController (
     assign begin_transaction_out = (state == INIT) ? 1'b1 : 1'b0;
     assign read_n_write_out = (state == INIT) ? (controlRegister[0] == 1) ? 1'b1 : 1'b0 : 1'b0;
     assign address_data_out = (state == INIT) ? busAddress : (state == WRITE) ? memDataIn: 32'b0; 
-    assign burst_size_out = (state == INIT) ? (blockSize - blockCounter) < burstSize ? (blockSize - blockCounter) : burstSize[7:0] : 8'b0;  // possibile soluzione con sottrazione, comparator e mux
-    
+    assign burst_size_out = (state == INIT) ? (blockSize - blockCounter) < burstSize ? (blockSize - blockCounter) : burstSize[7:0] : 8'b0;
+    assign byte_enables_out = (state == INIT && controlRegister == 2'd2) ? 4'b1 : 4'b0;
     assign data_valid_sc = (state == WRITE && memCounter == 2'd2 && !busy_in) ? 1'b1 : 1'b0;
 
     assign data_valid_out = data_valid_sc;
@@ -174,7 +174,6 @@ module DMAController (
                     end
                 end
                 INIT: begin
-                    controlRegister <= 2'b0;
                     if (controlRegister == 2'd1) begin
                         state <= READ;
                     end else begin
@@ -188,6 +187,7 @@ module DMAController (
                     end else if (end_transaction_in == 1) begin 
                         if (blockCounter == blockSize) begin
                             statusRegister[0] <= 1'b0;
+                            controlRegister <= 2'b0;
                             state <= IDLE;
                         end else begin
                             state <= REQUEST;
@@ -214,10 +214,12 @@ module DMAController (
                 end
                 CLOSE: begin
                     statusRegister[0] <= 1'b0;
+                    controlRegister <= 2'b0;
                     state <= IDLE;
                 end
                 default: begin
                     statusRegister[0] <= 1'b0; 
+                    controlRegister <= 2'b0;
                     state <= IDLE;
                 end
             endcase
