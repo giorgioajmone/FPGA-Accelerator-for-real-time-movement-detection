@@ -27,7 +27,7 @@ int main () {
 
   //wait until done
 
-  uint32_t flag = 0;
+  volatile uint32_t flag = 0;
   while(flag == 0){
     asm volatile ("l.nios_rrr [out], %[valueB], %[valueA], 0xB" : [out] "=r" (flag) : [valueA] "r" (0x00001400), [valueB] "r" (0x00000000));
   }
