@@ -707,7 +707,7 @@ ramDmaCi #(.customId(8'hD)) DMA(
     .data_valid_in(s_dataValid),
     .busy_in(s_busy),
     .error_in(s_busError),
-    .grantRequest(),
+    .grantRequest(s_busGrants[27]),
     .address_data_out(s_dmaAddressData),
     .byte_enables_out(s_dmaByteEnables),
     .burst_size_out(s_dmaBurstSize),
@@ -715,7 +715,7 @@ ramDmaCi #(.customId(8'hD)) DMA(
     .begin_transaction_out(s_dmaBeginTransaction), 
     .end_transaction_out(s_dmaEndTransaction), 
     .data_valid_out(s_dmaDataValid),
-    .busRequest()
+    .busRequest(s_busRequests[27])
 ) 
  
 endmodule
