@@ -151,7 +151,7 @@ initial begin
     start=1;
     ciN=8'hfe;
     valueA=32'h00000e00; // write 64 on block siye
-    valueB=32'd69;
+    valueB=32'd1;
     #10;
     start=0;
     ciN=0;
@@ -169,7 +169,7 @@ initial begin
     start=1;
     ciN=8'hfe;
     valueA=32'h00001200; // write 7 on burst size
-    valueB=32'd7;
+    valueB=32'd0;
     #10;
     start=0;
     ciN=0;

@@ -47,8 +47,11 @@ module DMAController (
     reg[0:2] memCounter = 3'b0;
 
     wire data_valid_sc;
+    wire[8:0] tmp_burst;//, tmp_burst_in;
 
     //CPU
+
+    //assign tmp_burst_in = {1'd0, writeSettings[7:0]};
 
     assign readSettings = (validInstruction == 0 || writeEnable == 1) ? 32'b0 : 
                             (configurationBits == 3'b001) ? busStart : 
@@ -65,8 +68,13 @@ module DMAController (
             memoryStart <= 0; 
             blockSize <= 0;
             burstSize <= 0;
-            statusRegister <= 0;
             controlRegister <= 0;
+        end else if(state == CLOSE || (state == READ && end_transaction_in == 1'b1 && blockCounter == blockSize)) begin
+            controlRegister <= 2'b0;
+            busStart <= busStart;
+            memoryStart <= memoryStart;
+            blockSize <= blockSize;
+            burstSize <= burstSize;
         end else if(validInstruction == 1 && writeEnable == 1) begin
             case (configurationBits)
                 3'd1: begin  busStart <= writeSettings; end
@@ -101,12 +109,14 @@ module DMAController (
 
     // BUS
 
+    assign tmp_burst = burstSize;
+
     assign busRequest = (state == REQUEST) ? 1'b1 : 1'b0;
 
     assign begin_transaction_out = (state == INIT) ? 1'b1 : 1'b0;
     assign read_n_write_out = (state == INIT) ? (controlRegister[0] == 1) ? 1'b1 : 1'b0 : 1'b0;
     assign address_data_out = (state == INIT) ? busAddress : (state == WRITE) ? memDataIn: 32'b0; 
-    assign burst_size_out = (state == INIT) ? (blockSize - blockCounter) < burstSize ? (blockSize - blockCounter) : burstSize[7:0] : 8'b0;
+    assign burst_size_out = (state == INIT) ? (blockSize - blockCounter) < burstSize ? (blockSize - blockCounter) : tmp_burst[7:0]: 8'b0;
     assign byte_enables_out = (state == INIT && controlRegister == 2'd2) ? 4'b1 : 4'b0;
     assign data_valid_sc = (state == WRITE && memCounter == 2'd2 && !busy_in) ? 1'b1 : 1'b0;
 
@@ -155,6 +165,7 @@ module DMAController (
     always @(posedge clock) begin
         if (reset == 1) begin
             state <= IDLE;
+            statusRegister <= 0;
         end else begin
             case (state)
                 IDLE: begin
@@ -162,7 +173,7 @@ module DMAController (
                         statusRegister <= 2'd1; 
                         state <= REQUEST;
                     end else begin
-                        statusRegister[0] <= 1'b0; 
+                        statusRegister <= statusRegister & 2'd2; 
                         state <= IDLE;
                     end
                 end
@@ -187,7 +198,6 @@ module DMAController (
                     end else if (end_transaction_in == 1) begin 
                         if (blockCounter == blockSize) begin
                             statusRegister[0] <= 1'b0;
-                            controlRegister <= 2'b0;
                             state <= IDLE;
                         end else begin
                             state <= REQUEST;
@@ -214,12 +224,10 @@ module DMAController (
                 end
                 CLOSE: begin
                     statusRegister[0] <= 1'b0;
-                    controlRegister <= 2'b0;
                     state <= IDLE;
                 end
                 default: begin
                     statusRegister[0] <= 1'b0; 
-                    controlRegister <= 2'b0;
                     state <= IDLE;
                 end
             endcase

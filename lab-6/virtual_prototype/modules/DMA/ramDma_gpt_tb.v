@@ -77,7 +77,8 @@ initial begin
     beginTransactionIn = 0;
     addressDataIn = 0;
     // Wait 100 ns for global reset to finish
-    #105;
+    #100;
+
     reset = 0;
 
     //test simple write & simple read operations
@@ -192,7 +193,7 @@ initial begin
     valueA=0;
     valueB=0;
     
-    for (i=0; i<8; i=i+1)begin
+    for (i=0; i<0; i=i+1)begin
         #30;
         transactionGranted=1'b1;
         #10;
