@@ -1,5 +1,5 @@
 Assembler report for or1420SingleCore
-Fri Apr 19 21:31:38 2024
+Sat Apr 20 18:49:08 2024
 Quartus Prime Version 18.1.1 Build 646 04/11/2019 SJ Lite Edition
 
 
@@ -38,7 +38,7 @@ https://fpgasoftware.intel.com/eula.
 +---------------------------------------------------------------+
 ; Assembler Summary                                             ;
 +-----------------------+---------------------------------------+
-; Assembler Status      ; Successful - Fri Apr 19 21:31:38 2024 ;
+; Assembler Status      ; Successful - Sat Apr 20 18:49:08 2024 ;
 ; Revision Name         ; or1420SingleCore                      ;
 ; Top-level Entity Name ; or1420SingleCore                      ;
 ; Family                ; Cyclone IV E                          ;
@@ -93,8 +93,8 @@ https://fpgasoftware.intel.com/eula.
 +----------------+-------------------------------+
 ; Option         ; Setting                       ;
 +----------------+-------------------------------+
-; JTAG usercode  ; 0x00B575DC                    ;
-; Checksum       ; 0x00B575DC                    ;
+; JTAG usercode  ; 0x00B56E5F                    ;
+; Checksum       ; 0x00B56E5F                    ;
 +----------------+-------------------------------+
 
 
@@ -118,14 +118,14 @@ Info: Running Quartus Prime Assembler
     Info: Intel and sold by Intel or its authorized distributors.  Please
     Info: refer to the applicable agreement for further details, at
     Info: https://fpgasoftware.intel.com/eula.
-    Info: Processing started: Fri Apr 19 21:31:35 2024
+    Info: Processing started: Sat Apr 20 18:49:05 2024
 Info: Command: quartus_asm or1420SingleCore
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
 Info (115031): Writing out detailed assembly data for power analysis
 Info (115030): Assembler is generating device programming files
 Info: Quartus Prime Assembler was successful. 0 errors, 1 warning
-    Info: Peak virtual memory: 830 megabytes
-    Info: Processing ended: Fri Apr 19 21:31:38 2024
+    Info: Peak virtual memory: 829 megabytes
+    Info: Processing ended: Sat Apr 20 18:49:08 2024
     Info: Elapsed time: 00:00:03
     Info: Total CPU time (on all processors): 00:00:02
 

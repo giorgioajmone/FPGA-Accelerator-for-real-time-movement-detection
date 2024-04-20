@@ -38,6 +38,7 @@ module ramDmaCi #(
     reg[31:0] address_data_in_r;
     reg end_transaction_in_r, data_valid_in_r, busy_in_r, error_in_r,
         grantRequest_r;
+    reg[4:0] feedback_r;
 
     wire is_valid, is_memory;
 
@@ -85,6 +86,7 @@ module ramDmaCi #(
             end_transaction_out_r <= 0;
             data_valid_out_r <= 0;
             busRequest_r <= 0;
+            feedback_r <= 0; 
         end else begin
             end_transaction_in_r <= end_transaction_in;
             data_valid_in_r <= data_valid_in;
@@ -101,6 +103,8 @@ module ramDmaCi #(
             end_transaction_out_r <= end_transaction_out_s;
             data_valid_out_r <= data_valid_out_s;
             busRequest_r <= busRequest_s;
+
+            feedback_r <= feedback;
         end
     end
 
@@ -115,7 +119,7 @@ module ramDmaCi #(
 
     dualPortSSRAM #(.bitwidth(32), .nrOfEntries(512), .readAfterWrite(0)) memory(
         .clockA(clock),
-        .clockB(!clock),
+        .clockB(clock),
         .writeEnableA(is_valid && valueA[9] && is_memory),
         .writeEnableB(memWriteEnable),
         .addressA(valueA[8:0]),
@@ -155,7 +159,7 @@ module ramDmaCi #(
         .error_in(error_in_r),
         .grantRequest(grantRequest_r),
         .busRequest(busRequest_s),
-        .feedback(feedback)
+        .feedback(feedback_r)
     );
     
 endmodule
