@@ -8,21 +8,18 @@ module dualPortSSRAM #( parameter bitwidth = 8, parameter nrOfEntries = 512, par
 
     reg [bitwidth-1 : 0] memoryContent [nrOfEntries-1 : 0];
 
-    /*
+  
     always @(posedge clockA) begin
-        if (readAfterWrite != 0) dataOutA = memoryContent[addressA];
         if (writeEnableA == 1'b1) memoryContent[addressA] = dataInA;
-        if (readAfterWrite == 0) dataOutA = memoryContent[addressA];
+        dataOutA = memoryContent[addressA];
     end
 
-    always @(negedge clockA) begin
-        if (readAfterWrite != 0) dataOutB = memoryContent[addressB];
+    always @(posedge clockB) begin
         if (writeEnableB == 1'b1) memoryContent[addressB] = dataInB;
-        if (readAfterWrite == 0) dataOutB = memoryContent[addressB];
+        dataOutB = memoryContent[addressB];
     end
-    */
 
-    always @(posedge clockA)
+    /* always @(posedge clockA)
     begin   
         if (writeEnableA) 
         begin
@@ -47,7 +44,7 @@ module dualPortSSRAM #( parameter bitwidth = 8, parameter nrOfEntries = 512, par
         begin
             dataOutB <= memoryContent[addressB];
         end
-    end
+    end */
 
 
 endmodule

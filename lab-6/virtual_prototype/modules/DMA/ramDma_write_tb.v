@@ -151,7 +151,7 @@ initial begin
     start=1;
     ciN=8'hfe;
     valueA=32'h00000e00; // write 64 on block siye
-    valueB=32'd1;
+    valueB=32'd16;
     #10;
     start=0;
     ciN=0;

@@ -629,9 +629,9 @@ module or1420SingleCore ( input wire         clock12MHz,
  assign s_busRequests[31] = s_cpu1DcacheRequestBus;
  assign s_busRequests[30] = s_cpu1IcacheRequestBus;
  assign s_busRequests[29] = s_hdmiRequestBus;
- assign s_busRequests[28] =  s_camReqBus;
+ assign s_busRequests[28] = s_camReqBus;
  assign s_busRequests[27] = s_dmaRequest;
- assign s_busRequests[26:0] = 29'd0;
+ assign s_busRequests[26:0] = 27'd0;
  
  assign s_cpu1DcacheBusAccessGranted = s_busGrants[31];
  assign s_cpu1IcacheBusAccessGranted = s_busGrants[30];
@@ -717,7 +717,8 @@ ramDmaCi #(.customId(8'hD)) DMA(
     .begin_transaction_out(s_dmaBeginTransaction), 
     .end_transaction_out(s_dmaEndTransaction), 
     .data_valid_out(s_dmaDataValid),
-    .busRequest(s_dmaRequest)
+    .busRequest(s_dmaRequest),
+    .feedback({s_arbBusError,s_biosBusError,s_uartBusError,s_sdramBusError,s_flashBusError})
 );
  
 endmodule

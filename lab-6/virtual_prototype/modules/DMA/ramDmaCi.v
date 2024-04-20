@@ -17,7 +17,10 @@ module ramDmaCi #(
     output wire read_n_write_out, begin_transaction_out, end_transaction_out, data_valid_out,
     input wire end_transaction_in, data_valid_in, busy_in, error_in,
     input wire grantRequest,
-    output wire busRequest
+    output wire busRequest,
+
+    //feedback
+    input wire[4:0] feedback
 );
 
     reg[1:0] counter;
@@ -37,7 +40,6 @@ module ramDmaCi #(
         grantRequest_r;
 
     wire is_valid, is_memory;
-    wire[1:0] status;
 
     wire[31:0] dataOutA, resultMem, resultDMA;
     wire doneMem, doneDMA;
@@ -57,8 +59,6 @@ module ramDmaCi #(
 
     assign doneDMA = (is_valid == 1'b1 && !is_memory) ? 1'b1 : 1'b0;
     assign doneMem = (ciN == customId && is_memory && (counter == 2'd2 || valueA[9] == 1'b1) )? 1'b1 : 1'b0;
-
-    //&& (counter == 2'd2 || valueA[9] == 1'b1) 
 
     assign resultMem = (ciN == customId && is_memory) ? dataOutA : 32'b0;
 
@@ -91,11 +91,11 @@ module ramDmaCi #(
             busy_in_r <= busy_in;
             error_in_r <= error_in;
             grantRequest_r <= grantRequest;
-            address_data_in_r <= address_data_in;//{address_data_in[7:0], address_data_in[15:8], address_data_in[23:16], address_data_in[31:24]}; 
+            address_data_in_r <= {address_data_in[7:0], address_data_in[15:8], address_data_in[23:16], address_data_in[31:24]}; 
 
             byte_enables_out_r <= byte_enables_out_s;
             burst_size_out_r <= burst_size_out_s;
-            address_data_out_r <= address_data_out_s; //{address_data_out_s[7:0], address_data_out_s[15:8], address_data_out_s[23:16], address_data_out_s[31:24]};
+            address_data_out_r <= {address_data_out_s[7:0], address_data_out_s[15:8], address_data_out_s[23:16], address_data_out_s[31:24]};
             read_n_write_out_r <= read_n_write_out_s;
             begin_transaction_out_r <= begin_transaction_out_s;
             end_transaction_out_r <= end_transaction_out_s;
@@ -104,7 +104,6 @@ module ramDmaCi #(
         end
     end
 
-    // modification: logic for counter
     always@(posedge clock) begin
         if(reset == 1'b1) begin
             counter = 0;
@@ -116,7 +115,7 @@ module ramDmaCi #(
 
     dualPortSSRAM #(.bitwidth(32), .nrOfEntries(512), .readAfterWrite(0)) memory(
         .clockA(clock),
-        .clockB(clock),
+        .clockB(!clock),
         .writeEnableA(is_valid && valueA[9] && is_memory),
         .writeEnableB(memWriteEnable),
         .addressA(valueA[8:0]),
@@ -135,7 +134,6 @@ module ramDmaCi #(
         .configurationBits(valueA[12:10]),
         .readSettings(resultDMA),
         .writeSettings(valueB),
-        .status(status),
 
         .memAddress(memAddress),
         .memDataIn(memDataIn),
@@ -143,20 +141,21 @@ module ramDmaCi #(
         .memWriteEnable(memWriteEnable),
 
         //bus ports
-    .address_data_in(address_data_in_r),
-    .address_data_out(address_data_out_s),
-    .byte_enables_out(byte_enables_out_s),
-    .burst_size_out(burst_size_out_s),
-    .read_n_write_out(read_n_write_out_s), 
-    .begin_transaction_out(begin_transaction_out_s), 
-    .end_transaction_out(end_transaction_out_s), 
-    .data_valid_out(data_valid_out_s),
-    .end_transaction_in(end_transaction_in_r), 
-    .data_valid_in(data_valid_in_r), 
-    .busy_in(busy_in_r), 
-    .error_in(error_in_r),
-    .grantRequest(grantRequest_r),
-    .busRequest(busRequest_s)
+        .address_data_in(address_data_in_r),
+        .address_data_out(address_data_out_s),
+        .byte_enables_out(byte_enables_out_s),
+        .burst_size_out(burst_size_out_s),
+        .read_n_write_out(read_n_write_out_s), 
+        .begin_transaction_out(begin_transaction_out_s), 
+        .end_transaction_out(end_transaction_out_s), 
+        .data_valid_out(data_valid_out_s),
+        .end_transaction_in(end_transaction_in_r), 
+        .data_valid_in(data_valid_in_r), 
+        .busy_in(busy_in_r), 
+        .error_in(error_in_r),
+        .grantRequest(grantRequest_r),
+        .busRequest(busRequest_s),
+        .feedback(feedback)
     );
     
 endmodule
