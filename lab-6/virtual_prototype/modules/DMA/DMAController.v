@@ -97,7 +97,7 @@ module DMAController (
     always @(posedge clock) begin
         if(reset == 1) begin 
             memAddress_r <= 9'b0;
-        end else if((state == READ && data_valid_in == 1) || (state == WRITE && data_valid_sc == 1)) begin
+        end else if((state == READ && data_valid_in == 1) || (state == WRITE && busy_in == 1'b0)) begin
             memAddress_r <= memAddress_r + 1;
         end else if (state == INIT) begin
             memAddress_r <= memAddress_r;
