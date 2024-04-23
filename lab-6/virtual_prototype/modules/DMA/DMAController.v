@@ -117,9 +117,9 @@ module DMAController (
     assign address_data_out = (state == INIT) ? tSwap : (state == WRITE) ? memDataIn: 32'b0; 
     assign burst_size_out = (state == INIT) ? (blockSize - blockCounter) < burstSize ? (blockSize - blockCounter - 10'd1) : (burstSize - 9'd1) : 8'b0;
     assign byte_enables_out = (state == INIT) ? 4'd15 : 4'd0;
-    assign data_valid_sc = (state == WRITE && memCounter == 3'd3 && busy_in == 1'b0) ? 1'b1 : 1'b0;
+    //assign data_valid_sc = (state == WRITE && memCounter == 3'd3 && busy_in == 1'b0) ? 1'b1 : 1'b0;
 
-    assign data_valid_out = data_valid_sc;
+    assign data_valid_out = (state == WRITE) ? 1'b1 : 1'b0;
 
     assign end_transaction_out = (state == CLOSE || state == C2R) ? 1'b1 : 1'b0;
 
@@ -140,7 +140,7 @@ module DMAController (
             burstCounter <= 9'b0;
             blockCounter <= 10'b0;
             busAddress <= 32'b0;
-        end else if((state == READ && data_valid_in == 1) || (state == WRITE && data_valid_sc == 1)) begin
+        end else if((state == READ && data_valid_in == 1) || (state == WRITE && busy_in == 0)) begin
             burstCounter <= burstCounter + 1;                                       
             blockCounter <= blockCounter + 1;                                       
             busAddress <= busAddress + 4;

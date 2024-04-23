@@ -85,6 +85,16 @@ module DMA_tb;
         ciValueA = 0;
         ciValueB = 0;
 
+        #10;
+        ciN = 8'h69;
+        ciValueA = 16 | (1 << 9);
+        ciValueB = 13;
+        ciStart = 1;
+        #10;
+        ciStart = 0;
+        ciValueA = 0;
+        ciValueB = 0;
+
         #40;
         ciN = 8'h69;
         ciValueA = 5 | (0 << 9);
