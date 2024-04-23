@@ -44,13 +44,8 @@ module DMAController (
     reg[8:0] memAddress_r;
     reg[8:0] burstCounter;
     reg[9:0] blockCounter;
-    
 
-    reg[2:0] memCounter;
-    wire data_valid_sc;
-
-    reg[9:0] feedback_r;
-    wire[31:0] tSwap;
+    reg[9:0] burstToShow;
 
     //CPU
 
@@ -59,8 +54,7 @@ module DMAController (
                                 (configurationBits == 3'b010) ? memoryStart : 
                                     (configurationBits == 3'b011) ? blockSize :
                                         (configurationBits == 3'b100) ? burstSize - 9'd1 :
-                                            (configurationBits == 3'b101) ? statusRegister : 
-                                                (configurationBits == 3'b111) ? feedback_r : 32'b0; 
+                                            (configurationBits == 3'b101) ? statusRegister : 32'b0; 
 
     
     always @(posedge clock) begin
@@ -114,26 +108,13 @@ module DMAController (
 
     assign begin_transaction_out = (state == INIT) ? 1'b1 : 1'b0;
     assign read_n_write_out = (state == INIT) ? controlRegister[0] : 1'b0;
-    assign address_data_out = (state == INIT) ? tSwap : (state == WRITE) ? memDataIn: 32'b0; 
+    assign address_data_out = (state == INIT) ? busAddress : (state == WRITE) ? {memDataIn[7:0], memDataIn[15:8], memDataIn[23:16], memDataIn[31:24]}: 32'b0; 
     assign burst_size_out = (state == INIT) ? (blockSize - blockCounter) < burstSize ? (blockSize - blockCounter - 10'd1) : (burstSize - 9'd1) : 8'b0;
     assign byte_enables_out = (state == INIT) ? 4'd15 : 4'd0;
-    //assign data_valid_sc = (state == WRITE && memCounter == 3'd3 && busy_in == 1'b0) ? 1'b1 : 1'b0;
 
     assign data_valid_out = (state == WRITE) ? 1'b1 : 1'b0;
 
     assign end_transaction_out = (state == CLOSE || state == C2R) ? 1'b1 : 1'b0;
-
-    always @(posedge clock) begin
-        if (reset == 1) begin 
-            memCounter <= 3'b0;
-        end else if(state == WRITE && busy_in == 1'b0) begin
-            memCounter <= (memCounter == 3'd3) ? 0 : memCounter + 1;
-        end else if(state == INIT) begin
-            memCounter <= 0;
-        end else begin
-            memCounter <= memCounter;
-        end
-    end
 
     always @(posedge clock) begin
         if(reset == 1) begin
@@ -159,6 +140,16 @@ module DMAController (
         end
     end
 
+    always @(posedge clock) begin
+        if(reset == 1) begin
+            burstToShow <= 0;
+        end else if((state == REQUEST && grantRequest == 1)) begin
+            burstToShow <= (blockSize - blockCounter) < burstSize ? (blockSize - blockCounter - 10'd1) : (burstSize - 9'd1);
+        end else begin
+            burstToShow <= 0;
+        end
+    end
+
     // FSM 
 
     always @(posedge clock) begin
@@ -169,9 +160,6 @@ module DMAController (
         end else begin
             case (state)
                 IDLE: begin
-                    if(error_in == 1 && feedback_r == 0) begin
-                        feedback_r <= {3'd1, feedback};
-                    end
                     if (controlRegister[0] != controlRegister[1] && blockSize != 0) begin
                         statusRegister <= 2'd1; 
                         state <= REQUEST;
@@ -181,9 +169,6 @@ module DMAController (
                     end
                 end
                 REQUEST: begin
-                    if(error_in == 1&& feedback_r == 0) begin
-                        feedback_r <= {3'd2, feedback};
-                    end
                     if(grantRequest == 1) begin 
                         state <= INIT;
                         statusRegister <= statusRegister;
@@ -193,9 +178,6 @@ module DMAController (
                     end
                 end
                 INIT: begin
-                    if(error_in == 1&& feedback_r == 0) begin
-                        feedback_r <= {3'd3, feedback};
-                    end
                     if (controlRegister[0] == 1'b1) begin
                         state <= READ;
                         statusRegister <= statusRegister;
@@ -205,9 +187,6 @@ module DMAController (
                     end
                 end
                 READ: begin
-                    if(error_in == 1&& feedback_r == 0) begin
-                        feedback_r <= {3'd4, feedback};
-                    end
                     if(error_in == 1) begin 
                         statusRegister <= 2'd2;
                         state <= CLOSE;
@@ -225,16 +204,13 @@ module DMAController (
                     end
                 end
                 WRITE: begin
-                    if(error_in == 1&& feedback_r == 0) begin
-                        feedback_r <= {3'd5, feedback};
-                    end
                     if(error_in == 1) begin 
                         statusRegister <= 2'd2;
                         state <= CLOSE;
-                    end else if (blockCounter+1 == blockSize && busy_in == 1'b0) begin
+                    end else if (blockCounter + 1 == blockSize && busy_in == 1'b0) begin
                         statusRegister <= 2'd0;
                         state <= CLOSE;
-                    end else if (burstCounter+1  == burstSize && busy_in == 1'b0) begin
+                    end else if (burstCounter + 1 == burstSize && busy_in == 1'b0) begin
                         state <= C2R;
                         statusRegister <= statusRegister;
                     end else begin
@@ -257,17 +233,5 @@ module DMAController (
             endcase
         end
     end
-
-    swapByte #(
-        .customIntructionNr(8'd69)
-    ) kModule (
-        .ciN(8'd69),
-        .ciDataA(busAddress),
-        .ciDataB(32'd0),
-        .ciStart(1'b1),
-        .ciCke(1'b1),
-        .ciDone(),
-        .ciResult(tSwap)
-    );
     
 endmodule

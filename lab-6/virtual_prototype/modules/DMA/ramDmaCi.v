@@ -49,14 +49,14 @@ module ramDmaCi #(
     wire[31:0] memDataIn, memDataOut;
     wire memWriteEnable;
 
-    assign byte_enables_out = byte_enables_out_r;
+    /*assign byte_enables_out = byte_enables_out_r;
     assign burst_size_out = burst_size_out_r;
     assign address_data_out = address_data_out_r;
     assign read_n_write_out = read_n_write_out_r;
     assign begin_transaction_out = begin_transaction_out_r;
     assign end_transaction_out = end_transaction_out_r;
     assign data_valid_out = data_valid_out_r;
-    assign busRequest = busRequest_r;
+    assign busRequest = busRequest_r;*/
 
     assign doneDMA = (is_valid == 1'b1 && !is_memory) ? 1'b1 : 1'b0;
     assign doneMem = (ciN == customId && is_memory && (counter == 2'd2 || valueA[9] == 1'b1) )? 1'b1 : 1'b0;
@@ -127,7 +127,7 @@ module ramDmaCi #(
 
     dualPortSSRAM #(.bitwidth(32), .nrOfEntries(512), .readAfterWrite(0)) memory(
         .clockA(clock),
-        .clockB(clock),
+        .clockB(~clock),
         .writeEnableA(is_valid && valueA[9] && is_memory),
         .writeEnableB(memWriteEnable),
         .addressA(valueA[8:0]),
@@ -154,19 +154,19 @@ module ramDmaCi #(
 
         //bus ports
         .address_data_in(address_data_in_r),
-        .address_data_out(address_data_out_s),
-        .byte_enables_out(byte_enables_out_s),
-        .burst_size_out(burst_size_out_s),
-        .read_n_write_out(read_n_write_out_s), 
-        .begin_transaction_out(begin_transaction_out_s), 
-        .end_transaction_out(end_transaction_out_s), 
-        .data_valid_out(data_valid_out_s),
+        .address_data_out(address_data_out),
+        .byte_enables_out(byte_enables_out),
+        .burst_size_out(burst_size_out),
+        .read_n_write_out(read_n_write_out), 
+        .begin_transaction_out(begin_transaction_out), 
+        .end_transaction_out(end_transaction_out), 
+        .data_valid_out(data_valid_out),
         .end_transaction_in(end_transaction_in_r), 
         .data_valid_in(data_valid_in_r), 
         .busy_in(busy_in_r), 
         .error_in(error_in_r),
         .grantRequest(grantRequest_r),
-        .busRequest(busRequest_s),
+        .busRequest(busRequest),
         .feedback(feedback_r)
     );
     
