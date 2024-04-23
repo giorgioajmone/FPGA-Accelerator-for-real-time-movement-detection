@@ -69,11 +69,19 @@ module ramDmaCi #(
     assign is_valid = (ciN == customId && start == 1'b1);
     assign is_memory = (valueA[12:10] == 3'b0);
 
+    always @(negedge clock) begin
+        if(reset == 1'b1) begin
+            busy_in_r <= 0;
+        end else begin
+            busy_in_r <= busy_in;
+        end
+    end
+
     always @(posedge clock) begin
         if (reset == 1'b1) begin
             end_transaction_in_r <= 0;
             data_valid_in_r <= 0;
-            busy_in_r <= 0;
+            //busy_in_r <= 0;
             error_in_r <= 0;
             grantRequest_r <= 0;
             address_data_in_r <= 0;
@@ -90,7 +98,7 @@ module ramDmaCi #(
         end else begin
             end_transaction_in_r <= end_transaction_in;
             data_valid_in_r <= data_valid_in;
-            busy_in_r <= busy_in;
+            //busy_in_r <= busy_in;
             error_in_r <= error_in;
             grantRequest_r <= grantRequest;
             address_data_in_r <= {address_data_in[7:0], address_data_in[15:8], address_data_in[23:16], address_data_in[31:24]}; 

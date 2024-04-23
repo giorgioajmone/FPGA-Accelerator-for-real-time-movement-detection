@@ -231,10 +231,10 @@ module DMAController (
                     if(error_in == 1) begin 
                         statusRegister <= 2'd2;
                         state <= CLOSE;
-                    end else if (blockCounter == blockSize) begin
+                    end else if (blockCounter+1 == blockSize && busy_in == 1'b0) begin
                         statusRegister <= 2'd0;
                         state <= CLOSE;
-                    end else if (burstCounter  == burstSize) begin
+                    end else if (burstCounter+1  == burstSize && busy_in == 1'b0) begin
                         state <= C2R;
                         statusRegister <= statusRegister;
                     end else begin
