@@ -717,8 +717,7 @@ ramDmaCi #(.customId(8'hD)) DMA(
     .begin_transaction_out(s_dmaBeginTransaction), 
     .end_transaction_out(s_dmaEndTransaction), 
     .data_valid_out(s_dmaDataValid),
-    .busRequest(s_dmaRequest),
-    .feedback({s_arbBusError,s_biosBusError,s_uartBusError,s_sdramBusError,s_flashBusError})
+    .busRequest(s_dmaRequest)
 );
  
 endmodule

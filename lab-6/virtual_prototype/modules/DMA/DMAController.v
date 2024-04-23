@@ -18,20 +18,17 @@ module DMAController (
     output wire read_n_write_out, begin_transaction_out, end_transaction_out, data_valid_out,
     input wire end_transaction_in, data_valid_in, busy_in, error_in,
     input wire grantRequest,
-    output wire busRequest,
-
-    //feedback
-    input wire[4:0] feedback
+    output wire busRequest
 );
 
-    reg[2:0] state;  
-    localparam IDLE = 3'd0;
-    parameter REQUEST = 3'd1;
-    localparam INIT = 3'd2;
-    parameter READ = 3'd3;
-    parameter CLOSE = 3'd4;
-    parameter WRITE = 3'd5;
-    parameter C2R = 3'd6;
+    reg[4:0] state;  
+    localparam IDLE = 5'b00000;
+    localparam REQUEST = 5'b00010;
+    localparam INIT = 5'b00001;
+    localparam READ = 5'b10000;
+    localparam CLOSE = 5'b01000;
+    localparam WRITE = 5'b00100;
+    localparam C2R = 5'b11000;
     
     reg[31:0] busStart;
     reg[8:0] memoryStart;
@@ -46,6 +43,7 @@ module DMAController (
     reg[9:0] blockCounter;
 
     reg[9:0] burstToShow;
+    reg[31:0] dataToShow;
 
     //CPU
 
@@ -104,17 +102,19 @@ module DMAController (
 
     // BUS
 
-    assign busRequest = (state == REQUEST) ? 1'b1 : 1'b0;
+    assign busRequest = state[1];
 
-    assign begin_transaction_out = (state == INIT) ? 1'b1 : 1'b0;
-    assign read_n_write_out = (state == INIT) ? controlRegister[0] : 1'b0;
+    assign begin_transaction_out = state[0];
+    assign read_n_write_out = state[0] & controlRegister[0];
     assign address_data_out = (state == INIT) ? busAddress : (state == WRITE) ? {memDataIn[7:0], memDataIn[15:8], memDataIn[23:16], memDataIn[31:24]}: 32'b0; 
-    assign burst_size_out = (state == INIT) ? (blockSize - blockCounter) < burstSize ? (blockSize - blockCounter - 10'd1) : (burstSize - 9'd1) : 8'b0;
-    assign byte_enables_out = (state == INIT) ? 4'd15 : 4'd0;
+    //(busAddress & state[0]) | ({memDataIn[7:0], memDataIn[15:8], memDataIn[23:16], memDataIn[31:24]} & state[2]);
+    
+    assign burst_size_out = burstToShow[7:0];
+    assign byte_enables_out = {state[0], state[0], state[0], state[0]};
 
-    assign data_valid_out = (state == WRITE) ? 1'b1 : 1'b0;
+    assign data_valid_out = state[2];
 
-    assign end_transaction_out = (state == CLOSE || state == C2R) ? 1'b1 : 1'b0;
+    assign end_transaction_out = state[3];
 
     always @(posedge clock) begin
         if(reset == 1) begin
@@ -150,13 +150,22 @@ module DMAController (
         end
     end
 
+    always @(posedge clock) begin
+        if(reset == 1) begin
+            dataToShow <= 0;
+        end else if((state == REQUEST && grantRequest == 1)) begin
+            dataToShow <= busAddress;
+        end else if (state == INIT && controlRegister == 2'd2) begin
+            dataToShow <= {memDataIn[7:0], memDataIn[15:8], memDataIn[23:16], memDataIn[31:24]};
+        end
+    end
+
     // FSM 
 
     always @(posedge clock) begin
         if (reset == 1) begin
             state <= IDLE;
             statusRegister <= 2'd0;
-            feedback_r <= 0;
         end else begin
             case (state)
                 IDLE: begin

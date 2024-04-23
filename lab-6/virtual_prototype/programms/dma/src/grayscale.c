@@ -8,7 +8,7 @@
 
 volatile uint32_t testArray[512];
 
-int main () {
+int main() {
   volatile uint32_t pointer1 = (uint32_t) &testArray[0];
   volatile uint32_t * pointer = (uint32_t *) &testArray[0];
   volatile uint32_t flag;
@@ -75,11 +75,11 @@ int main () {
   //initialize memory
   
   for(volatile uint32_t i = 0; i < 512; i++){
-    asm volatile ("l.nios_rrr r0, %[valueA], %[valueB], 0xD" :: [valueA] "r" ((i | 0x00000200)), [valueB] "r" (2));
+    asm volatile ("l.nios_rrr r0, %[valueA], %[valueB], 0xD" :: [valueA] "r" ((i | 0x00000200)), [valueB] "r" (i+512));
   }
 
   //set bus
-  asm volatile ("l.nios_rrr r0, %[valueA], %[valueB], 0xD" :: [valueA] "r" (0x00000600), [valueB] "r" (pointer1));
+  asm volatile ("l.nios_rrr r0, %[valueA], %[valueB], 0xD" :: [valueA] "r" (0x00000600), [valueB] "r" (pointer));
   //set memory
   asm volatile ("l.nios_rrr r0, %[valueA], %[valueB], 0xD" :: [valueA] "r" (0x00000A00), [valueB] "r" (0x00000000));
   //set block
