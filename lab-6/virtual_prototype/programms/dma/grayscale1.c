@@ -6,9 +6,10 @@
 #include <swap.h>
 #include <vga.h>
 
-volatile uint32_t testArray[512];
+
 
 int main13() {
+  volatile uint32_t testArray[512];
   volatile uint32_t pointer1 = (uint32_t) &testArray[0];
   volatile uint32_t * pointer = (uint32_t *) &testArray[0];
   volatile uint32_t flag;

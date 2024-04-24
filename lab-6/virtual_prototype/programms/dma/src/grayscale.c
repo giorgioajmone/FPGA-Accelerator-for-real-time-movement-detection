@@ -8,7 +8,7 @@
 
 volatile uint32_t testArray[512];
 
-int main2() {
+int main() {
   volatile uint32_t pointer; 
   volatile uint32_t flag, value;
 
@@ -23,8 +23,6 @@ int main2() {
   }
   
   //_____________________________ START TRANSFER TO MEMORY ________________________________________________________________
-
-  printf("\n===== TRANSFER FROM BUS TO MEMORY : BLOCK MULTIPLE OF BURST =====\n");
 
   // START TRANSFER 256 IN BURST OF 64 
   
@@ -51,6 +49,8 @@ int main2() {
   //read burst
   asm volatile ("l.nios_rrr %[out], %[valueA], r0, 0xD" : [out] "=r" (flag) : [valueA] "r" (0x00001000));
   printf("Burst size: %d\n", flag);
+
+  printf("\n===== TRANSFER FROM BUS TO MEMORY : BLOCK MULTIPLE OF BURST =====\n");
 
   //start transaction
   asm volatile ("l.nios_rrr r0, %[valueA], %[valueB], 0xD" :: [valueA] "r" (0x00001600), [valueB] "r" (0x0000001)); 
