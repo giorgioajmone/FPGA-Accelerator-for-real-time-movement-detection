@@ -1,3 +1,5 @@
+// Giorgio Ajmone 368146, Alessandro Cardinale 368411
+
 module DMAController (
     input wire validInstruction, writeEnable, clock, reset,
     input wire[2:0] configurationBits,
@@ -43,7 +45,6 @@ module DMAController (
     reg[9:0] blockCounter;
 
     reg[9:0] burstToShow;
-    reg[31:0] dataToShow;
 
     //CPU
 
@@ -75,7 +76,7 @@ module DMAController (
                 3'd3: begin  blockSize <= writeSettings[9:0]; end
                 3'd4: begin burstSize <= {1'd0, writeSettings[7:0]} + 9'd1; end
                 3'd5: begin controlRegister <= writeSettings[1:0]; end
-                default: begin end//not so sure
+                default: begin end
             endcase
         end
     end
@@ -147,16 +148,6 @@ module DMAController (
             burstToShow <= (blockSize - blockCounter) < burstSize ? (blockSize - blockCounter - 10'd1) : (burstSize - 9'd1);
         end else begin
             burstToShow <= 0;
-        end
-    end
-
-    always @(posedge clock) begin
-        if(reset == 1) begin
-            dataToShow <= 0;
-        end else if((state == REQUEST && grantRequest == 1)) begin
-            dataToShow <= busAddress;
-        end else if (state == INIT && controlRegister == 2'd2) begin
-            dataToShow <= {memDataIn[7:0], memDataIn[15:8], memDataIn[23:16], memDataIn[31:24]};
         end
     end
 

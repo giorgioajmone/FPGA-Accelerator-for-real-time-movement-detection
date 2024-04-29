@@ -1,3 +1,5 @@
+// Giorgio Ajmone 368146, Alessandro Cardinale 368411
+
 module dualPortSSRAM #( parameter bitwidth = 8, parameter nrOfEntries = 512, parameter readAfterWrite = 0 )
 ( 
     input wire clockA, clockB, writeEnableA, writeEnableB,
@@ -18,33 +20,5 @@ module dualPortSSRAM #( parameter bitwidth = 8, parameter nrOfEntries = 512, par
         dataOutB <= memoryContent[addressB];
         if (writeEnableB == 1'b1) memoryContent[addressB] <= dataInB;
     end
-
-    /*always @(posedge clockA)
-    begin   
-        if (writeEnableA) 
-        begin
-            memoryContent[addressA] <= dataInA;
-            dataOutA <= dataInA;
-        end
-        else
-        begin
-            dataOutA <= memoryContent[addressA];
-        end
-    end
-
-
-    always @(negedge clockB)
-    begin   
-        if (writeEnableB) 
-        begin
-            memoryContent[addressB] <= dataInB;
-            dataOutB <= dataInB;
-        end
-        else
-        begin
-            dataOutB <= memoryContent[addressB];
-        end
-    end*/
-
 
 endmodule

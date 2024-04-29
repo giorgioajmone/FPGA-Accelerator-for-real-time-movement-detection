@@ -1,3 +1,5 @@
+// Giorgio Ajmone 368146, Alessandro Cardinale 368411
+
 module ramDmaCi #(
     parameter[7:0] customId = 8'h00
 ) (
@@ -23,8 +25,7 @@ module ramDmaCi #(
     reg[1:0] counter;
 
     reg[31:0] address_data_in_r;
-    reg end_transaction_in_r, data_valid_in_r, busy_in_r, error_in_r,
-        grantRequest_r;
+    reg end_transaction_in_r, data_valid_in_r, busy_in_r, error_in_r, grantRequest_r;
 
     wire is_valid, is_memory;
 

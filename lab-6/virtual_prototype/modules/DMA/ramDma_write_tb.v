@@ -1,3 +1,5 @@
+// Giorgio Ajmone 368146, Alessandro Cardinale 368411
+
 `timescale 1ns / 1ps
 
 module dma_controller_tb;

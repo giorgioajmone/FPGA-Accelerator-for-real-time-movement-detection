@@ -85,7 +85,7 @@ int main() {
   }
   printf("Transfer completed\n");
 
-  printf("\n===== TRANSFER FROM BUS TO MEMORY : URST BIGGER THAN BLOCK =====\n");
+  printf("\n===== TRANSFER FROM BUS TO MEMORY : BURST BIGGER THAN BLOCK =====\n");
 
   // START TRANSFER 59 IN BURST OF 64 
 
