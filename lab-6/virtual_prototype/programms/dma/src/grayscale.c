@@ -16,7 +16,7 @@ int main() {
 
   for(volatile uint32_t i = 0; i < 512; i++) testArray[i] = i;
 
-  printf("\n===== INITIALIZE MEMORY WITH VALUES TO 0 AND ARRAY WITH VALUES FROM 0 TO 511 =====\n");
+  printf("\n===== INITIALIZE MEMORY WITH VALUE 0 AND ARRAY WITH VALUES FROM 0 TO 511 =====\n");
 
   for(volatile uint32_t i = 0; i < 512; i++){
     asm volatile ("l.nios_rrr r0, %[valueA], %[valueB], 0xD" :: [valueA] "r" ((i | 0x00000200)), [valueB] "r" (0));
@@ -118,8 +118,10 @@ int main() {
     }
   }
 
-  if(correct) printf("The transfer is correct\n");
-  else printf("The transfer is wrong\n");
+  printf("Checking value transfered\n");
+
+  if(correct) printf("\n===================================================== TRANSFER IS CORRECT=====================================================\n");
+  else printf("\n===================================================== TRANSFER IS WRONG=====================================================\n");
 
   printf("\n===== INITIALIZE MEMORY WITH VALUES FROM 512 to 1023 =====\n");
   
@@ -208,6 +210,8 @@ int main() {
     }
   }
 
-  if(correct) printf("The transfer is correct\n");
-  else printf("The transfer is wrong\n");
+  printf("Checking value transfered\n");
+
+  if(correct) printf("\n===================================================== TRANSFER IS CORRECT=====================================================\n");
+  else printf("\n===================================================== TRANSFER IS WRONG=====================================================\n");
 }

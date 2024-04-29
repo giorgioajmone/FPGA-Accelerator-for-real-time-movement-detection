@@ -24,7 +24,7 @@ As soon as the control register is set, the machine enters the REQUEST state whe
 Once completed the INIT phase, the FSM goes into the READ state, where it reads data from the bus (sent by the slave addressed  witht the address in the INIT phase).
 During READ state, the data incoming in the DMA, that is latched to reduce the critical path, is assigned directly to the portB of the Ci memory and the WriteEnableB is set to 1. Port B of the memory is controlled by CLKb, as it is samples data at the negative edge of the clock.
 
-Several coutners are instantiated to keep track of the different parameters:
+Several counters are instantiated to keep track of the different parameters:
 - Block Counter unpdates once each word has been received/sent. It resets at the block size
 - Burst Counter also updates once each word has been received/sent but is resets at the burst size
 - memAddress_r updates the address of the Ci memory
@@ -40,26 +40,26 @@ At the end of every READ operation, if we go back to the REQUEST, in the followi
 
 If, when in READ, an error is received, we set the error signal in the status register and the transaction is closed by entering in state CLOSE.
 
-2.4 DRMA from the Ci Memory
+2.4 DMA from the Ci Memory
 
 In this last point, the DMA is responsible of reading data from the memory and writing it to a slave.
 
 Up to the READ state, the steps are the same of previous points. The counters work in the same way too.
 This however, after the INIT state we enter the WRITE state and wee stay there until the transaction is ended, that occurs whent all the words of a burst have been sent.
 Errors are dealt the same way as in the READ state.
-At the end of a transaction there are two possibilities: either the block has been completed and we close the transaction (state CLOSe), send an end_transaction and go back to IDLE, or we still send a end_transaction but then return to state REQUEST (state C2R).
+At the end of a transaction there are two possibilities: either the block has been completed and we close the transaction (state CLOSE), send an end_transaction and go back to IDLE, or we still send a end_transaction but then return to state REQUEST (state C2R).
 
-When in WRITE state, the addressDataOut is assigned asynchronously the value read from the Ci Memory. It is not latched before getting sent into the BUS. That is  because that operation was jeopardizing the functiolity of the system. Despite that, the logic from the regiters of the memory to the outputtt port hass been minimized to avoid timing issues.
+When in WRITE state, the addressDataOut is assigned asynchronously the value read from the Ci Memory. It is not latched before getting sent into the BUS. That is  because that operation was jeopardizing the functionality of the system. Despite that, the logic from the regiters of the memory to the output port has been minimized to avoid timing issues.
 
 For both type of transactions: when DMA starts operation it sets the status register to 1. When it finishes, it sets the status register back to zero.
 
 Inside DMAController it is also defined the logic to let the CPU read the settings from the DMA. In case this operation is called by the CPU, the result of the top module ramDmaCi is assigned with the value of the setting the programmer is asking.
 
-GENERAAAL REMARK: we remark that, even though we did not enter in all the details of the system, the protocol implemented is the same of the lectures.
+GENERAL REMARK: we remark that, even though we did not enter in all the details of the system, the protocol implemented is the same of the lectures.
 
 TESTING
 
-The first testing has been done with a testbench, then the whole system aahas been uploaded on the board and tested with a C code contained in programmms/DMA/src.
+The first testing has been done with a testbench, then the whole system has been uploaded on the board and tested with a C code contained in programmms/DMA/src.
 In the C code the following testing operations are carried out:
 - Initialize an array in the SDRAM. The SDRAM will be the slave with which the DMA will communicate.
 - Write a set of known values into the Ci memory of the DMA

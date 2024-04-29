@@ -108,7 +108,6 @@ module DMAController (
     assign begin_transaction_out = state[0];
     assign read_n_write_out = state[0] & controlRegister[0];
     assign address_data_out = (state == INIT) ? busAddress : (state == WRITE) ? {memDataIn[7:0], memDataIn[15:8], memDataIn[23:16], memDataIn[31:24]}: 32'b0; 
-    //(busAddress & state[0]) | ({memDataIn[7:0], memDataIn[15:8], memDataIn[23:16], memDataIn[31:24]} & state[2]);
     
     assign burst_size_out = burstToShow[7:0];
     assign byte_enables_out = {state[0], state[0], state[0], state[0]};
