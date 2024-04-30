@@ -1,5 +1,5 @@
 Analysis & Synthesis report for or1420SingleCore
-Wed Apr 24 08:50:10 2024
+Mon Apr 29 17:44:28 2024
 Quartus Prime Version 18.1.1 Build 646 04/11/2019 SJ Lite Edition
 
 
@@ -152,7 +152,7 @@ https://fpgasoftware.intel.com/eula.
 +----------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                     ;
 +------------------------------------+---------------------------------------------+
-; Analysis & Synthesis Status        ; Successful - Wed Apr 24 08:50:09 2024       ;
+; Analysis & Synthesis Status        ; Successful - Mon Apr 29 17:44:28 2024       ;
 ; Quartus Prime Version              ; 18.1.1 Build 646 04/11/2019 SJ Lite Edition ;
 ; Revision Name                      ; or1420SingleCore                            ;
 ; Top-level Entity Name              ; or1420SingleCore                            ;
@@ -268,7 +268,7 @@ https://fpgasoftware.intel.com/eula.
 ;                            ;             ;
 ; Usage by Processor         ; % Time Used ;
 ;     Processor 1            ; 100.0%      ;
-;     Processor 2            ;   0.4%      ;
+;     Processor 2            ;   0.6%      ;
 ;     Processor 3            ;   0.2%      ;
 ;     Processor 4            ;   0.2%      ;
 +----------------------------+-------------+
@@ -4191,7 +4191,7 @@ Note: In order to hide this table in the UI and the text report file, please set
 +----------------+--------------+
 ; Partition Name ; Elapsed Time ;
 +----------------+--------------+
-; Top            ; 00:00:30     ;
+; Top            ; 00:00:35     ;
 +----------------+--------------+
 
 
@@ -4215,7 +4215,7 @@ Info: Running Quartus Prime Analysis & Synthesis
     Info: Intel and sold by Intel or its authorized distributors.  Please
     Info: refer to the applicable agreement for further details, at
     Info: https://fpgasoftware.intel.com/eula.
-    Info: Processing started: Wed Apr 24 08:49:23 2024
+    Info: Processing started: Mon Apr 29 17:43:36 2024
 Info: Command: quartus_map --family="Cyclone IV E" or1420SingleCore
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
 Info (20030): Parallel compilation is enabled and will use 4 of the 4 processors detected
@@ -4332,11 +4332,11 @@ Info (12021): Found 1 design units, including 1 entities, in source file /home/a
 Info (12021): Found 1 design units, including 1 entities, in source file /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-6/virtual_prototype/modules/grayscale/rgb565grayscaleIse.v
     Info (12023): Found entity 1: rgb565grayscaleIse File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-6/virtual_prototype/modules/grayscale/rgb565grayscaleIse.v Line: 3
 Info (12021): Found 1 design units, including 1 entities, in source file /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-6/virtual_prototype/modules/DMA/DMAController.v
-    Info (12023): Found entity 1: DMAController File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-6/virtual_prototype/modules/DMA/DMAController.v Line: 1
+    Info (12023): Found entity 1: DMAController File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-6/virtual_prototype/modules/DMA/DMAController.v Line: 3
 Info (12021): Found 1 design units, including 1 entities, in source file /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-6/virtual_prototype/modules/DMA/dualPortSSRAM.v
-    Info (12023): Found entity 1: dualPortSSRAM File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-6/virtual_prototype/modules/DMA/dualPortSSRAM.v Line: 1
+    Info (12023): Found entity 1: dualPortSSRAM File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-6/virtual_prototype/modules/DMA/dualPortSSRAM.v Line: 3
 Info (12021): Found 1 design units, including 1 entities, in source file /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-6/virtual_prototype/modules/DMA/ramDmaCi.v
-    Info (12023): Found entity 1: ramDmaCi File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-6/virtual_prototype/modules/DMA/ramDmaCi.v Line: 1
+    Info (12023): Found entity 1: ramDmaCi File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-6/virtual_prototype/modules/DMA/ramDmaCi.v Line: 3
 Info (12021): Found 1 design units, including 1 entities, in source file /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-6/virtual_prototype/systems/singleCore/verilog/or1420SingleCore.v
     Info (12023): Found entity 1: or1420SingleCore File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-6/virtual_prototype/systems/singleCore/verilog/or1420SingleCore.v Line: 3
 Info (12127): Elaborating entity "or1420SingleCore" for the top level hierarchy
@@ -4498,11 +4498,10 @@ Info (12128): Elaborating entity "rgb565grayscaleIse" for hierarchy "rgb565grays
 Info (12128): Elaborating entity "singlePixel" for hierarchy "rgb565grayscaleIse:grayPixel|singlePixel:pixelLogic" File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-6/virtual_prototype/modules/grayscale/rgb565grayscaleIse.v Line: 21
 Warning (10034): Output port "result[31..8]" at singlePixel.v(7) has no driver File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-6/virtual_prototype/modules/grayscale/singlePixel.v Line: 7
 Info (12128): Elaborating entity "ramDmaCi" for hierarchy "ramDmaCi:DMA" File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-6/virtual_prototype/systems/singleCore/verilog/or1420SingleCore.v Line: 721
-Warning (10230): Verilog HDL assignment warning at ramDmaCi.v(77): truncated value with size 32 to match size of target (2) File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-6/virtual_prototype/modules/DMA/ramDmaCi.v Line: 77
-Info (12128): Elaborating entity "dualPortSSRAM" for hierarchy "ramDmaCi:DMA|dualPortSSRAM:memory" File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-6/virtual_prototype/modules/DMA/ramDmaCi.v Line: 93
-Info (12128): Elaborating entity "DMAController" for hierarchy "ramDmaCi:DMA|DMAController:dmaController" File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-6/virtual_prototype/modules/DMA/ramDmaCi.v Line: 124
-Warning (10036): Verilog HDL or VHDL warning at DMAController.v(46): object "dataToShow" assigned a value but never read File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-6/virtual_prototype/modules/DMA/DMAController.v Line: 46
-Warning (10230): Verilog HDL assignment warning at DMAController.v(93): truncated value with size 32 to match size of target (9) File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-6/virtual_prototype/modules/DMA/DMAController.v Line: 93
+Warning (10230): Verilog HDL assignment warning at ramDmaCi.v(78): truncated value with size 32 to match size of target (2) File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-6/virtual_prototype/modules/DMA/ramDmaCi.v Line: 78
+Info (12128): Elaborating entity "dualPortSSRAM" for hierarchy "ramDmaCi:DMA|dualPortSSRAM:memory" File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-6/virtual_prototype/modules/DMA/ramDmaCi.v Line: 94
+Info (12128): Elaborating entity "DMAController" for hierarchy "ramDmaCi:DMA|DMAController:dmaController" File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-6/virtual_prototype/modules/DMA/ramDmaCi.v Line: 125
+Warning (10230): Verilog HDL assignment warning at DMAController.v(94): truncated value with size 32 to match size of target (9) File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-6/virtual_prototype/modules/DMA/DMAController.v Line: 94
 Warning (10230): Verilog HDL assignment warning at DMAController.v(125): truncated value with size 32 to match size of target (9) File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-6/virtual_prototype/modules/DMA/DMAController.v Line: 125
 Warning (10230): Verilog HDL assignment warning at DMAController.v(126): truncated value with size 32 to match size of target (10) File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-6/virtual_prototype/modules/DMA/DMAController.v Line: 126
 Warning (276027): Inferred dual-clock RAM node "ramDmaCi:DMA|dualPortSSRAM:memory|memoryContent_rtl_0" from synchronous design logic.  The read-during-write behavior of a dual-clock RAM is undefined and may not match the behavior of the original design.
@@ -5067,11 +5066,11 @@ Info (21057): Implemented 15481 device resources after synthesis - the final res
     Info (21064): Implemented 291 RAM segments
     Info (21065): Implemented 1 PLLs
     Info (21062): Implemented 9 DSP elements
-Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 28 warnings
-    Info: Peak virtual memory: 1079 megabytes
-    Info: Processing ended: Wed Apr 24 08:50:10 2024
-    Info: Elapsed time: 00:00:47
-    Info: Total CPU time (on all processors): 00:00:53
+Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 27 warnings
+    Info: Peak virtual memory: 1091 megabytes
+    Info: Processing ended: Mon Apr 29 17:44:29 2024
+    Info: Elapsed time: 00:00:53
+    Info: Total CPU time (on all processors): 00:00:57
 
 
 +------------------------------------------+
