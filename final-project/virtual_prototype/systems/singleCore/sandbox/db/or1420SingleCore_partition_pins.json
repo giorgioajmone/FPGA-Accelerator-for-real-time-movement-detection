@@ -284,6 +284,14 @@
 					"strict" : false
 				},
 				{
+					"name" : "camData[4]",
+					"strict" : false
+				},
+				{
+					"name" : "camVsync",
+					"strict" : false
+				},
+				{
 					"name" : "camData[1]",
 					"strict" : false
 				},
@@ -292,23 +300,7 @@
 					"strict" : false
 				},
 				{
-					"name" : "camData[4]",
-					"strict" : false
-				},
-				{
 					"name" : "camData[2]",
-					"strict" : false
-				},
-				{
-					"name" : "camVsync",
-					"strict" : false
-				},
-				{
-					"name" : "camData[6]",
-					"strict" : false
-				},
-				{
-					"name" : "camData[7]",
 					"strict" : false
 				},
 				{
@@ -317,6 +309,14 @@
 				},
 				{
 					"name" : "camData[5]",
+					"strict" : false
+				},
+				{
+					"name" : "camData[6]",
+					"strict" : false
+				},
+				{
+					"name" : "camData[7]",
 					"strict" : false
 				},
 				{

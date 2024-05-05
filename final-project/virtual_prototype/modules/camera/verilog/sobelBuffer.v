@@ -5,11 +5,11 @@ module sobelBuffer (input wire [7:0]  addressIn, addressOut,
 
   reg [15:0] memory [255:0];
   
-  always @(posedge clock1)
+  always @(posedge clockA)
   begin
     if (writeEnable) memory[addressIn] <= dataIn;
   end
   
-  always @(posedge clock2) dataOut <= memory[addressOut];
+  always @(posedge clockB) dataOut <= memory[addressOut];
 
 endmodule
