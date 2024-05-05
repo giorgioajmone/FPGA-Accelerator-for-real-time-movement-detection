@@ -50,4 +50,7 @@
 ../../../modules/support/verilog/sram_512x32.v
 ../../../modules/support/verilog/sram_1024x16_dp.v
 ../../../modules/support/verilog/sram2048x8Dp.v
+../../../modules/camera/verilog/sobelAccelerator.v
+../../../modules/camera/verilog/sobelBuffer.v
+../../../modules/camera/verilog/dHash.v
 ../verilog/or1420SingleCore.v

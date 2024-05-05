@@ -114,12 +114,13 @@ module camera #(parameter [7:0] customInstructionId = 8'd0,
   
   always @(posedge pclk)
     begin
-      s_vsyncDetectReg     <= {s_vsyncDetectReg[0],vsync};
-      s_hsyncDetectReg     <= {s_hsyncDetectReg[0],hsync};
+      s_vsyncDetectReg     <= {s_vsyncDetectReg[0],vsync}; //shift register per segnale vsync (inizio frame)
+      s_hsyncDetectReg     <= {s_hsyncDetectReg[0],hsync}; //shift register per segnale hsync (inizio linea)
       s_pixelCountValueReg <= (s_hsyncNegEdge == 1'b1) ? s_pixelCountReg : s_pixelCountValueReg;
-      s_pixelCountReg      <= (s_hsyncNegEdge == 1'b1) ? 11'd0 : (hsync == 1'b1) ? s_pixelCountReg + 11'd1 : s_pixelCountReg;
+      s_pixelCountReg      <= (s_hsyncNegEdge == 1'b1) ? 11'd0 : (hsync == 1'b1) ? s_pixelCountReg + 11'd1 : s_pixelCountReg; //se inizia nuova linea si resetta a zero, altrimenti si incrementa di uno se stiamo trasmettendo linea oppure si mantiene
       s_lineCountValueReg  <= (s_vsyncNegEdge == 1'b1) ? s_lineCountReg : s_lineCountValueReg;
-      s_lineCountReg       <= (s_vsyncNegEdge == 1'b1) ? 11'd0 : (s_hsyncNegEdge == 1'b1) ? s_lineCountReg + 11'd1 : s_lineCountReg;
+      s_lineCountReg       <= (s_vsyncNegEdge == 1'b1) ? 11'd0 : (s_hsyncNegEdge == 1'b1) ? s_lineCountReg + 11'd1 : s_lineCountReg; //se inizia nuovo frame si resetta a zero, altrimenti si incrementa di uno se stiamo iniziando nuova linea oppure si mantiene
+      //inutili giusto per misurare performance (credo)
       s_pclkCountReg       <= (reset == 1'b1 || s_clockPclkValue == 1'b1) ? 17'd0 : s_pclkCountReg + 17'd1;
       s_pclkCountValueReg  <= (reset == 1'b1) ? 17'd0 : (s_clockPclkValue == 1'b1) ? s_pclkCountReg : s_pclkCountValueReg;
       s_fpsCountReg        <= (reset == 1'b1 || s_clockFPS == 1'b1) ? 8'd0 : (s_vsyncNegEdge == 1'b1) ? s_fpsCountReg + 8'd1 : s_fpsCountReg;
@@ -165,8 +166,8 @@ module camera #(parameter [7:0] customInstructionId = 8'd0,
   reg [7:0] s_byte3Reg,s_byte2Reg,s_byte1Reg;
   reg [8:0] s_busSelectReg;
   wire [31:0] s_busPixelWord;
-  wire [31:0] s_pixelWord = {s_byte3Reg,s_byte2Reg,s_byte1Reg,camData};
-  wire s_weLineBuffer = (s_pixelCountReg[1:0] == 2'b11) ? hsync : 1'b0;
+  wire [31:0] s_pixelWord = {s_byte1Reg, camData, s_byte3Reg,s_byte2Reg};
+  wire s_weLineBuffer = (s_pixelCountReg[1:0] == 2'b11) ? hsync : 1'b0; //attiva write enable solo quando 4 byte sono completie siamo ancora in scrittura (hsync)
   
   always @(posedge pclk)
     begin
@@ -197,7 +198,7 @@ module camera #(parameter [7:0] customInstructionId = 8'd0,
   wire s_newScreen, s_newLine;
   wire s_doWrite = ((s_stateMachineReg == DO_BURST1) && s_burstCountReg[8] == 1'b0) ? ~busyIn : 1'b0;
   wire [31:0] s_busAddressNext = (reset == 1'b1 || s_newScreen == 1'b1) ? s_frameBufferBaseReg : 
-                                 (s_doWrite == 1'b1) ? s_busAddressReg + 32'd4 : s_busAddressReg;
+                                 (s_doWrite == 1'b1) ? s_busAddressReg + 32'd4 : s_busAddressReg; //se nuovo frame resettiamo dove mandare
   wire [7:0] s_burstSizeNext = ((s_stateMachineReg == INIT_BURST1) && s_nrOfPixelsPerLineReg > 9'd16) ? 8'd16 : s_nrOfPixelsPerLineReg[7:0];
   
   assign requestBus        = (s_stateMachineReg == REQUEST_BUS1) ? 1'b1 : 1'b0;
@@ -206,7 +207,7 @@ module camera #(parameter [7:0] customInstructionId = 8'd0,
   
   always @*
     case (s_stateMachineReg)
-      IDLE            : s_stateMachineNext <= ((s_grabberRunningReg == 1'b1 || s_singleShotActionReg[0] == 1'b1) && s_newLine == 1'b1) ? REQUEST_BUS1 : IDLE;
+      IDLE            : s_stateMachineNext <= ((s_grabberRunningReg == 1'b1 || s_singleShotActionReg[0] == 1'b1) && s_newLine == 1'b1) ? REQUEST_BUS1 : IDLE; //parti solo se sta iniziando una nuova linea
       REQUEST_BUS1    : s_stateMachineNext <= (busGrant == 1'b1) ? INIT_BURST1 : REQUEST_BUS1;
       INIT_BURST1     : s_stateMachineNext <= DO_BURST1;
       DO_BURST1       : s_stateMachineNext <= (busErrorIn == 1'b1) ? END_TRANS2 :
@@ -218,7 +219,8 @@ module camera #(parameter [7:0] customInstructionId = 8'd0,
   always @(posedge clock)
     begin
       s_busAddressReg        <= s_busAddressNext;
-      s_grabberRunningReg    <= (reset == 1'b1) ? 1'b0 : (s_newScreen == 1'b1) ? s_grabberActiveReg : s_grabberRunningReg;
+      s_grabberRunningReg    <= (reset == 1'b1) ? 1'b0 : (s_newScreen == 1'b1) ? s_grabberActiveReg : s_grabberRunningReg; //se arriva un nuovo frame ti chiedi se cpu ti ha detto di partire, se si setti grabberRunning cosi che da idle puoi passare a request quando arriva new line
+      //credo per gestire se si vuole fare una sola immagine oppure flusso continuo
       s_singleShotActionReg  <= (reset == 1'b1 || s_singleShotActionReg[1] == 1'b1) ? 2'b0 : (s_newScreen == 1'b1) ? {1'b0,s_grabberSingleShotReg} : s_singleShotActionReg;
       s_singleShotDoneReg    <= (reset == 1'b1 || (s_isMyCi == 1'b1 && ciValueA[2:0] == 3'd7)) ? 1'b1 : (s_singleShotActionReg[1] == 1'b1) ? 1'b1 : s_singleShotDoneReg;
       s_stateMachineReg      <= (reset == 1'b1) ? IDLE : s_stateMachineNext;
@@ -232,7 +234,7 @@ module camera #(parameter [7:0] customInstructionId = 8'd0,
       burstSizeOut           <= (s_stateMachineReg == INIT_BURST1) ? s_burstSizeNext - 8'd1 : 8'd0;
       s_burstCountReg        <= (s_stateMachineReg == INIT_BURST1) ? s_burstSizeNext - 8'd1 :
                                 (s_doWrite == 1'b1) ? s_burstCountReg - 9'd1 : s_burstCountReg;
-      s_busSelectReg         <= (s_stateMachineReg == IDLE) ? 9'd0 : (s_doWrite == 1'b1) ? s_busSelectReg + 9'd1 : s_busSelectReg;
+      s_busSelectReg         <= (s_stateMachineReg == IDLE) ? 9'd0 : (s_doWrite == 1'b1) ? s_busSelectReg + 9'd1 : s_busSelectReg; //perchè non resettiamo il posto da cui leggiamo? se parte una nuova linea noi resettiamo il posto in cui scriviamo perchè settiamo pixelCountReg a zero
       s_nrOfPixelsPerLineReg <= (s_newLine == 1'b1) ? s_pixelCountValueReg[10:2] : 
                                 (s_stateMachineReg == INIT_BURST1) ? s_nrOfPixelsPerLineReg - {1'b0,s_burstSizeNext} : s_nrOfPixelsPerLineReg;
     end
