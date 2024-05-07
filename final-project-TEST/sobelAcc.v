@@ -17,19 +17,28 @@ module sobelAcc #(parameter [7:0] customId = 8'd0) (
     input wire         busyIn, busErrorIn
 );
 
-    //TO DO : overwrite, transfer start signal, verilog language details 
+    //TO DO : transfer start signal, verilog language details 
 
-    reg[7:0] writeAddress [0:8];
-    reg[7:0] readAddress [0:8];
-    reg writeEnable [0:8];
+    reg[7:0] addressReg [0:8];
+
+
+    wire [7:0] address [0:8];
     wire [15:0] writeData [0:8];
     wire [15:0] readData [0:8];
+
+    integer j;
+    generate
+        for(j = 0; j < 9; j = j + 1) begin
+                assign address[j] = addressReg[j];
+        end
+    endgenerate
+
 
     genvar i;
     generate
         for(i = 0; i < 9; i = i + 1) begin : buffer_instantiation
-            sobelBuffer  buffer(.addressIn(writeAddress[i]), .addressOut(readAddress[i]), 
-                            .clockA(clock), .clockB(~clock), .writeEnable(writeEnable[i]), 
+            sobelBuffer  buffer(.addressIn(address[i]), .addressOut(address[i]), 
+                            .clockA(clock), .clockB(~clock), .writeEnable(1'b1), 
                                 .dataIn(writeData[i]), .dataOut(readData[i]));
         end
     endgenerate  
@@ -39,26 +48,26 @@ module sobelAcc #(parameter [7:0] customId = 8'd0) (
 
     wire[7:0] s_writeAddress [0:8];
 
-    assign s_writeAddress[0] = writeAddress[0] + (pixelCount[0] & RowCount[0] & firstTriplet);
-    assign s_writeAddress[1] = writeAddress[1] + (pixelCount[1] & RowCount[0] & firstTriplet);
-    assign s_writeAddress[2] = writeAddress[2] + (pixelCount[2] & RowCount[0] & firstTriplet);
-    assign s_writeAddress[3] = writeAddress[3] + (pixelCount[0] & RowCount[1] & firstTriplet);
-    assign s_writeAddress[4] = writeAddress[4] + (pixelCount[1] & RowCount[1] & firstTriplet);
-    assign s_writeAddress[5] = writeAddress[5] + (pixelCount[2] & RowCount[1] & firstTriplet);
-    assign s_writeAddress[6] = writeAddress[6] + (pixelCount[0] & RowCount[2] & firstTriplet);
-    assign s_writeAddress[7] = writeAddress[7] + (pixelCount[1] & RowCount[2] & firstTriplet);
-    assign s_writeAddress[8] = writeAddress[8] + (pixelCount[2] & RowCount[2] & firstTriplet);
+    assign s_writeAddress[0] = addressReg[0] + (pixelCount[0] & RowCount[0] & firstTriplet);
+    assign s_writeAddress[1] = addressReg[1] + (pixelCount[1] & RowCount[0] & firstTriplet);
+    assign s_writeAddress[2] = addressReg[2] + (pixelCount[2] & RowCount[0] & firstTriplet);
+    assign s_writeAddress[3] = addressReg[3] + (pixelCount[0] & RowCount[1] & firstTriplet);
+    assign s_writeAddress[4] = addressReg[4] + (pixelCount[1] & RowCount[1] & firstTriplet);
+    assign s_writeAddress[5] = addressReg[5] + (pixelCount[2] & RowCount[1] & firstTriplet);
+    assign s_writeAddress[6] = addressReg[6] + (pixelCount[0] & RowCount[2] & firstTriplet);
+    assign s_writeAddress[7] = addressReg[7] + (pixelCount[1] & RowCount[2] & firstTriplet);
+    assign s_writeAddress[8] = addressReg[8] + (pixelCount[2] & RowCount[2] & firstTriplet);
 
     always @(posedge clock) begin
-            writeAddress[0] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : s_writeAddress[0];
-            writeAddress[1] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : s_writeAddress[1];
-            writeAddress[2] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : s_writeAddress[2];
-            writeAddress[3] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : s_writeAddress[3];
-            writeAddress[4] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : s_writeAddress[4];
-            writeAddress[5] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : s_writeAddress[5];
-            writeAddress[6] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : s_writeAddress[6];
-            writeAddress[7] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : s_writeAddress[7];
-            writeAddress[8] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : s_writeAddress[8];
+        addressReg[0] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : s_writeAddress[0];
+        addressReg[1] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : s_writeAddress[1];
+        addressReg[2] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : s_writeAddress[2];
+        addressReg[3] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : s_writeAddress[3];
+        addressReg[4] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : s_writeAddress[4];
+        addressReg[5] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : s_writeAddress[5];
+        addressReg[6] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : s_writeAddress[6];
+        addressReg[7] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : s_writeAddress[7];
+        addressReg[8] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : s_writeAddress[8];
     end      
 
     reg[5:0] count3pixels;      // put six bits to take into account the row
@@ -78,47 +87,24 @@ module sobelAcc #(parameter [7:0] customId = 8'd0) (
         end
     end
 
-    always @(posedge clock) begin
-        writeEnable[0] = (count3pixels[0] & count3pixels[3]) ? 1'b1 : RowCount[0] & pixelCount[0];
-        writeEnable[1] = (count3pixels[1] & count3pixels[3]) ? 1'b1 : RowCount[0] & pixelCount[1];
-        writeEnable[2] = (count3pixels[2] & count3pixels[3]) ? 1'b1 : RowCount[0] & pixelCount[2];
-        writeEnable[3] = (count3pixels[0] & count3pixels[4]) ? 1'b1 : RowCount[1] & pixelCount[0];
-        writeEnable[4] = (count3pixels[1] & count3pixels[4]) ? 1'b1 : RowCount[1] & pixelCount[1];
-        writeEnable[5] = (count3pixels[2] & count3pixels[4]) ? 1'b1 : RowCount[1] & pixelCount[2];
-        writeEnable[6] = (count3pixels[0] & count3pixels[5]) ? 1'b1 : RowCount[2] & pixelCount[0];
-        writeEnable[7] = (count3pixels[1] & count3pixels[5]) ? 1'b1 : RowCount[2] & pixelCount[1];
-        writeEnable[8] = (count3pixels[2] & count3pixels[5]) ? 1'b1 : RowCount[2] & pixelCount[2];
-    end
-
-    // Perform the overwriting: overwrite in every memory, then the writeEnable should manage if the overwriting occurs or not
-
-    wire overwrite = ~RowCount[0];   // overwrite at each new triplet or rows. active low signal
-
     wire[15:0] filteredData[0:8];
 
-    assign writeData[0] = readData[0] + filteredData[0];
-    assign writeData[1] = readData[1] + filteredData[1];    
-    assign writeData[2] = readData[2] + filteredData[2];
-    assign writeData[3] = readData[3] + filteredData[3];
-    assign writeData[4] = readData[4] + filteredData[4];
-    assign writeData[5] = readData[5] + filteredData[5];
-    assign writeData[6] = readData[6] + filteredData[6];
-    assign writeData[7] = readData[7] + filteredData[7];
-    assign writeData[8] = readData[8] + filteredData[8];
-
-    // Compute in advance all the possible results and then multiplex them for every memory
+    assign writeData[0] = readData[0] & {16{~RowCount[0] & ~pixelCount[0]}} + filteredData[0];
+    assign writeData[1] = readData[1] & {16{~RowCount[0] & ~pixelCount[1]}} + filteredData[1];
+    assign writeData[2] = readData[2] & {16{~RowCount[0] & ~pixelCount[2]}} + filteredData[2];
+    assign writeData[3] = readData[3] & {16{~RowCount[1] & ~pixelCount[0]}} + filteredData[3];
+    assign writeData[4] = readData[4] & {16{~RowCount[1] & ~pixelCount[1]}} + filteredData[4];
+    assign writeData[5] = readData[5] & {16{~RowCount[1] & ~pixelCount[2]}} + filteredData[5];
+    assign writeData[6] = readData[6] & {16{~RowCount[2] & ~pixelCount[0]}} + filteredData[6];
+    assign writeData[7] = readData[7] & {16{~RowCount[2] & ~pixelCount[1]}} + filteredData[7];
+    assign writeData[8] = readData[8] & {16{~RowCount[2] & ~pixelCount[2]}} + filteredData[8];
 
     wire[15:0] resultx1  = camData;
     wire[15:0] resultx2  = camData << 1;
     wire[15:0] resultx_1 = ~camData + 1;
     wire[15:0] resultx_2 = ~(camData << 1) + 1; 
 
-
-    // Chose the filteredData of the Sobel filter according to the Row and Column of the pixel: hard-code the logic to each memory block
-
-    // X filtering
-
-    reg[2:0] filteredData[0:8];  // 3 bits to support the 2's complement
+    reg[2:0] filteredData[0:8];
 
     // MEM 0
     always @* begin
