@@ -162,53 +162,49 @@ module camera #(parameter [7:0] customInstructionId = 8'd0,
    * Here the grabber is defined
    *
    */
-  reg [7:0] s_byte3Reg,s_byte2Reg,s_byte1Reg;
+  reg [7:0] s_byte3Reg, s_byte2Reg, s_byte1Reg, s_byte4Reg, s_byte5Reg, s_byte6Reg, s_byte7Reg;
   reg [8:0] s_busSelectReg;
   wire [31:0] s_busPixelWord;
-  wire [31:0] s_pixelWord = {s_byte1Reg,camData, s_byte3Reg,s_byte2Reg};
-  wire s_weLineBuffer = (s_pixelCountReg[1:0] == 2'b11) ? hsync : 1'b0;
+  wire [63:0] s_pixelDoubleWord = {s_byte1Reg, camData, s_byte3Reg, s_byte2Reg, s_byte5Reg, s_byte4Reg, s_byte7Reg, s_byte6Reg};
+  wire s_weLineBuffer = (s_pixelCountReg[2:0] == 3'b111) ? hsync : 1'b0;
   
   always @(posedge pclk)
     begin
-      s_byte3Reg <= (s_pixelCountReg[1:0] == 2'b00 && hsync == 1'b1) ? camData : s_byte3Reg;
-      s_byte2Reg <= (s_pixelCountReg[1:0] == 2'b01 && hsync == 1'b1) ? camData : s_byte2Reg;
-      s_byte1Reg <= (s_pixelCountReg[1:0] == 2'b10 && hsync == 1'b1) ? camData : s_byte1Reg;
+      s_byte7Reg <= (s_pixelCountReg[2:0] == 3'b000 && hsync == 1'b1) ? camData : s_byte7Reg;
+      s_byte6Reg <= (s_pixelCountReg[2:0] == 3'b001 && hsync == 1'b1) ? camData : s_byte6Reg;
+      s_byte5Reg <= (s_pixelCountReg[2:0] == 3'b010 && hsync == 1'b1) ? camData : s_byte5Reg;
+
+      s_byte4Reg <= (s_pixelCountReg[2:0] == 3'b011 && hsync == 1'b1) ? camData : s_byte4Reg;
+      s_byte3Reg <= (s_pixelCountReg[2:0] == 3'b100 && hsync == 1'b1) ? camData : s_byte3Reg;
+      s_byte2Reg <= (s_pixelCountReg[2:0] == 3'b101 && hsync == 1'b1) ? camData : s_byte2Reg;
+      s_byte1Reg <= (s_pixelCountReg[2:0] == 3'b110 && hsync == 1'b1) ? camData : s_byte1Reg;
     end
 
   //modification to support GRAYSCALE
 
-  wire[7:0] s_MSPixel, s_LSPixel;
-  reg [15:0] r_grayscalePixelHalfWord;
+  wire[31:0] s_grayscalePixelWord;
 
-  rgb565Grayscale pixel1 ( .rgb565(s_pixelWord[15:0]),
-                           .grayscale(s_LSPixel));
-  rgb565Grayscale pixel2 ( .rgb565(s_pixelWord[31:16]),
-                           .grayscale(s_MSPixel));
-
-  
-
-  wire[15:0] s_grayscalePixelHalfWord = {s_MSPixel, s_LSPixel};
-
-  always @(posedge clock) begin
-    if(reset == 1) begin
-      r_grayscalePixelHalfWord <= 0;
-    end else begin
-      r_grayscalePixelHalfWord <= s_grayscalePixelHalfWord;
-    end
-  end
+  rgb565Grayscale pixel1 ( .rgb565(s_pixelDoubleWord[63:48]),
+                           .grayscale(s_grayscalePixelWord[31:24]));
+  rgb565Grayscale pixel2 ( .rgb565(s_pixelDoubleWord[47:32]),
+                           .grayscale(s_grayscalePixelWord[23:16]));
+  rgb565Grayscale pixel3 ( .rgb565(s_pixelDoubleWord[31:16]),
+                           .grayscale(s_grayscalePixelWord[15:8]));
+  rgb565Grayscale pixel4 ( .rgb565(s_pixelDoubleWord[15:0]),
+                           .grayscale(s_grayscalePixelWord[7:0]));
 
   dualPortRam2k lineBuffer ( .address1(s_pixelCountReg[10:3]),
                              .address2(s_busSelectReg),
                              .clock1(pclk),
                              .clock2(clock),
-                             .writeEnable(s_weLineBuffer & s_pixelCountReg[2]),
-                             .dataIn1({r_grayscalePixelHalfWord, s_grayscalePixelHalfWord}),
+                             .writeEnable(s_weLineBuffer),
+                             .dataIn1(s_grayscalePixelWord),
                              .dataOut2(s_busPixelWord));
 
   /*
    *
    * Here the bus interface is defined
-   *
+   * sand 
    */
   reg [31:0] s_busAddressReg, s_addressDataOutReg;
   reg [8:0] s_nrOfPixelsPerLineReg;

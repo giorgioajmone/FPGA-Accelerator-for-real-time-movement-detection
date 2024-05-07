@@ -17,13 +17,11 @@ module sobelAcc #(parameter [7:0] customId = 8'd0) (
     input wire         busyIn, busErrorIn
 );
 
-    // Instantiate the memories
-    
-    // Secondo me il for generate così non è sbagliato. Magari il tool li sintetizza come segnali diversi, ma è più veloce da scrivere
+    //TO DO : overwrite, transfer start signal, verilog language details 
 
     reg[7:0] writeAddress [0:8];
     reg[7:0] readAddress [0:8];
-    wire writeEnable [0:8];
+    reg writeEnable [0:8];
     wire [15:0] writeData [0:8];
     wire [15:0] readData [0:8];
 
@@ -35,118 +33,33 @@ module sobelAcc #(parameter [7:0] customId = 8'd0) (
                                 .dataIn(writeData[i]), .dataOut(readData[i]));
         end
     endgenerate  
-
-    // Update Write Address of memories
-
-    // Sequential: in theory, a bunch of adders working in parallel
-
     
-    wire firstTriplet = count3pixels[2] & count3pixels[1] & count3pixels[0];    // active low signal
+    wire firstTriplet = count3pixels[2] & count3pixels[1] & count3pixels[0];
 
 
     wire[7:0] s_writeAddress [0:8];
 
-    assign s_writeAddress[0] = writeAddress[0] + (pixelCount[0] & RowCount[0] & firstTriplet);            // only mem0 still updated at the last triplet of pixels
-    assign s_writeAddress[1] = writeAddress[1] + (pixelCount[1] & RowCount[0] & ~endLine & firstTriplet);
-    assign s_writeAddress[2] = writeAddress[2] + (pixelCount[2] & RowCount[0] & ~endLine & firstTriplet);
-    assign s_writeAddress[3] = writeAddress[3] + (pixelCount[0] & RowCount[1] & ~endLine & firstTriplet);
-    assign s_writeAddress[4] = writeAddress[4] + (pixelCount[1] & RowCount[1] & ~endLine & firstTriplet);
-    assign s_writeAddress[5] = writeAddress[5] + (pixelCount[2] & RowCount[1] & ~endLine & firstTriplet);
-    assign s_writeAddress[6] = writeAddress[6] + (pixelCount[0] & RowCount[2] & ~endLine & firstTriplet);
-    assign s_writeAddress[7] = writeAddress[7] + (pixelCount[1] & RowCount[2] & ~endLine & firstTriplet);
-    assign s_writeAddress[8] = writeAddress[8] + (pixelCount[2] & RowCount[2] & ~endLine & firstTriplet);
-
-    // Latch the results: read and write addresses are always the same (one memory cell = one window)
-    always @(posedge clock) begin
-        if(reset) begin
-            writeAddress[0] <= 8'd0;
-            writeAddress[1] <= 8'd0;
-            writeAddress[2] <= 8'd0;
-            writeAddress[3] <= 8'd0;
-            writeAddress[4] <= 8'd0;
-            writeAddress[5] <= 8'd0;
-            writeAddress[6] <= 8'd0;
-            writeAddress[7] <= 8'd0;
-            writeAddress[8] <= 8'd0;
-        end else begin
-            writeAddress[0] <= s_writeAddress[0];
-            writeAddress[1] <= s_writeAddress[1];
-            writeAddress[2] <= s_writeAddress[2];
-            writeAddress[3] <= s_writeAddress[3];
-            writeAddress[4] <= s_writeAddress[4];
-            writeAddress[5] <= s_writeAddress[5];
-            writeAddress[6] <= s_writeAddress[6];
-            writeAddress[7] <= s_writeAddress[7];
-            writeAddress[8] <= s_writeAddress[8];
-        end
-    end
+    assign s_writeAddress[0] = writeAddress[0] + (pixelCount[0] & RowCount[0] & firstTriplet);
+    assign s_writeAddress[1] = writeAddress[1] + (pixelCount[1] & RowCount[0] & firstTriplet);
+    assign s_writeAddress[2] = writeAddress[2] + (pixelCount[2] & RowCount[0] & firstTriplet);
+    assign s_writeAddress[3] = writeAddress[3] + (pixelCount[0] & RowCount[1] & firstTriplet);
+    assign s_writeAddress[4] = writeAddress[4] + (pixelCount[1] & RowCount[1] & firstTriplet);
+    assign s_writeAddress[5] = writeAddress[5] + (pixelCount[2] & RowCount[1] & firstTriplet);
+    assign s_writeAddress[6] = writeAddress[6] + (pixelCount[0] & RowCount[2] & firstTriplet);
+    assign s_writeAddress[7] = writeAddress[7] + (pixelCount[1] & RowCount[2] & firstTriplet);
+    assign s_writeAddress[8] = writeAddress[8] + (pixelCount[2] & RowCount[2] & firstTriplet);
 
     always @(posedge clock) begin
-        if(reset) begin
-            readAddress[0] <= 8'd0;
-            readAddress[1] <= 8'd0;
-            readAddress[2] <= 8'd0;
-            readAddress[3] <= 8'd0;
-            readAddress[4] <= 8'd0;
-            readAddress[5] <= 8'd0;
-            readAddress[6] <= 8'd0;
-            readAddress[7] <= 8'd0;
-            readAddress[8] <= 8'd0;
-        end else begin
-            readAddress[0] <= s_writeAddress[0];
-            readAddress[1] <= s_writeAddress[1];
-            readAddress[2] <= s_writeAddress[2];
-            readAddress[3] <= s_writeAddress[3];
-            readAddress[4] <= s_writeAddress[4];
-            readAddress[5] <= s_writeAddress[5];
-            readAddress[6] <= s_writeAddress[6];
-            readAddress[7] <= s_writeAddress[7];
-            readAddress[8] <= s_writeAddress[8];
-        end
-    end    
-
-    // Detect end of line (not very efficient beacause 8 bits counter)
-
-    reg[7:0] tripletsCount;
-    
-    // endLine gets set when tripletsCount == 8'd212, but reset at the beginning of every line
-    wire endLine = (tripletsCount == 8'd212) ? 1'b1 ^ hsync : 1'b0 ^ hsync;     // same as saying !hsync. like this more readable maybe
-
-    // tripletsCount updates when pixelCount[2] == 1 and I have not finished the line
-    always @(posedge clock) begin
-        if(reset) begin
-            tripletsCount <= 8'd0;
-        end else begin
-            if(pixelCount[2] & (~endLine)) begin
-                tripletsCount <= tripletsCount + 1;
-            end else if(hsync) begin
-                tripletsCount <= 8'd0;
-            end else begin
-                tripletsCount <= tripletsCount;
-            end
-        end
-    end    
-
-    // Open a memory block by setting his write enable signal: after 3 pixels in a row, all the three mems corresponding to that row will stay open
-    // Add an endFrame condition to take into account the last 3 rows (last 2 rows do not write in mems 3-8 anymore)
-
-    reg[7:0] tripletsRowsCount;
-
-    wire endFrame = (tripletsRowsCount == 8'd159) ? 1'b1 ^ vsync : 1'b0 ^ vsync;
-
-    always @(posedge clock) begin
-        if(reset) begin
-            tripletsRowsCount <= 8'd0;
-        end else begin
-            if(pixelCount[2] & (~endFrame)) begin
-                tripletsRowsCount <= tripletsRowsCount + 1;
-            end else if(vsync) begin
-                tripletsRowsCount <= 8'd0;
-            end else begin
-                tripletsRowsCount <= tripletsRowsCount;
-            end
-        end
-    end
+            writeAddress[0] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : s_writeAddress[0];
+            writeAddress[1] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : s_writeAddress[1];
+            writeAddress[2] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : s_writeAddress[2];
+            writeAddress[3] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : s_writeAddress[3];
+            writeAddress[4] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : s_writeAddress[4];
+            writeAddress[5] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : s_writeAddress[5];
+            writeAddress[6] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : s_writeAddress[6];
+            writeAddress[7] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : s_writeAddress[7];
+            writeAddress[8] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : s_writeAddress[8];
+    end      
 
     reg[5:0] count3pixels;      // put six bits to take into account the row
 
@@ -165,16 +78,17 @@ module sobelAcc #(parameter [7:0] customId = 8'd0) (
         end
     end
 
-    // add condition of count3pixels
-    assign writeEnable[0] = (count3pixels[0] & count3pixels[3]) ? 1'b1 : RowCount[0] & pixelCount[0];                         // only mem0/1/2 updated at the last triplet of rows
-    assign writeEnable[1] = (count3pixels[1] & count3pixels[3]) ? 1'b1 : RowCount[0] & pixelCount[1];
-    assign writeEnable[2] = (count3pixels[2] & count3pixels[3]) ? 1'b1 : RowCount[0] & pixelCount[2];
-    assign writeEnable[3] = (count3pixels[0] & count3pixels[4]) ? 1'b1 & ~endFrame : RowCount[1] & pixelCount[0] & ~endFrame;
-    assign writeEnable[4] = (count3pixels[1] & count3pixels[4]) ? 1'b1 & ~endFrame : RowCount[1] & pixelCount[1] & ~endFrame;
-    assign writeEnable[5] = (count3pixels[2] & count3pixels[4]) ? 1'b1 & ~endFrame : RowCount[1] & pixelCount[2] & ~endFrame;
-    assign writeEnable[6] = (count3pixels[0] & count3pixels[5]) ? 1'b1 & ~endFrame : RowCount[2] & pixelCount[0] & ~endFrame;
-    assign writeEnable[7] = (count3pixels[1] & count3pixels[5]) ? 1'b1 & ~endFrame : RowCount[2] & pixelCount[1] & ~endFrame;
-    assign writeEnable[8] = (count3pixels[2] & count3pixels[5]) ? 1'b1 & ~endFrame : RowCount[2] & pixelCount[2] & ~endFrame;
+    always @(posedge clock) begin
+        writeEnable[0] = (count3pixels[0] & count3pixels[3]) ? 1'b1 : RowCount[0] & pixelCount[0];
+        writeEnable[1] = (count3pixels[1] & count3pixels[3]) ? 1'b1 : RowCount[0] & pixelCount[1];
+        writeEnable[2] = (count3pixels[2] & count3pixels[3]) ? 1'b1 : RowCount[0] & pixelCount[2];
+        writeEnable[3] = (count3pixels[0] & count3pixels[4]) ? 1'b1 : RowCount[1] & pixelCount[0];
+        writeEnable[4] = (count3pixels[1] & count3pixels[4]) ? 1'b1 : RowCount[1] & pixelCount[1];
+        writeEnable[5] = (count3pixels[2] & count3pixels[4]) ? 1'b1 : RowCount[1] & pixelCount[2];
+        writeEnable[6] = (count3pixels[0] & count3pixels[5]) ? 1'b1 : RowCount[2] & pixelCount[0];
+        writeEnable[7] = (count3pixels[1] & count3pixels[5]) ? 1'b1 : RowCount[2] & pixelCount[1];
+        writeEnable[8] = (count3pixels[2] & count3pixels[5]) ? 1'b1 : RowCount[2] & pixelCount[2];
+    end
 
     // Perform the overwriting: overwrite in every memory, then the writeEnable should manage if the overwriting occurs or not
 
@@ -347,20 +261,16 @@ module sobelAcc #(parameter [7:0] customId = 8'd0) (
     always @* begin
         case(pixelCount)
             RST_STATE_P:    nextStateP <= (hsync == 1'b1) ? P0 : RST_STATE_P;
-            P0:             nextStateP <= P1;
-            P1:             nextStateP <= P2;
-            P2:             nextStateP <= P0;
+            P0:             nextStateP <= (validCamera == 1'b1)  ? P1 : P0;
+            P1:             nextStateP <= (validCamera == 1'b1)  ? P2 : P1; 
+            P2:             nextStateP <= (validCamera == 1'b1)  ? P0 : P2;
             default:        nextStateP <= RST_STATE_P;
         endcase
     end
 
     //Sequential: latch the new state
     always @(posedge clock) begin
-        if(reset) begin
-            pixelCount <= RST_STATE_P;
-        end else begin
-            pixelCount <= nextStateP;
-        end
+        pixelCount <= (reset == 1'b1) ? RST_STATE_P : nextStateP; 
     end
 
     // Row counter
@@ -385,11 +295,7 @@ module sobelAcc #(parameter [7:0] customId = 8'd0) (
 
     //Sequential: latch the new state
     always @(posedge clock) begin
-        if(reset) begin
-            RowCount <= RST_STATE_R;
-        end else begin
-            RowCount <= nextStateR;
-        end
+        pixelCount <= (reset == 1'b1) ? RST_STATE_R : nextStateR; 
     end
 
 
