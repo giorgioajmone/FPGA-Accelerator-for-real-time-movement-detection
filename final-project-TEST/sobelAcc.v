@@ -92,15 +92,17 @@ module sobelAcc #(parameter [7:0] customId = 8'd0) (
 
     // Perform the overwriting: overwrite in every memory, then the writeEnable should manage if the overwriting occurs or not
 
-    assign writeData[0] = readData[0] + camData * coefficient[0];
-    assign writeData[1] = readData[1] + camData * coefficient[1];    
-    assign writeData[2] = readData[2] + camData * coefficient[2];
-    assign writeData[3] = readData[3] + camData * coefficient[3];
-    assign writeData[4] = readData[4] + camData * coefficient[4];
-    assign writeData[5] = readData[5] + camData * coefficient[5];
-    assign writeData[6] = readData[6] + camData * coefficient[6];
-    assign writeData[7] = readData[7] + camData * coefficient[7];
-    assign writeData[8] = readData[8] + camData * coefficient[8];
+    wire overwrite = ~RowCount[0];   // overwrite at each new triplet or rows. active low signal
+
+    assign writeData[0] = (readData[0] & overwrite) + camData * coefficient[0];
+    assign writeData[1] = (readData[1] & overwrite) + camData * coefficient[1];    
+    assign writeData[2] = (readData[2] & overwrite) + camData * coefficient[2];
+    assign writeData[3] = (readData[3] & overwrite) + camData * coefficient[3];
+    assign writeData[4] = (readData[4] & overwrite) + camData * coefficient[4];
+    assign writeData[5] = (readData[5] & overwrite) + camData * coefficient[5];
+    assign writeData[6] = (readData[6] & overwrite) + camData * coefficient[6];
+    assign writeData[7] = (readData[7] & overwrite) + camData * coefficient[7];
+    assign writeData[8] = (readData[8] & overwrite) + camData * coefficient[8];
 
 
     // Chose the coefficient of the Sobel filter according to the Row and Column of the pixel: hard-code the logic to each memory block
