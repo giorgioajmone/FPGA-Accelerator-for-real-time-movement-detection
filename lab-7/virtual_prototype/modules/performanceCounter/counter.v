@@ -9,5 +9,4 @@ module counter #( parameter WIDTH = 8)
     counterValue <= (reset == 1'b1) ? {WIDTH{1'b0}} : 
                     (enable == 1'b0) ? counterValue :
                     (direction == 1'b1) ? counterValue + 1 : counterValue - 1;
-
 endmodule
