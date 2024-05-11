@@ -6,7 +6,7 @@
 #define BURST_SIZE 31
 
 int main () {
-  uint32_t ret;
+  uint32_t done;
   volatile uint16_t rgb565[640*480];
   volatile uint8_t grayscale[640*480];
   volatile uint32_t result, cycles,stall,idle;
@@ -42,11 +42,11 @@ int main () {
     asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x5 << 9), [in2] "r"(0));
     asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x7 << 9), [in2] "r"(256));
     asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x9 << 9), [in2] "r"(15));
-    asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" : [out] "=r"(ret) : [in1] "r"(0xB << 9), [in2] "r"(0x1));
+    asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0xB << 9), [in2] "r"(0x1));
 
     do{
-      asm volatile("l.nios_rrr %[out],%[in1],r0,0xD" : [out] "=r"(ret) : [in1] "r"(0xA << 9));
-    } while(ret & 0x1);
+      asm volatile("l.nios_rrr %[out],%[in1],r0,0xD" : [out] "=r"(done) : [in1] "r"(0xA << 9));
+    } while(done & 0x1);
 
     for(uint32_t i = 0; i < 600; i++) {
       uint32_t * rgbAddress = &((uint32_t *)rgb565)[(i + 1) << 8];
@@ -72,8 +72,8 @@ int main () {
       }
 
       do{
-         asm volatile("l.nios_rrr %[out],%[in1],r0,0xD" : [out] "=r"(ret) : [in1] "r"(0xA << 9));
-      } while(ret & 0x1);
+         asm volatile("l.nios_rrr %[out],%[in1],r0,0xD" : [out] "=r"(done) : [in1] "r"(0xA << 9));
+      } while(done & 0x1);
   
       // DMA - i-1 BUFFER OUT
 
@@ -84,8 +84,8 @@ int main () {
       asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0xB << 9), [in2] "r"(0x2));
 
       do{
-         asm volatile("l.nios_rrr %[out],%[in1],r0,0xD" : [out] "=r"(ret) : [in1] "r"(0xA << 9));
-      } while(ret & 0x1);
+         asm volatile("l.nios_rrr %[out],%[in1],r0,0xD" : [out] "=r"(done) : [in1] "r"(0xA << 9));
+      } while(done & 0x1);
     }
 
     // PROFILING
