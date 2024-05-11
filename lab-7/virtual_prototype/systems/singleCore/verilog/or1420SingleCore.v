@@ -681,12 +681,12 @@ module or1420SingleCore ( input wire         clock12MHz,
     .busIdle(s_busIdle),
     .valueA(s_cpu1CiDataA),
     .valueB(s_cpu1CiDataB),
-    .cIn(s_cpu1CiN),
+    .ciN(s_cpu1CiN),
     .done(s_counterDone),
     .result(s_counterResult)
  );
 
-rgb565grayscaleIse #(.customId(8'hC)) grayPixel (
+rgb565GrayscaleIse #(.customInstructionId(8'hC)) grayPixel (
     .start(s_cpu1CiStart),
     .valueA(s_cpu1CiDataA),
     .valueB(s_cpu1CiDataB),
@@ -717,8 +717,7 @@ ramDmaCi #(.customId(8'hD)) DMA(
     .begin_transaction_out(s_dmaBeginTransaction), 
     .end_transaction_out(s_dmaEndTransaction), 
     .data_valid_out(s_dmaDataValid),
-    .busRequest(s_dmaRequest),
-    .feedback({s_arbBusError,s_biosBusError,s_uartBusError,s_sdramBusError,s_flashBusError})
+    .busRequest(s_dmaRequest)
 );
  
 endmodule

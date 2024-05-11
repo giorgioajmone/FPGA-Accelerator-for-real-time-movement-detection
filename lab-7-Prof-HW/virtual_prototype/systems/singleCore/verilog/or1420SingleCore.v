@@ -443,7 +443,7 @@ module or1420SingleCore ( input wire         clock12MHz,
    * A profile ISE
    *
    */
-  profileCi #(.customId(8'd12)) profiler
+  profileCi #(.customId(8'hB)) profiler
              (.start(s_cpu1CiStart),
               .clock(s_systemClock),
               .reset(s_cpuReset),
@@ -460,7 +460,7 @@ module or1420SingleCore ( input wire         clock12MHz,
    * An rgb to grayscale ISE
    *
    */
-  rgb565GrayscaleIse #(.customInstructionId(8'd9)) converter
+  rgb565GrayscaleIse #(.customInstructionId(8'hC)) converter
                       (.start(s_cpu1CiStart),
                        .valueA(s_cpu1CiDataA),
                        .valueB(s_cpu1CiDataB),
@@ -479,7 +479,7 @@ module or1420SingleCore ( input wire         clock12MHz,
   wire [7:0] s_ramDmaBurstSize;
   wire [31:0] s_ramDmaAddressData;
   
-  ramDmaCi #(.customId(8'd20) ) ramDma
+  ramDmaCi #(.customId(8'hD) ) ramDma
             (.start(s_cpu1CiStart),
              .clock(s_systemClock),
              .reset(s_cpuReset),
