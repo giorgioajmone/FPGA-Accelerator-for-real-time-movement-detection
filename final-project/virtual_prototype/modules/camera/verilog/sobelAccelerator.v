@@ -17,12 +17,14 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     input wire         busyIn, busErrorIn
 );
 
+        //handle done signal
+
     reg[31:0] busStartReg;
     reg[9:0] blockSizeReg;
     reg[8:0] burstSizeReg;
     reg[15:0] thresholdReg;
     reg[1:0] transferModeReg;
-    reg[1:0] staturReg;
+    reg[1:0] statusReg;
 
     wire validInstr = (ciN == customId) ? ciStart : 1'b0;
 
@@ -31,7 +33,7 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
                                 (ciValueA[12:10] == 3'b010) ? blockSizeReg : 
                                     (ciValueA[12:10] == 3'b011) ? burstSizeReg :
                                         (ciValueA[12:10] == 3'b100) ? thresholdReg :
-                                            (ciValueA[12:10] == 3'b101) ? staturReg : 32'b0; 
+                                            (ciValueA[12:10] == 3'b101) ? statusReg : 32'b0; 
 
     always @ (posedge clock) begin
         busStartReg <= (reset == 1'b1) ? 32'b0 : (validInstr == 1'b1 && ciValueA[12:9] == 4'b0011) ? ciValueB : busStartReg;
@@ -319,11 +321,6 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     wire[31:0] s_busPixelWord;
 
     //quando controlliamo il bus dobbiamo mettere 3 linee di delay rispetto a new screen
-
-    reg delayHSYNC, delayVSYNC;
-    reg[10:0] delayHCounter, delayVCounter;
-
-
 
     reg[2:0] stateReg, nextState;  
     localparam IDLE     = 3'd0;
