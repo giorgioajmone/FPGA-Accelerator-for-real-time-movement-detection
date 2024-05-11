@@ -56,7 +56,7 @@ int main () {
       if(i != 599) {
         // DMA - i BUFFER IN
         asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x3 << 9), [in2] "r"((uint32_t) rgbAddress));
-        asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x5 << 9), [in2] "r"((i&0x1) ? 0 : 256));
+        asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x5 << 9), [in2] "r"((~i&0x1) << 8));
         asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x7 << 9), [in2] "r"(256));
         asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x9 << 9), [in2] "r"(15));
         asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0xB << 9), [in2] "r"(0x1));
