@@ -6,7 +6,7 @@
 #define BURST_SIZE 31
 
 int main () {
-  volatile uint32_t ret;
+  uint32_t ret;
   volatile uint16_t rgb565[640*480];
   volatile uint8_t grayscale[640*480];
   volatile uint32_t result, cycles,stall,idle;
@@ -41,7 +41,7 @@ int main () {
     asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x3 << 9), [in2] "r"((uint32_t) rgb565));
     asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x5 << 9), [in2] "r"(0));
     asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x7 << 9), [in2] "r"(256));
-    asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x9 << 9), [in2] "r"(32));
+    asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x9 << 9), [in2] "r"(15));
     asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" : [out] "=r"(ret) : [in1] "r"(0xB << 9), [in2] "r"(0x1));
 
     do{
@@ -58,7 +58,7 @@ int main () {
         asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x3 << 9), [in2] "r"((uint32_t) rgbAddress));
         asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x5 << 9), [in2] "r"((i&0x1) ? 0 : 256));
         asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x7 << 9), [in2] "r"(256));
-        asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x9 << 9), [in2] "r"(32));
+        asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x9 << 9), [in2] "r"(15));
         asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0xB << 9), [in2] "r"(0x1));
       }
 
@@ -80,7 +80,7 @@ int main () {
       asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x3 << 9), [in2] "r"((uint32_t) &((uint32_t *)&grayscale[0])[i<<7]));
       asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x5 << 9), [in2] "r"(it_hold));
       asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x7 << 9), [in2] "r"(128));
-      asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x9 << 9), [in2] "r"(32));
+      asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x9 << 9), [in2] "r"(15));
       asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0xB << 9), [in2] "r"(0x2));
 
       do{
