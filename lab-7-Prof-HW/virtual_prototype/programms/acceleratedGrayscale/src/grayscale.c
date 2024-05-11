@@ -41,14 +41,14 @@ int main () {
     asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x3 << 9), [in2] "r"((uint32_t) rgb565));
     asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x5 << 9), [in2] "r"(0));
     asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x7 << 9), [in2] "r"(256));
-    asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x9 << 9), [in2] "r"(16));
+    asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x9 << 9), [in2] "r"(32));
     asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" : [out] "=r"(ret) : [in1] "r"(0xB << 9), [in2] "r"(0x1));
 
     do{
       asm volatile("l.nios_rrr %[out],%[in1],r0,0xD" : [out] "=r"(ret) : [in1] "r"(0xA << 9));
     } while(ret & 0x1);
 
-    for(volatile uint32_t i = 0; i < 600; i++) {
+    for(uint32_t i = 0; i < 600; i++) {
       uint32_t * rgbAddress = &((uint32_t *)rgb565)[(i + 1) << 8];
       uint32_t it_hold = (i&0x1) << 8;
       
@@ -58,7 +58,7 @@ int main () {
         asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x3 << 9), [in2] "r"((uint32_t) rgbAddress));
         asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x5 << 9), [in2] "r"((i&0x1) ? 0 : 256));
         asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x7 << 9), [in2] "r"(256));
-        asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x9 << 9), [in2] "r"(16));
+        asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x9 << 9), [in2] "r"(32));
         asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0xB << 9), [in2] "r"(0x1));
       }
 
@@ -67,7 +67,7 @@ int main () {
         // PIXELS - PROCESSING
         asm volatile("l.nios_rrr %[out],%[in1],%[in2],0xD" : [out] "=r"(pixelA) : [in1] "r"(it_hold + pixels), [in2] "r"(0));
         asm volatile("l.nios_rrr %[out],%[in1],%[in2],0xD" : [out] "=r"(pixelB) : [in1] "r"(it_hold + pixels + 1), [in2] "r"(0));
-        asm volatile("l.nios_rrr %[out],%[in1],%[in2],0xC":[out]"=r"(gray):[in1]"r"(swap_u16(pixelA)),[in2]"r"(swap_u16(pixelB)));
+        asm volatile("l.nios_rrr %[out],%[in1],%[in2],0xC":[out]"=r"(gray):[in1]"r"(swap_u16(pixelB)),[in2]"r"(swap_u16(pixelA)));
         asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x200 | (it_hold + (pixels>>1))), [in2] "r"(gray));
       }
 
@@ -80,7 +80,7 @@ int main () {
       asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x3 << 9), [in2] "r"((uint32_t) &((uint32_t *)&grayscale[0])[i<<7]));
       asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x5 << 9), [in2] "r"(it_hold));
       asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x7 << 9), [in2] "r"(128));
-      asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x9 << 9), [in2] "r"(16));
+      asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0x9 << 9), [in2] "r"(32));
       asm volatile("l.nios_rrr r0,%[in1],%[in2],0xD" :: [in1] "r"(0xB << 9), [in2] "r"(0x2));
 
       do{
