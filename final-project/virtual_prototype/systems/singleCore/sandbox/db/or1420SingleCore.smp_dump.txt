@@ -1,5 +1,5 @@
 
-State Machine - |or1420SingleCore|sobelAccelerator:acc|stateReg
+State Machine - |or1420SingleCore|sobelAccelerator:sobelino|stateReg
 Name stateReg.ERROR stateReg.WRITE stateReg.CLOSE stateReg.INIT stateReg.REQUEST stateReg.IDLE 
 stateReg.IDLE 0 0 0 0 0 0 
 stateReg.REQUEST 0 0 0 0 1 1 

@@ -280,6 +280,10 @@
 					"strict" : false
 				},
 				{
+					"name" : "camHsync",
+					"strict" : false
+				},
+				{
 					"name" : "camData[4]",
 					"strict" : false
 				},
@@ -313,10 +317,6 @@
 				},
 				{
 					"name" : "camVsync",
-					"strict" : false
-				},
-				{
-					"name" : "camHsync",
 					"strict" : false
 				},
 				{

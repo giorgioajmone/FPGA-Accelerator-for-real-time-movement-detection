@@ -646,5 +646,31 @@ module or1420SingleCore ( input wire         clock12MHz,
                              s_flashDataValid | s_camDataValid;
  assign s_busy             = s_sdramBusy;
  assign s_burstSize        = s_cpu1BurstSize | s_hdmiBurstSize | s_camBurstSize;
+
+sobelAccelerator #(.customId(8'd111)) sobelino (
+    .clock(s_systemClock), 
+    .camClock(camPclk), 
+    .reset(s_cpuReset), 
+    .hsync(1'b1), 
+    .vsync(1'b1), 
+    .ciStart(s_cpu1CiStart), 
+    .validCamera(1'b1),
+    .ciN(s_cpu1CiN), 
+    .camData(8'b1),
+    .ciValueA(s_cpu1CiDataA), 
+    .ciValueB(s_cpu1CiDataB),
+    .ciResult(),
+    .ciDone(),
+    .requestBus(),
+    .busGrant(s_camAckBus),
+    .beginTransactionOut(),
+    .addressDataOut(),
+    .endTransactionOut(),
+    .byteEnablesOut(),
+    .dataValidOut(),
+    .burstSizeOut(),
+    .busyIn(s_busy),
+    .busErrorIn(s_busError)
+);
  
 endmodule

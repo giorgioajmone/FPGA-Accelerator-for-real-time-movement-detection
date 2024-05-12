@@ -68,7 +68,7 @@ hdmiBlue[3] << screens:hdmi.blue
 SCL << i2cCustomInstr:i2cm.SCL
 camnReset << s_resetCountReg[4].DB_MAX_OUTPUT_PORT_TYPE
 SDA <> i2cCustomInstr:i2cm.SDA
-camPclk => camPclk.IN1
+camPclk => camPclk.IN2
 camHsync => camHsync.IN1
 camVsync => camVsync.IN1
 biosBypass => biosBypass.IN1
@@ -16745,105 +16745,258 @@ dataReadPort[30] <= dataReadPort[30]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 dataReadPort[31] <= dataReadPort[31]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|or1420SingleCore|sobelAccelerator:acc
-clock => clock.IN18
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => busStartReg.OUTPUTSELECT
-reset => blockSizeReg.OUTPUTSELECT
-reset => blockSizeReg.OUTPUTSELECT
-reset => blockSizeReg.OUTPUTSELECT
-reset => blockSizeReg.OUTPUTSELECT
-reset => blockSizeReg.OUTPUTSELECT
-reset => blockSizeReg.OUTPUTSELECT
-reset => blockSizeReg.OUTPUTSELECT
-reset => blockSizeReg.OUTPUTSELECT
-reset => blockSizeReg.OUTPUTSELECT
-reset => blockSizeReg.OUTPUTSELECT
-reset => burstSizeReg.OUTPUTSELECT
-reset => burstSizeReg.OUTPUTSELECT
-reset => burstSizeReg.OUTPUTSELECT
-reset => burstSizeReg.OUTPUTSELECT
-reset => burstSizeReg.OUTPUTSELECT
-reset => burstSizeReg.OUTPUTSELECT
-reset => burstSizeReg.OUTPUTSELECT
-reset => burstSizeReg.OUTPUTSELECT
-reset => burstSizeReg.OUTPUTSELECT
-reset => thresholdReg.OUTPUTSELECT
-reset => thresholdReg.OUTPUTSELECT
-reset => thresholdReg.OUTPUTSELECT
-reset => thresholdReg.OUTPUTSELECT
-reset => thresholdReg.OUTPUTSELECT
-reset => thresholdReg.OUTPUTSELECT
-reset => thresholdReg.OUTPUTSELECT
-reset => thresholdReg.OUTPUTSELECT
-reset => thresholdReg.OUTPUTSELECT
-reset => thresholdReg.OUTPUTSELECT
-reset => thresholdReg.OUTPUTSELECT
-reset => thresholdReg.OUTPUTSELECT
-reset => thresholdReg.OUTPUTSELECT
-reset => thresholdReg.OUTPUTSELECT
-reset => thresholdReg.OUTPUTSELECT
-reset => thresholdReg.OUTPUTSELECT
-reset => transferModeReg.OUTPUTSELECT
-reset => transferModeReg.OUTPUTSELECT
-reset => addressReg.IN0
-reset => comb.IN0
-reset => stateReg.OUTPUTSELECT
-reset => stateReg.OUTPUTSELECT
-reset => stateReg.OUTPUTSELECT
-reset => stateReg.OUTPUTSELECT
-reset => stateReg.OUTPUTSELECT
-reset => stateReg.OUTPUTSELECT
-hsync => addressReg.IN1
-vsync => comb.IN1
+|or1420SingleCore|sobelAccelerator:sobelino
+clock => clock.IN3
+camClock => camClock.IN21
+reset => reset.IN2
+hsync => addressReg.IN0
+hsync => count3rows.OUTPUTSELECT
+hsync => count3rows.OUTPUTSELECT
+hsync => count3rows.OUTPUTSELECT
+hsync => nextStateP.OUTPUTSELECT
+hsync => nextStateP.OUTPUTSELECT
+hsync => nextStateP.OUTPUTSELECT
+hsync => nextStateP.OUTPUTSELECT
+hsync => Mux2.IN7
+hsync => nextStateR.DATAA
+hsync => nextStateR.DATAA
+hsync => nextStateR.DATAA
+hsync => nextStateR.DATAA
+vsync => vsync.IN1
 ciStart => comb.DATAB
 validCamera => validCamera.IN18
 ciN[0] => Equal0.IN7
 ciN[1] => Equal0.IN6
 ciN[2] => Equal0.IN5
 ciN[3] => Equal0.IN4
-ciN[4] => Equal0.IN3
-ciN[5] => Equal0.IN2
-ciN[6] => Equal0.IN1
+ciN[4] => Equal0.IN1
+ciN[5] => Equal0.IN3
+ciN[6] => Equal0.IN2
 ciN[7] => Equal0.IN0
-camData[0] => ~NO_FANOUT~
-camData[1] => ~NO_FANOUT~
-camData[2] => ~NO_FANOUT~
-camData[3] => ~NO_FANOUT~
-camData[4] => ~NO_FANOUT~
-camData[5] => ~NO_FANOUT~
-camData[6] => ~NO_FANOUT~
-camData[7] => ~NO_FANOUT~
+camData[0] => filteredDataX.DATAB
+camData[0] => filteredDataX.DATAB
+camData[0] => filteredDataX.DATAB
+camData[0] => filteredDataX.DATAB
+camData[0] => filteredDataX.DATAB
+camData[0] => filteredDataX.DATAB
+camData[0] => filteredDataX.DATAB
+camData[0] => filteredDataX.DATAB
+camData[0] => filteredDataX.DATAB
+camData[0] => filteredDataX.DATAB
+camData[0] => filteredDataX.DATAB
+camData[0] => filteredDataX.DATAB
+camData[0] => filteredDataX.DATAB
+camData[0] => filteredDataX.DATAB
+camData[0] => filteredDataX.DATAB
+camData[0] => filteredDataX.DATAB
+camData[0] => filteredDataX.DATAB
+camData[0] => filteredDataX.DATAB
+camData[0] => Add18.IN16
+camData[0] => filteredDataX.DATAB
+camData[0] => filteredDataX.DATAB
+camData[0] => filteredDataX.DATAB
+camData[0] => filteredDataX.DATAB
+camData[0] => filteredDataX.DATAB
+camData[0] => filteredDataX.DATAB
+camData[0] => filteredDataX.DATAB
+camData[0] => filteredDataX.DATAB
+camData[0] => filteredDataX.DATAB
+camData[1] => filteredDataX.DATAB
+camData[1] => filteredDataX.DATAB
+camData[1] => filteredDataX.DATAB
+camData[1] => filteredDataX.DATAB
+camData[1] => filteredDataX.DATAB
+camData[1] => filteredDataX.DATAB
+camData[1] => filteredDataX.DATAB
+camData[1] => filteredDataX.DATAB
+camData[1] => filteredDataX.DATAB
+camData[1] => filteredDataX.DATAB
+camData[1] => filteredDataX.DATAB
+camData[1] => filteredDataX.DATAB
+camData[1] => filteredDataX.DATAB
+camData[1] => filteredDataX.DATAB
+camData[1] => filteredDataX.DATAB
+camData[1] => filteredDataX.DATAB
+camData[1] => filteredDataX.DATAB
+camData[1] => filteredDataX.DATAB
+camData[1] => Add18.IN15
+camData[1] => filteredDataX.DATAB
+camData[1] => filteredDataX.DATAB
+camData[1] => filteredDataX.DATAB
+camData[1] => filteredDataX.DATAB
+camData[1] => filteredDataX.DATAB
+camData[1] => filteredDataX.DATAB
+camData[1] => filteredDataX.DATAB
+camData[1] => filteredDataX.DATAB
+camData[1] => filteredDataX.DATAB
+camData[2] => filteredDataX.DATAB
+camData[2] => filteredDataX.DATAB
+camData[2] => filteredDataX.DATAB
+camData[2] => filteredDataX.DATAB
+camData[2] => filteredDataX.DATAB
+camData[2] => filteredDataX.DATAB
+camData[2] => filteredDataX.DATAB
+camData[2] => filteredDataX.DATAB
+camData[2] => filteredDataX.DATAB
+camData[2] => filteredDataX.DATAB
+camData[2] => filteredDataX.DATAB
+camData[2] => filteredDataX.DATAB
+camData[2] => filteredDataX.DATAB
+camData[2] => filteredDataX.DATAB
+camData[2] => filteredDataX.DATAB
+camData[2] => filteredDataX.DATAB
+camData[2] => filteredDataX.DATAB
+camData[2] => filteredDataX.DATAB
+camData[2] => Add18.IN14
+camData[2] => filteredDataX.DATAB
+camData[2] => filteredDataX.DATAB
+camData[2] => filteredDataX.DATAB
+camData[2] => filteredDataX.DATAB
+camData[2] => filteredDataX.DATAB
+camData[2] => filteredDataX.DATAB
+camData[2] => filteredDataX.DATAB
+camData[2] => filteredDataX.DATAB
+camData[2] => filteredDataX.DATAB
+camData[3] => filteredDataX.DATAB
+camData[3] => filteredDataX.DATAB
+camData[3] => filteredDataX.DATAB
+camData[3] => filteredDataX.DATAB
+camData[3] => filteredDataX.DATAB
+camData[3] => filteredDataX.DATAB
+camData[3] => filteredDataX.DATAB
+camData[3] => filteredDataX.DATAB
+camData[3] => filteredDataX.DATAB
+camData[3] => filteredDataX.DATAB
+camData[3] => filteredDataX.DATAB
+camData[3] => filteredDataX.DATAB
+camData[3] => filteredDataX.DATAB
+camData[3] => filteredDataX.DATAB
+camData[3] => filteredDataX.DATAB
+camData[3] => filteredDataX.DATAB
+camData[3] => filteredDataX.DATAB
+camData[3] => filteredDataX.DATAB
+camData[3] => Add18.IN13
+camData[3] => filteredDataX.DATAB
+camData[3] => filteredDataX.DATAB
+camData[3] => filteredDataX.DATAB
+camData[3] => filteredDataX.DATAB
+camData[3] => filteredDataX.DATAB
+camData[3] => filteredDataX.DATAB
+camData[3] => filteredDataX.DATAB
+camData[3] => filteredDataX.DATAB
+camData[3] => filteredDataX.DATAB
+camData[4] => filteredDataX.DATAB
+camData[4] => filteredDataX.DATAB
+camData[4] => filteredDataX.DATAB
+camData[4] => filteredDataX.DATAB
+camData[4] => filteredDataX.DATAB
+camData[4] => filteredDataX.DATAB
+camData[4] => filteredDataX.DATAB
+camData[4] => filteredDataX.DATAB
+camData[4] => filteredDataX.DATAB
+camData[4] => filteredDataX.DATAB
+camData[4] => filteredDataX.DATAB
+camData[4] => filteredDataX.DATAB
+camData[4] => filteredDataX.DATAB
+camData[4] => filteredDataX.DATAB
+camData[4] => filteredDataX.DATAB
+camData[4] => filteredDataX.DATAB
+camData[4] => filteredDataX.DATAB
+camData[4] => filteredDataX.DATAB
+camData[4] => Add18.IN12
+camData[4] => filteredDataX.DATAB
+camData[4] => filteredDataX.DATAB
+camData[4] => filteredDataX.DATAB
+camData[4] => filteredDataX.DATAB
+camData[4] => filteredDataX.DATAB
+camData[4] => filteredDataX.DATAB
+camData[4] => filteredDataX.DATAB
+camData[4] => filteredDataX.DATAB
+camData[4] => filteredDataX.DATAB
+camData[5] => filteredDataX.DATAB
+camData[5] => filteredDataX.DATAB
+camData[5] => filteredDataX.DATAB
+camData[5] => filteredDataX.DATAB
+camData[5] => filteredDataX.DATAB
+camData[5] => filteredDataX.DATAB
+camData[5] => filteredDataX.DATAB
+camData[5] => filteredDataX.DATAB
+camData[5] => filteredDataX.DATAB
+camData[5] => filteredDataX.DATAB
+camData[5] => filteredDataX.DATAB
+camData[5] => filteredDataX.DATAB
+camData[5] => filteredDataX.DATAB
+camData[5] => filteredDataX.DATAB
+camData[5] => filteredDataX.DATAB
+camData[5] => filteredDataX.DATAB
+camData[5] => filteredDataX.DATAB
+camData[5] => filteredDataX.DATAB
+camData[5] => Add18.IN11
+camData[5] => filteredDataX.DATAB
+camData[5] => filteredDataX.DATAB
+camData[5] => filteredDataX.DATAB
+camData[5] => filteredDataX.DATAB
+camData[5] => filteredDataX.DATAB
+camData[5] => filteredDataX.DATAB
+camData[5] => filteredDataX.DATAB
+camData[5] => filteredDataX.DATAB
+camData[5] => filteredDataX.DATAB
+camData[6] => filteredDataX.DATAB
+camData[6] => filteredDataX.DATAB
+camData[6] => filteredDataX.DATAB
+camData[6] => filteredDataX.DATAB
+camData[6] => filteredDataX.DATAB
+camData[6] => filteredDataX.DATAB
+camData[6] => filteredDataX.DATAB
+camData[6] => filteredDataX.DATAB
+camData[6] => filteredDataX.DATAB
+camData[6] => filteredDataX.DATAB
+camData[6] => filteredDataX.DATAB
+camData[6] => filteredDataX.DATAB
+camData[6] => filteredDataX.DATAB
+camData[6] => filteredDataX.DATAB
+camData[6] => filteredDataX.DATAB
+camData[6] => filteredDataX.DATAB
+camData[6] => filteredDataX.DATAB
+camData[6] => filteredDataX.DATAB
+camData[6] => Add18.IN10
+camData[6] => filteredDataX.DATAB
+camData[6] => filteredDataX.DATAB
+camData[6] => filteredDataX.DATAB
+camData[6] => filteredDataX.DATAB
+camData[6] => filteredDataX.DATAB
+camData[6] => filteredDataX.DATAB
+camData[6] => filteredDataX.DATAB
+camData[6] => filteredDataX.DATAB
+camData[6] => filteredDataX.DATAB
+camData[7] => filteredDataX.DATAB
+camData[7] => filteredDataX.DATAB
+camData[7] => filteredDataX.DATAB
+camData[7] => filteredDataX.DATAB
+camData[7] => filteredDataX.DATAB
+camData[7] => filteredDataX.DATAB
+camData[7] => filteredDataX.DATAB
+camData[7] => filteredDataX.DATAB
+camData[7] => filteredDataX.DATAB
+camData[7] => filteredDataX.DATAB
+camData[7] => filteredDataX.DATAB
+camData[7] => filteredDataX.DATAB
+camData[7] => filteredDataX.DATAB
+camData[7] => filteredDataX.DATAB
+camData[7] => filteredDataX.DATAB
+camData[7] => filteredDataX.DATAB
+camData[7] => filteredDataX.DATAB
+camData[7] => filteredDataX.DATAB
+camData[7] => Add18.IN9
+camData[7] => filteredDataX.DATAB
+camData[7] => filteredDataX.DATAB
+camData[7] => filteredDataX.DATAB
+camData[7] => filteredDataX.DATAB
+camData[7] => filteredDataX.DATAB
+camData[7] => filteredDataX.DATAB
+camData[7] => filteredDataX.DATAB
+camData[7] => filteredDataX.DATAB
+camData[7] => filteredDataX.DATAB
 ciValueA[0] => ~NO_FANOUT~
 ciValueA[1] => ~NO_FANOUT~
 ciValueA[2] => ~NO_FANOUT~
@@ -16854,38 +17007,38 @@ ciValueA[6] => ~NO_FANOUT~
 ciValueA[7] => ~NO_FANOUT~
 ciValueA[8] => ~NO_FANOUT~
 ciValueA[9] => ciResult.IN1
-ciValueA[9] => Equal6.IN1
-ciValueA[9] => Equal7.IN1
-ciValueA[9] => Equal8.IN2
-ciValueA[9] => Equal9.IN1
-ciValueA[9] => Equal10.IN2
-ciValueA[10] => Equal1.IN0
-ciValueA[10] => Equal2.IN2
-ciValueA[10] => Equal3.IN1
-ciValueA[10] => Equal4.IN2
-ciValueA[10] => Equal6.IN0
-ciValueA[10] => Equal7.IN3
-ciValueA[10] => Equal8.IN1
-ciValueA[10] => Equal9.IN3
-ciValueA[10] => Equal10.IN1
-ciValueA[11] => Equal1.IN2
-ciValueA[11] => Equal2.IN0
-ciValueA[11] => Equal3.IN0
-ciValueA[11] => Equal4.IN1
-ciValueA[11] => Equal6.IN3
-ciValueA[11] => Equal7.IN0
-ciValueA[11] => Equal8.IN0
-ciValueA[11] => Equal9.IN2
-ciValueA[11] => Equal10.IN3
-ciValueA[12] => Equal1.IN1
-ciValueA[12] => Equal2.IN1
-ciValueA[12] => Equal3.IN2
-ciValueA[12] => Equal4.IN0
-ciValueA[12] => Equal6.IN2
-ciValueA[12] => Equal7.IN2
-ciValueA[12] => Equal8.IN3
-ciValueA[12] => Equal9.IN0
-ciValueA[12] => Equal10.IN0
+ciValueA[9] => Equal6.IN3
+ciValueA[9] => Equal7.IN3
+ciValueA[9] => Equal8.IN3
+ciValueA[9] => Equal9.IN3
+ciValueA[9] => Equal10.IN3
+ciValueA[10] => Equal1.IN2
+ciValueA[10] => Equal2.IN1
+ciValueA[10] => Equal3.IN2
+ciValueA[10] => Equal4.IN1
+ciValueA[10] => Equal6.IN2
+ciValueA[10] => Equal7.IN1
+ciValueA[10] => Equal8.IN2
+ciValueA[10] => Equal9.IN1
+ciValueA[10] => Equal10.IN2
+ciValueA[11] => Equal1.IN1
+ciValueA[11] => Equal2.IN2
+ciValueA[11] => Equal3.IN1
+ciValueA[11] => Equal4.IN0
+ciValueA[11] => Equal6.IN1
+ciValueA[11] => Equal7.IN2
+ciValueA[11] => Equal8.IN1
+ciValueA[11] => Equal9.IN0
+ciValueA[11] => Equal10.IN0
+ciValueA[12] => Equal1.IN0
+ciValueA[12] => Equal2.IN0
+ciValueA[12] => Equal3.IN0
+ciValueA[12] => Equal4.IN2
+ciValueA[12] => Equal6.IN0
+ciValueA[12] => Equal7.IN0
+ciValueA[12] => Equal8.IN0
+ciValueA[12] => Equal9.IN2
+ciValueA[12] => Equal10.IN1
 ciValueA[13] => ~NO_FANOUT~
 ciValueA[14] => ~NO_FANOUT~
 ciValueA[15] => ~NO_FANOUT~
@@ -17096,7 +17249,7 @@ busErrorIn => nextState.OUTPUTSELECT
 busErrorIn => nextState.ERROR.DATAB
 
 
-|or1420SingleCore|sobelAccelerator:acc|sobelBuffer:bufferX_instantiation[0].buffer
+|or1420SingleCore|sobelAccelerator:sobelino|sobelBuffer:bufferX_instantiation[0].bufferX
 addressIn[0] => memory.waddr_a[0].DATAIN
 addressIn[0] => memory.WADDR
 addressIn[1] => memory.waddr_a[1].DATAIN
@@ -17215,7 +17368,7 @@ dataOut[14] <= dataOut[14]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 dataOut[15] <= dataOut[15]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|or1420SingleCore|sobelAccelerator:acc|sobelBuffer:bufferX_instantiation[1].buffer
+|or1420SingleCore|sobelAccelerator:sobelino|sobelBuffer:bufferX_instantiation[1].bufferX
 addressIn[0] => memory.waddr_a[0].DATAIN
 addressIn[0] => memory.WADDR
 addressIn[1] => memory.waddr_a[1].DATAIN
@@ -17334,7 +17487,7 @@ dataOut[14] <= dataOut[14]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 dataOut[15] <= dataOut[15]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|or1420SingleCore|sobelAccelerator:acc|sobelBuffer:bufferX_instantiation[2].buffer
+|or1420SingleCore|sobelAccelerator:sobelino|sobelBuffer:bufferX_instantiation[2].bufferX
 addressIn[0] => memory.waddr_a[0].DATAIN
 addressIn[0] => memory.WADDR
 addressIn[1] => memory.waddr_a[1].DATAIN
@@ -17453,7 +17606,7 @@ dataOut[14] <= dataOut[14]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 dataOut[15] <= dataOut[15]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|or1420SingleCore|sobelAccelerator:acc|sobelBuffer:bufferX_instantiation[3].buffer
+|or1420SingleCore|sobelAccelerator:sobelino|sobelBuffer:bufferX_instantiation[3].bufferX
 addressIn[0] => memory.waddr_a[0].DATAIN
 addressIn[0] => memory.WADDR
 addressIn[1] => memory.waddr_a[1].DATAIN
@@ -17572,7 +17725,7 @@ dataOut[14] <= dataOut[14]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 dataOut[15] <= dataOut[15]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|or1420SingleCore|sobelAccelerator:acc|sobelBuffer:bufferX_instantiation[4].buffer
+|or1420SingleCore|sobelAccelerator:sobelino|sobelBuffer:bufferX_instantiation[4].bufferX
 addressIn[0] => memory.waddr_a[0].DATAIN
 addressIn[0] => memory.WADDR
 addressIn[1] => memory.waddr_a[1].DATAIN
@@ -17691,7 +17844,7 @@ dataOut[14] <= dataOut[14]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 dataOut[15] <= dataOut[15]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|or1420SingleCore|sobelAccelerator:acc|sobelBuffer:bufferX_instantiation[5].buffer
+|or1420SingleCore|sobelAccelerator:sobelino|sobelBuffer:bufferX_instantiation[5].bufferX
 addressIn[0] => memory.waddr_a[0].DATAIN
 addressIn[0] => memory.WADDR
 addressIn[1] => memory.waddr_a[1].DATAIN
@@ -17810,7 +17963,7 @@ dataOut[14] <= dataOut[14]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 dataOut[15] <= dataOut[15]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|or1420SingleCore|sobelAccelerator:acc|sobelBuffer:bufferX_instantiation[6].buffer
+|or1420SingleCore|sobelAccelerator:sobelino|sobelBuffer:bufferX_instantiation[6].bufferX
 addressIn[0] => memory.waddr_a[0].DATAIN
 addressIn[0] => memory.WADDR
 addressIn[1] => memory.waddr_a[1].DATAIN
@@ -17929,7 +18082,7 @@ dataOut[14] <= dataOut[14]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 dataOut[15] <= dataOut[15]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|or1420SingleCore|sobelAccelerator:acc|sobelBuffer:bufferX_instantiation[7].buffer
+|or1420SingleCore|sobelAccelerator:sobelino|sobelBuffer:bufferX_instantiation[7].bufferX
 addressIn[0] => memory.waddr_a[0].DATAIN
 addressIn[0] => memory.WADDR
 addressIn[1] => memory.waddr_a[1].DATAIN
@@ -18048,7 +18201,7 @@ dataOut[14] <= dataOut[14]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 dataOut[15] <= dataOut[15]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|or1420SingleCore|sobelAccelerator:acc|sobelBuffer:bufferX_instantiation[8].buffer
+|or1420SingleCore|sobelAccelerator:sobelino|sobelBuffer:bufferX_instantiation[8].bufferX
 addressIn[0] => memory.waddr_a[0].DATAIN
 addressIn[0] => memory.WADDR
 addressIn[1] => memory.waddr_a[1].DATAIN
@@ -18167,7 +18320,7 @@ dataOut[14] <= dataOut[14]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 dataOut[15] <= dataOut[15]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|or1420SingleCore|sobelAccelerator:acc|sobelBuffer:bufferY_instantiation[0].buffer
+|or1420SingleCore|sobelAccelerator:sobelino|sobelBuffer:bufferY_instantiation[0].bufferY
 addressIn[0] => memory.waddr_a[0].DATAIN
 addressIn[0] => memory.WADDR
 addressIn[1] => memory.waddr_a[1].DATAIN
@@ -18286,7 +18439,7 @@ dataOut[14] <= dataOut[14]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 dataOut[15] <= dataOut[15]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|or1420SingleCore|sobelAccelerator:acc|sobelBuffer:bufferY_instantiation[1].buffer
+|or1420SingleCore|sobelAccelerator:sobelino|sobelBuffer:bufferY_instantiation[1].bufferY
 addressIn[0] => memory.waddr_a[0].DATAIN
 addressIn[0] => memory.WADDR
 addressIn[1] => memory.waddr_a[1].DATAIN
@@ -18405,7 +18558,7 @@ dataOut[14] <= dataOut[14]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 dataOut[15] <= dataOut[15]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|or1420SingleCore|sobelAccelerator:acc|sobelBuffer:bufferY_instantiation[2].buffer
+|or1420SingleCore|sobelAccelerator:sobelino|sobelBuffer:bufferY_instantiation[2].bufferY
 addressIn[0] => memory.waddr_a[0].DATAIN
 addressIn[0] => memory.WADDR
 addressIn[1] => memory.waddr_a[1].DATAIN
@@ -18524,7 +18677,7 @@ dataOut[14] <= dataOut[14]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 dataOut[15] <= dataOut[15]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|or1420SingleCore|sobelAccelerator:acc|sobelBuffer:bufferY_instantiation[3].buffer
+|or1420SingleCore|sobelAccelerator:sobelino|sobelBuffer:bufferY_instantiation[3].bufferY
 addressIn[0] => memory.waddr_a[0].DATAIN
 addressIn[0] => memory.WADDR
 addressIn[1] => memory.waddr_a[1].DATAIN
@@ -18643,7 +18796,7 @@ dataOut[14] <= dataOut[14]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 dataOut[15] <= dataOut[15]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|or1420SingleCore|sobelAccelerator:acc|sobelBuffer:bufferY_instantiation[4].buffer
+|or1420SingleCore|sobelAccelerator:sobelino|sobelBuffer:bufferY_instantiation[4].bufferY
 addressIn[0] => memory.waddr_a[0].DATAIN
 addressIn[0] => memory.WADDR
 addressIn[1] => memory.waddr_a[1].DATAIN
@@ -18762,7 +18915,7 @@ dataOut[14] <= dataOut[14]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 dataOut[15] <= dataOut[15]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|or1420SingleCore|sobelAccelerator:acc|sobelBuffer:bufferY_instantiation[5].buffer
+|or1420SingleCore|sobelAccelerator:sobelino|sobelBuffer:bufferY_instantiation[5].bufferY
 addressIn[0] => memory.waddr_a[0].DATAIN
 addressIn[0] => memory.WADDR
 addressIn[1] => memory.waddr_a[1].DATAIN
@@ -18881,7 +19034,7 @@ dataOut[14] <= dataOut[14]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 dataOut[15] <= dataOut[15]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|or1420SingleCore|sobelAccelerator:acc|sobelBuffer:bufferY_instantiation[6].buffer
+|or1420SingleCore|sobelAccelerator:sobelino|sobelBuffer:bufferY_instantiation[6].bufferY
 addressIn[0] => memory.waddr_a[0].DATAIN
 addressIn[0] => memory.WADDR
 addressIn[1] => memory.waddr_a[1].DATAIN
@@ -19000,7 +19153,7 @@ dataOut[14] <= dataOut[14]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 dataOut[15] <= dataOut[15]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|or1420SingleCore|sobelAccelerator:acc|sobelBuffer:bufferY_instantiation[7].buffer
+|or1420SingleCore|sobelAccelerator:sobelino|sobelBuffer:bufferY_instantiation[7].bufferY
 addressIn[0] => memory.waddr_a[0].DATAIN
 addressIn[0] => memory.WADDR
 addressIn[1] => memory.waddr_a[1].DATAIN
@@ -19119,7 +19272,7 @@ dataOut[14] <= dataOut[14]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 dataOut[15] <= dataOut[15]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 
 
-|or1420SingleCore|sobelAccelerator:acc|sobelBuffer:bufferY_instantiation[8].buffer
+|or1420SingleCore|sobelAccelerator:sobelino|sobelBuffer:bufferY_instantiation[8].bufferY
 addressIn[0] => memory.waddr_a[0].DATAIN
 addressIn[0] => memory.WADDR
 addressIn[1] => memory.waddr_a[1].DATAIN
@@ -19236,5 +19389,230 @@ dataOut[12] <= dataOut[12]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 dataOut[13] <= dataOut[13]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 dataOut[14] <= dataOut[14]~reg0.DB_MAX_OUTPUT_PORT_TYPE
 dataOut[15] <= dataOut[15]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|or1420SingleCore|sobelAccelerator:sobelino|dualPortRam2k:lineBuffer
+address1[0] => memory.waddr_a[0].DATAIN
+address1[0] => memory.WADDR
+address1[1] => memory.waddr_a[1].DATAIN
+address1[1] => memory.WADDR1
+address1[2] => memory.waddr_a[2].DATAIN
+address1[2] => memory.WADDR2
+address1[3] => memory.waddr_a[3].DATAIN
+address1[3] => memory.WADDR3
+address1[4] => memory.waddr_a[4].DATAIN
+address1[4] => memory.WADDR4
+address1[5] => memory.waddr_a[5].DATAIN
+address1[5] => memory.WADDR5
+address1[6] => memory.waddr_a[6].DATAIN
+address1[6] => memory.WADDR6
+address1[7] => memory.waddr_a[7].DATAIN
+address1[7] => memory.WADDR7
+address1[8] => memory.waddr_a[8].DATAIN
+address1[8] => memory.WADDR8
+address2[0] => memory.RADDR
+address2[1] => memory.RADDR1
+address2[2] => memory.RADDR2
+address2[3] => memory.RADDR3
+address2[4] => memory.RADDR4
+address2[5] => memory.RADDR5
+address2[6] => memory.RADDR6
+address2[7] => memory.RADDR7
+address2[8] => memory.RADDR8
+clock1 => memory.we_a.CLK
+clock1 => memory.waddr_a[8].CLK
+clock1 => memory.waddr_a[7].CLK
+clock1 => memory.waddr_a[6].CLK
+clock1 => memory.waddr_a[5].CLK
+clock1 => memory.waddr_a[4].CLK
+clock1 => memory.waddr_a[3].CLK
+clock1 => memory.waddr_a[2].CLK
+clock1 => memory.waddr_a[1].CLK
+clock1 => memory.waddr_a[0].CLK
+clock1 => memory.data_a[31].CLK
+clock1 => memory.data_a[30].CLK
+clock1 => memory.data_a[29].CLK
+clock1 => memory.data_a[28].CLK
+clock1 => memory.data_a[27].CLK
+clock1 => memory.data_a[26].CLK
+clock1 => memory.data_a[25].CLK
+clock1 => memory.data_a[24].CLK
+clock1 => memory.data_a[23].CLK
+clock1 => memory.data_a[22].CLK
+clock1 => memory.data_a[21].CLK
+clock1 => memory.data_a[20].CLK
+clock1 => memory.data_a[19].CLK
+clock1 => memory.data_a[18].CLK
+clock1 => memory.data_a[17].CLK
+clock1 => memory.data_a[16].CLK
+clock1 => memory.data_a[15].CLK
+clock1 => memory.data_a[14].CLK
+clock1 => memory.data_a[13].CLK
+clock1 => memory.data_a[12].CLK
+clock1 => memory.data_a[11].CLK
+clock1 => memory.data_a[10].CLK
+clock1 => memory.data_a[9].CLK
+clock1 => memory.data_a[8].CLK
+clock1 => memory.data_a[7].CLK
+clock1 => memory.data_a[6].CLK
+clock1 => memory.data_a[5].CLK
+clock1 => memory.data_a[4].CLK
+clock1 => memory.data_a[3].CLK
+clock1 => memory.data_a[2].CLK
+clock1 => memory.data_a[1].CLK
+clock1 => memory.data_a[0].CLK
+clock1 => memory.CLK0
+clock2 => dataOut2[0]~reg0.CLK
+clock2 => dataOut2[1]~reg0.CLK
+clock2 => dataOut2[2]~reg0.CLK
+clock2 => dataOut2[3]~reg0.CLK
+clock2 => dataOut2[4]~reg0.CLK
+clock2 => dataOut2[5]~reg0.CLK
+clock2 => dataOut2[6]~reg0.CLK
+clock2 => dataOut2[7]~reg0.CLK
+clock2 => dataOut2[8]~reg0.CLK
+clock2 => dataOut2[9]~reg0.CLK
+clock2 => dataOut2[10]~reg0.CLK
+clock2 => dataOut2[11]~reg0.CLK
+clock2 => dataOut2[12]~reg0.CLK
+clock2 => dataOut2[13]~reg0.CLK
+clock2 => dataOut2[14]~reg0.CLK
+clock2 => dataOut2[15]~reg0.CLK
+clock2 => dataOut2[16]~reg0.CLK
+clock2 => dataOut2[17]~reg0.CLK
+clock2 => dataOut2[18]~reg0.CLK
+clock2 => dataOut2[19]~reg0.CLK
+clock2 => dataOut2[20]~reg0.CLK
+clock2 => dataOut2[21]~reg0.CLK
+clock2 => dataOut2[22]~reg0.CLK
+clock2 => dataOut2[23]~reg0.CLK
+clock2 => dataOut2[24]~reg0.CLK
+clock2 => dataOut2[25]~reg0.CLK
+clock2 => dataOut2[26]~reg0.CLK
+clock2 => dataOut2[27]~reg0.CLK
+clock2 => dataOut2[28]~reg0.CLK
+clock2 => dataOut2[29]~reg0.CLK
+clock2 => dataOut2[30]~reg0.CLK
+clock2 => dataOut2[31]~reg0.CLK
+writeEnable => memory.we_a.DATAIN
+writeEnable => memory.WE
+dataIn1[0] => memory.data_a[0].DATAIN
+dataIn1[0] => memory.DATAIN
+dataIn1[1] => memory.data_a[1].DATAIN
+dataIn1[1] => memory.DATAIN1
+dataIn1[2] => memory.data_a[2].DATAIN
+dataIn1[2] => memory.DATAIN2
+dataIn1[3] => memory.data_a[3].DATAIN
+dataIn1[3] => memory.DATAIN3
+dataIn1[4] => memory.data_a[4].DATAIN
+dataIn1[4] => memory.DATAIN4
+dataIn1[5] => memory.data_a[5].DATAIN
+dataIn1[5] => memory.DATAIN5
+dataIn1[6] => memory.data_a[6].DATAIN
+dataIn1[6] => memory.DATAIN6
+dataIn1[7] => memory.data_a[7].DATAIN
+dataIn1[7] => memory.DATAIN7
+dataIn1[8] => memory.data_a[8].DATAIN
+dataIn1[8] => memory.DATAIN8
+dataIn1[9] => memory.data_a[9].DATAIN
+dataIn1[9] => memory.DATAIN9
+dataIn1[10] => memory.data_a[10].DATAIN
+dataIn1[10] => memory.DATAIN10
+dataIn1[11] => memory.data_a[11].DATAIN
+dataIn1[11] => memory.DATAIN11
+dataIn1[12] => memory.data_a[12].DATAIN
+dataIn1[12] => memory.DATAIN12
+dataIn1[13] => memory.data_a[13].DATAIN
+dataIn1[13] => memory.DATAIN13
+dataIn1[14] => memory.data_a[14].DATAIN
+dataIn1[14] => memory.DATAIN14
+dataIn1[15] => memory.data_a[15].DATAIN
+dataIn1[15] => memory.DATAIN15
+dataIn1[16] => memory.data_a[16].DATAIN
+dataIn1[16] => memory.DATAIN16
+dataIn1[17] => memory.data_a[17].DATAIN
+dataIn1[17] => memory.DATAIN17
+dataIn1[18] => memory.data_a[18].DATAIN
+dataIn1[18] => memory.DATAIN18
+dataIn1[19] => memory.data_a[19].DATAIN
+dataIn1[19] => memory.DATAIN19
+dataIn1[20] => memory.data_a[20].DATAIN
+dataIn1[20] => memory.DATAIN20
+dataIn1[21] => memory.data_a[21].DATAIN
+dataIn1[21] => memory.DATAIN21
+dataIn1[22] => memory.data_a[22].DATAIN
+dataIn1[22] => memory.DATAIN22
+dataIn1[23] => memory.data_a[23].DATAIN
+dataIn1[23] => memory.DATAIN23
+dataIn1[24] => memory.data_a[24].DATAIN
+dataIn1[24] => memory.DATAIN24
+dataIn1[25] => memory.data_a[25].DATAIN
+dataIn1[25] => memory.DATAIN25
+dataIn1[26] => memory.data_a[26].DATAIN
+dataIn1[26] => memory.DATAIN26
+dataIn1[27] => memory.data_a[27].DATAIN
+dataIn1[27] => memory.DATAIN27
+dataIn1[28] => memory.data_a[28].DATAIN
+dataIn1[28] => memory.DATAIN28
+dataIn1[29] => memory.data_a[29].DATAIN
+dataIn1[29] => memory.DATAIN29
+dataIn1[30] => memory.data_a[30].DATAIN
+dataIn1[30] => memory.DATAIN30
+dataIn1[31] => memory.data_a[31].DATAIN
+dataIn1[31] => memory.DATAIN31
+dataOut2[0] <= dataOut2[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[1] <= dataOut2[1]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[2] <= dataOut2[2]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[3] <= dataOut2[3]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[4] <= dataOut2[4]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[5] <= dataOut2[5]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[6] <= dataOut2[6]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[7] <= dataOut2[7]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[8] <= dataOut2[8]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[9] <= dataOut2[9]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[10] <= dataOut2[10]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[11] <= dataOut2[11]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[12] <= dataOut2[12]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[13] <= dataOut2[13]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[14] <= dataOut2[14]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[15] <= dataOut2[15]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[16] <= dataOut2[16]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[17] <= dataOut2[17]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[18] <= dataOut2[18]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[19] <= dataOut2[19]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[20] <= dataOut2[20]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[21] <= dataOut2[21]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[22] <= dataOut2[22]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[23] <= dataOut2[23]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[24] <= dataOut2[24]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[25] <= dataOut2[25]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[26] <= dataOut2[26]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[27] <= dataOut2[27]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[28] <= dataOut2[28]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[29] <= dataOut2[29]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[30] <= dataOut2[30]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+dataOut2[31] <= dataOut2[31]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|or1420SingleCore|sobelAccelerator:sobelino|synchroFlop:sns
+clockIn => s_states[0].CLK
+clockOut => s_states[1].CLK
+clockOut => s_states[2].CLK
+reset => s_reset0.IN1
+reset => s_states[1].ACLR
+reset => s_states[2].ACLR
+D => s_states[0].ENA
+Q <= s_states[2].DB_MAX_OUTPUT_PORT_TYPE
+
+
+|or1420SingleCore|sobelAccelerator:sobelino|synchroFlop:snl
+clockIn => s_states[0].CLK
+clockOut => s_states[1].CLK
+clockOut => s_states[2].CLK
+reset => s_reset0.IN1
+reset => s_states[1].ACLR
+reset => s_states[2].ACLR
+D => s_states[0].ENA
+Q <= s_states[2].DB_MAX_OUTPUT_PORT_TYPE
 
 

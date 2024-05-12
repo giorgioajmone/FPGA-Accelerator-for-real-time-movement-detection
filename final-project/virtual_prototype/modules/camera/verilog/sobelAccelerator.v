@@ -44,8 +44,11 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
 
     reg[7:0] addressReg [0:8];
     wire [7:0] address [0:8];
-    wire [15:0] writeData [0:8];
-    wire [15:0] readData [0:8];
+    wire [15:0] writeDataX [0:8];
+    wire [15:0] readDataX [0:8];
+    
+    wire [15:0] writeDataY [0:8];
+    wire [15:0] readDataY [0:8];
 
     genvar j;
     generate
@@ -58,18 +61,18 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     genvar i;
     generate
         for(i = 0; i < 9; i = i + 1) begin : bufferX_instantiation
-            sobelBuffer  buffer(.addressIn(address[i]), .addressOut(address[i]), 
+            sobelBuffer  bufferX(.addressIn(address[i]), .addressOut(address[i]), 
                                     .clockA(camClock), .clockB(~camClock), .writeEnable(validCamera), 
-                                        .dataIn(writeData[i]), .dataOut(readData[i]));
+                                        .dataIn(writeDataX[i]), .dataOut(readDataX[i]));
         end
     endgenerate
 
     genvar k;
     generate
         for(k = 0; k < 9; k = k + 1) begin : bufferY_instantiation
-            sobelBuffer  buffer(.addressIn(address[k]), .addressOut(address[k]), 
+            sobelBuffer  bufferY(.addressIn(address[k]), .addressOut(address[k]), 
                                     .clockA(camClock), .clockB(~camClock), .writeEnable(validCamera), 
-                                        .dataIn(writeData[k]), .dataOut(readData[k]));
+                                        .dataIn(writeDataY[k]), .dataOut(readDataY[k]));
         end
     endgenerate  
     
@@ -109,167 +112,199 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
                                 {count3rows[1:0], 1'b1} : count3rows;                        
     end
 
-    reg[15:0] filteredData[0:8];
+    reg[15:0] filteredDataX[0:8];
 
-    assign writeData[0] = readData[0] & {16{~rowCount[0] & ~pixelCount[0]}} + filteredData[0];
-    assign writeData[1] = readData[1] & {16{~rowCount[0] & ~pixelCount[1]}} + filteredData[1];
-    assign writeData[2] = readData[2] & {16{~rowCount[0] & ~pixelCount[2]}} + filteredData[2];
-    assign writeData[3] = readData[3] & {16{~rowCount[1] & ~pixelCount[0]}} + filteredData[3];
-    assign writeData[4] = readData[4] & {16{~rowCount[1] & ~pixelCount[1]}} + filteredData[4];
-    assign writeData[5] = readData[5] & {16{~rowCount[1] & ~pixelCount[2]}} + filteredData[5];
-    assign writeData[6] = readData[6] & {16{~rowCount[2] & ~pixelCount[0]}} + filteredData[6];
-    assign writeData[7] = readData[7] & {16{~rowCount[2] & ~pixelCount[1]}} + filteredData[7];
-    assign writeData[8] = readData[8] & {16{~rowCount[2] & ~pixelCount[2]}} + filteredData[8];
+    assign writeDataX[0] = readDataX[0] & {16{~rowCount[0] & ~pixelCount[0]}} + filteredDataX[0];
+    assign writeDataX[1] = readDataX[1] & {16{~rowCount[0] & ~pixelCount[1]}} + filteredDataX[1];
+    assign writeDataX[2] = readDataX[2] & {16{~rowCount[0] & ~pixelCount[2]}} + filteredDataX[2];
+    assign writeDataX[3] = readDataX[3] & {16{~rowCount[1] & ~pixelCount[0]}} + filteredDataX[3];
+    assign writeDataX[4] = readDataX[4] & {16{~rowCount[1] & ~pixelCount[1]}} + filteredDataX[4];
+    assign writeDataX[5] = readDataX[5] & {16{~rowCount[1] & ~pixelCount[2]}} + filteredDataX[5];
+    assign writeDataX[6] = readDataX[6] & {16{~rowCount[2] & ~pixelCount[0]}} + filteredDataX[6];
+    assign writeDataX[7] = readDataX[7] & {16{~rowCount[2] & ~pixelCount[1]}} + filteredDataX[7];
+    assign writeDataX[8] = readDataX[8] & {16{~rowCount[2] & ~pixelCount[2]}} + filteredDataX[8];
 
     wire[15:0] resultx1  = camData;
     wire[15:0] resultx2  = camData << 1;
-    wire[15:0] resultx_1 = ~camData + 1;
-    wire[15:0] resultx_2 = ~(camData << 1) + 1; 
+    wire[15:0] resultx_1 = ~camData - 1;
+    wire[15:0] resultx_2 = ~(camData << 1) - 1; 
 
     
     //mega wire
-    wire[15:0] outputX =    writeData[0] & {16{rowCount[2] & pixelCount[2]}} |
-                            writeData[1] & {16{rowCount[2] & pixelCount[0]}} |
-                            writeData[2] & {16{rowCount[2] & pixelCount[1]}} |
-                            writeData[3] & {16{rowCount[0] & pixelCount[2]}} |
-                            writeData[4] & {16{rowCount[0] & pixelCount[0]}} |
-                            writeData[5] & {16{rowCount[0] & pixelCount[1]}} |
-                            writeData[6] & {16{rowCount[1] & pixelCount[2]}} |
-                            writeData[7] & {16{rowCount[1] & pixelCount[0]}} |
-                            writeData[8] & {16{rowCount[1] & pixelCount[1]}}; 
+    wire[15:0] outputX =    writeDataX[0] & {16{rowCount[2] & pixelCount[2]}} |
+                            writeDataX[1] & {16{rowCount[2] & pixelCount[0]}} |
+                            writeDataX[2] & {16{rowCount[2] & pixelCount[1]}} |
+                            writeDataX[3] & {16{rowCount[0] & pixelCount[2]}} |
+                            writeDataX[4] & {16{rowCount[0] & pixelCount[0]}} |
+                            writeDataX[5] & {16{rowCount[0] & pixelCount[1]}} |
+                            writeDataX[6] & {16{rowCount[1] & pixelCount[2]}} |
+                            writeDataX[7] & {16{rowCount[1] & pixelCount[0]}} |
+                            writeDataX[8] & {16{rowCount[1] & pixelCount[1]}}; 
+
+    reg[15:0] filteredDataY[0:8];
+
+    assign writeDataY[0] = readDataY[0] & {16{~rowCount[0] & ~pixelCount[0]}} + filteredDataY[0];
+    assign writeDataY[1] = readDataY[1] & {16{~rowCount[0] & ~pixelCount[1]}} + filteredDataY[1];
+    assign writeDataY[2] = readDataY[2] & {16{~rowCount[0] & ~pixelCount[2]}} + filteredDataY[2];
+    assign writeDataY[3] = readDataY[3] & {16{~rowCount[1] & ~pixelCount[0]}} + filteredDataY[3];
+    assign writeDataY[4] = readDataY[4] & {16{~rowCount[1] & ~pixelCount[1]}} + filteredDataY[4];
+    assign writeDataY[5] = readDataY[5] & {16{~rowCount[1] & ~pixelCount[2]}} + filteredDataY[5];
+    assign writeDataY[6] = readDataY[6] & {16{~rowCount[2] & ~pixelCount[0]}} + filteredDataY[6];
+    assign writeDataY[7] = readDataY[7] & {16{~rowCount[2] & ~pixelCount[1]}} + filteredDataY[7];
+    assign writeDataY[8] = readDataY[8] & {16{~rowCount[2] & ~pixelCount[2]}} + filteredDataY[8];
+
+    wire[15:0] resulty1  = camData;
+    wire[15:0] resulty2  = camData << 1;
+    wire[15:0] resulty_1 = ~camData - 1;
+    wire[15:0] resulty_2 = ~(camData << 1) - 1; 
+
+    
+    //mega wire
+    wire[15:0] outputY =    writeDataY[0] & {16{rowCount[2] & pixelCount[2]}} |
+                            writeDataY[1] & {16{rowCount[2] & pixelCount[0]}} |
+                            writeDataY[2] & {16{rowCount[2] & pixelCount[1]}} |
+                            writeDataY[3] & {16{rowCount[0] & pixelCount[2]}} |
+                            writeDataY[4] & {16{rowCount[0] & pixelCount[0]}} |
+                            writeDataY[5] & {16{rowCount[0] & pixelCount[1]}} |
+                            writeDataY[6] & {16{rowCount[1] & pixelCount[2]}} |
+                            writeDataY[7] & {16{rowCount[1] & pixelCount[0]}} |
+                            writeDataY[8] & {16{rowCount[1] & pixelCount[1]}}; 
+
+    wire[7:0] finalOutput = ((((outputX >> 15) ^ outputX) - (outputX >> 15)) 
+                                + (((outputY >> 15) ^ outputY) - (outputY >> 15))) > thresholdReg ? 8'hFF : 8'h0;
 
     // MEM 0
     always @* begin
         if((rowCount[0] & pixelCount[0]) | rowCount[2] & pixelCount[0]) begin
-                filteredData[0] = resultx_1;
+                filteredDataX[0] = resultx_1;
         end else if((rowCount[0] & pixelCount[2]) | (rowCount[2] & pixelCount[2])) begin
-                filteredData[0] = resultx1;
+                filteredDataX[0] = resultx1;
         end else if(rowCount[1] & pixelCount[0]) begin
-                filteredData[0] = resultx_2;
+                filteredDataX[0] = resultx_2;
         end else if(rowCount[1] & pixelCount[2]) begin
-                filteredData[0] = resultx2;
+                filteredDataX[0] = resultx2;
         end else begin
-                filteredData[0] = 16'd0;
+                filteredDataX[0] = 16'd0;
         end
     end
 
     // MEM 1
     always @(*) begin
         if((rowCount[0] & pixelCount[1]) | rowCount[2] & pixelCount[1]) begin
-                filteredData[1] = resultx_1;
+                filteredDataX[1] = resultx_1;
         end else if((rowCount[0] & pixelCount[0]) | (rowCount[2] & pixelCount[0])) begin
-                filteredData[1] = resultx1;
+                filteredDataX[1] = resultx1;
         end else if(rowCount[1] & pixelCount[1]) begin
-                filteredData[1] = resultx_2;
+                filteredDataX[1] = resultx_2;
         end else if(rowCount[1] & pixelCount[0]) begin
-                filteredData[1] = resultx2;
+                filteredDataX[1] = resultx2;
         end else begin
-                filteredData[1] = 16'd0;
+                filteredDataX[1] = 16'd0;
         end        
     end
 
     // MEM 2
     always @(*) begin
         if((rowCount[0] & pixelCount[2]) | rowCount[2] & pixelCount[2]) begin
-                filteredData[2] = resultx_1;
+                filteredDataX[2] = resultx_1;
         end else if((rowCount[0] & pixelCount[1]) | (rowCount[2] & pixelCount[1])) begin
-                filteredData[2] = resultx1;
+                filteredDataX[2] = resultx1;
         end else if(rowCount[1] & pixelCount[2]) begin
-                filteredData[2] = resultx_2;
+                filteredDataX[2] = resultx_2;
         end else if(rowCount[1] & pixelCount[1]) begin
-                filteredData[2] = resultx2;
+                filteredDataX[2] = resultx2;
         end else begin
-                filteredData[2] = 16'd0;
+                filteredDataX[2] = 16'd0;
         end        
     end
 
     // MEM 3
     always @* begin
         if((rowCount[1] & pixelCount[0]) | rowCount[0] & pixelCount[0]) begin
-                filteredData[3] = resultx_1;
+                filteredDataX[3] = resultx_1;
         end else if((rowCount[1] & pixelCount[2]) | (rowCount[0] & pixelCount[2])) begin
-                filteredData[3] = resultx1;
+                filteredDataX[3] = resultx1;
         end else if(rowCount[2] & pixelCount[0]) begin
-                filteredData[3] = resultx_2;
+                filteredDataX[3] = resultx_2;
         end else if(rowCount[2] & pixelCount[2]) begin
-                filteredData[3] = resultx2;
+                filteredDataX[3] = resultx2;
         end else begin
-                filteredData[3] = 16'd0;
+                filteredDataX[3] = 16'd0;
         end
     end
 
     // MEM 4
     always @(*) begin
         if((rowCount[1] & pixelCount[1]) | rowCount[0] & pixelCount[1]) begin
-                filteredData[4] = resultx_1;
+                filteredDataX[4] = resultx_1;
         end else if((rowCount[1] & pixelCount[0]) | (rowCount[0] & pixelCount[0])) begin
-                filteredData[4] = resultx1;
+                filteredDataX[4] = resultx1;
         end else if(rowCount[2] & pixelCount[1]) begin
-                filteredData[4] = resultx_2;
+                filteredDataX[4] = resultx_2;
         end else if(rowCount[2] & pixelCount[0]) begin
-                filteredData[4] = resultx2;
+                filteredDataX[4] = resultx2;
         end else begin
-                filteredData[4] = 16'd0;
+                filteredDataX[4] = 16'd0;
         end        
     end
 
     // MEM 5
     always @(*) begin
         if((rowCount[1] & pixelCount[2]) | rowCount[0] & pixelCount[2]) begin
-                filteredData[5] = resultx_1;
+                filteredDataX[5] = resultx_1;
         end else if((rowCount[1] & pixelCount[1]) | (rowCount[0] & pixelCount[1])) begin
-                filteredData[5] = resultx1;
+                filteredDataX[5] = resultx1;
         end else if(rowCount[2] & pixelCount[2]) begin
-                filteredData[5] = resultx_2;
+                filteredDataX[5] = resultx_2;
         end else if(rowCount[2] & pixelCount[1]) begin
-                filteredData[5] = resultx2;
+                filteredDataX[5] = resultx2;
         end else begin
-                filteredData[5] = 16'd0;
+                filteredDataX[5] = 16'd0;
         end        
     end
 
     // MEM 6
     always @* begin
         if((rowCount[2] & pixelCount[0]) | rowCount[1] & pixelCount[0]) begin
-                filteredData[6] = resultx_1;
+                filteredDataX[6] = resultx_1;
         end else if((rowCount[2] & pixelCount[2]) | (rowCount[1] & pixelCount[2])) begin
-                filteredData[6] = resultx1;
+                filteredDataX[6] = resultx1;
         end else if(rowCount[0] & pixelCount[0]) begin
-                filteredData[6] = resultx_2;
+                filteredDataX[6] = resultx_2;
         end else if(rowCount[0] & pixelCount[2]) begin
-                filteredData[6] = resultx2;
+                filteredDataX[6] = resultx2;
         end else begin
-                filteredData[6] = 16'd0;
+                filteredDataX[6] = 16'd0;
         end
     end
 
     // MEM 7
     always @(*) begin
         if((rowCount[2] & pixelCount[1]) | rowCount[1] & pixelCount[1]) begin
-                filteredData[7] = resultx_1;
+                filteredDataX[7] = resultx_1;
         end else if((rowCount[2] & pixelCount[0]) | (rowCount[1] & pixelCount[0])) begin
-                filteredData[7] = resultx1;
+                filteredDataX[7] = resultx1;
         end else if(rowCount[0] & pixelCount[1]) begin
-                filteredData[7] = resultx_2;
+                filteredDataX[7] = resultx_2;
         end else if(rowCount[0] & pixelCount[0]) begin
-                filteredData[7] = resultx2;
+                filteredDataX[7] = resultx2;
         end else begin
-                filteredData[7] = 16'd0;
+                filteredDataX[7] = 16'd0;
         end        
     end
 
     // MEM 8
     always @(*) begin
         if((rowCount[2] & pixelCount[2]) | rowCount[1] & pixelCount[2]) begin
-                filteredData[8] = resultx_1;
+                filteredDataX[8] = resultx_1;
         end else if((rowCount[2] & pixelCount[1]) | (rowCount[1] & pixelCount[1])) begin
-                filteredData[8] = resultx1;
+                filteredDataX[8] = resultx1;
         end else if(rowCount[0] & pixelCount[2]) begin
-                filteredData[8] = resultx_2;
+                filteredDataX[8] = resultx_2;
         end else if(rowCount[0] & pixelCount[1]) begin
-                filteredData[8] = resultx2;
+                filteredDataX[8] = resultx2;
         end else begin
-                filteredData[8] = 16'd0;
+                filteredDataX[8] = 16'd0;
         end        
     end
 
@@ -300,7 +335,7 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
 
     always @(posedge camClock) begin
         pixelCount <= (reset == 1'b1) ? S0 : nextStateP; 
-        pixelCount <= (reset == 1'b1) ? S0 : nextStateR;
+        rowCount <= (reset == 1'b1) ? S0 : nextStateR;
     end
 
     //divertimento per theo
@@ -387,6 +422,7 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
                                         (isWriting == 1'b1) ? memoryAddressReg + 9'd1 : memoryAddressReg;
         pixelPerLineReg         <= (newLine == 1'b1) ? 8'b0 : //da modificare per mettere counter dei pxel per riga
                                         (stateReg == INIT) ? pixelPerLineReg - {1'b0, burstSizeNext} : pixelPerLineReg;
+    end
 
     synchroFlop sns (.clockIn(camClock),
                     .clockOut(clock),
@@ -399,7 +435,5 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
                     .reset(reset),
                     .D(startLine),
                     .Q(newLine));
-
-    end
 
 endmodule

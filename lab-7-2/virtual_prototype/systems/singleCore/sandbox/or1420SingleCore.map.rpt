@@ -1,5 +1,5 @@
 Analysis & Synthesis report for or1420SingleCore
-Tue May  7 12:47:43 2024
+Sun May 12 17:20:01 2024
 Quartus Prime Version 18.1.1 Build 646 04/11/2019 SJ Lite Edition
 
 
@@ -154,13 +154,13 @@ https://fpgasoftware.intel.com/eula.
 +----------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                     ;
 +------------------------------------+---------------------------------------------+
-; Analysis & Synthesis Status        ; Successful - Tue May  7 12:47:43 2024       ;
+; Analysis & Synthesis Status        ; Successful - Sun May 12 17:20:01 2024       ;
 ; Quartus Prime Version              ; 18.1.1 Build 646 04/11/2019 SJ Lite Edition ;
 ; Revision Name                      ; or1420SingleCore                            ;
 ; Top-level Entity Name              ; or1420SingleCore                            ;
 ; Family                             ; Cyclone IV E                                ;
-; Total logic elements               ; 15,318                                      ;
-;     Total combinational functions  ; 13,518                                      ;
+; Total logic elements               ; 15,309                                      ;
+;     Total combinational functions  ; 13,509                                      ;
 ;     Dedicated logic registers      ; 6,384                                       ;
 ; Total registers                    ; 6384                                        ;
 ; Total pins                         ; 81                                          ;
@@ -262,21 +262,17 @@ https://fpgasoftware.intel.com/eula.
 +----------------------------+-------------+
 ; Processors                 ; Number      ;
 +----------------------------+-------------+
-; Number detected on machine ; 8           ;
-; Maximum allowed            ; 8           ;
+; Number detected on machine ; 4           ;
+; Maximum allowed            ; 4           ;
 ;                            ;             ;
 ; Average used               ; 1.01        ;
-; Maximum used               ; 8           ;
+; Maximum used               ; 4           ;
 ;                            ;             ;
 ; Usage by Processor         ; % Time Used ;
 ;     Processor 1            ; 100.0%      ;
-;     Processor 2            ;   0.2%      ;
+;     Processor 2            ;   0.5%      ;
 ;     Processor 3            ;   0.2%      ;
 ;     Processor 4            ;   0.2%      ;
-;     Processor 5            ;   0.2%      ;
-;     Processor 6            ;   0.2%      ;
-;     Processor 7            ;   0.2%      ;
-;     Processor 8            ;   0.2%      ;
 +----------------------------+-------------+
 
 
@@ -382,16 +378,16 @@ https://fpgasoftware.intel.com/eula.
 +---------------------------------------------+---------------------------------------------------------------------+
 ; Resource                                    ; Usage                                                               ;
 +---------------------------------------------+---------------------------------------------------------------------+
-; Estimated Total logic elements              ; 15,318                                                              ;
+; Estimated Total logic elements              ; 15,309                                                              ;
 ;                                             ;                                                                     ;
-; Total combinational functions               ; 13518                                                               ;
+; Total combinational functions               ; 13509                                                               ;
 ; Logic element usage by number of LUT inputs ;                                                                     ;
-;     -- 4 input functions                    ; 7673                                                                ;
-;     -- 3 input functions                    ; 4264                                                                ;
-;     -- <=2 input functions                  ; 1581                                                                ;
+;     -- 4 input functions                    ; 7671                                                                ;
+;     -- 3 input functions                    ; 4268                                                                ;
+;     -- <=2 input functions                  ; 1570                                                                ;
 ;                                             ;                                                                     ;
 ; Logic elements by mode                      ;                                                                     ;
-;     -- normal mode                          ; 12037                                                               ;
+;     -- normal mode                          ; 12028                                                               ;
 ;     -- arithmetic mode                      ; 1481                                                                ;
 ;                                             ;                                                                     ;
 ; Total registers                             ; 6384                                                                ;
@@ -408,7 +404,7 @@ https://fpgasoftware.intel.com/eula.
 ;                                             ;                                                                     ;
 ; Maximum fan-out node                        ; altpll:altpll_component|test_altpll:auto_generated|wire_pll1_clk[0] ;
 ; Maximum fan-out                             ; 6493                                                                ;
-; Total fan-out                               ; 69569                                                               ;
+; Total fan-out                               ; 69551                                                               ;
 ; Average fan-out                             ; 3.41                                                                ;
 +---------------------------------------------+---------------------------------------------------------------------+
 
@@ -418,7 +414,7 @@ https://fpgasoftware.intel.com/eula.
 +-------------------------------------------------+---------------------+---------------------------+-------------+--------------+---------+-----------+------+--------------+--------------------------------------------------------------------------------------------------------------------------------------+--------------------+--------------+
 ; Compilation Hierarchy Node                      ; Combinational ALUTs ; Dedicated Logic Registers ; Memory Bits ; DSP Elements ; DSP 9x9 ; DSP 18x18 ; Pins ; Virtual Pins ; Full Hierarchy Name                                                                                                                  ; Entity Name        ; Library Name ;
 +-------------------------------------------------+---------------------+---------------------------+-------------+--------------+---------+-----------+------+--------------+--------------------------------------------------------------------------------------------------------------------------------------+--------------------+--------------+
-; |or1420SingleCore                               ; 13518 (555)         ; 6384 (5)                  ; 291232      ; 9            ; 3       ; 3         ; 81   ; 0            ; |or1420SingleCore                                                                                                                    ; or1420SingleCore   ; work         ;
+; |or1420SingleCore                               ; 13509 (555)         ; 6384 (5)                  ; 291232      ; 9            ; 3       ; 3         ; 81   ; 0            ; |or1420SingleCore                                                                                                                    ; or1420SingleCore   ; work         ;
 ;    |altpll:altpll_component|                    ; 1 (0)               ; 1 (0)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|altpll:altpll_component                                                                                            ; altpll             ; work         ;
 ;       |test_altpll:auto_generated|              ; 1 (1)               ; 1 (1)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|altpll:altpll_component|test_altpll:auto_generated                                                                 ; test_altpll        ; work         ;
 ;    |bios:start|                                 ; 84 (84)             ; 103 (103)                 ; 65536       ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|bios:start                                                                                                         ; bios               ; work         ;
@@ -429,7 +425,7 @@ https://fpgasoftware.intel.com/eula.
 ;       |queueMemory:queue|                       ; 0 (0)               ; 0 (0)                     ; 160         ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|busArbiter:arbiter|queueMemory:queue                                                                               ; queueMemory        ; work         ;
 ;          |altsyncram:s_memory_rtl_0|            ; 0 (0)               ; 0 (0)                     ; 160         ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|busArbiter:arbiter|queueMemory:queue|altsyncram:s_memory_rtl_0                                                     ; altsyncram         ; work         ;
 ;             |altsyncram_epg1:auto_generated|    ; 0 (0)               ; 0 (0)                     ; 160         ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|busArbiter:arbiter|queueMemory:queue|altsyncram:s_memory_rtl_0|altsyncram_epg1:auto_generated                      ; altsyncram_epg1    ; work         ;
-;    |camera:camIf|                               ; 660 (330)           ; 365 (321)                 ; 16384       ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|camera:camIf                                                                                                       ; camera             ; work         ;
+;    |camera:camIf|                               ; 659 (329)           ; 365 (321)                 ; 16384       ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|camera:camIf                                                                                                       ; camera             ; work         ;
 ;       |dualPortRam2k:lineBuffer|                ; 0 (0)               ; 32 (32)                   ; 16384       ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|camera:camIf|dualPortRam2k:lineBuffer                                                                              ; dualPortRam2k      ; work         ;
 ;          |altsyncram:memory_rtl_0|              ; 0 (0)               ; 0 (0)                     ; 16384       ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|camera:camIf|dualPortRam2k:lineBuffer|altsyncram:memory_rtl_0                                                      ; altsyncram         ; work         ;
 ;             |altsyncram_23d1:auto_generated|    ; 0 (0)               ; 0 (0)                     ; 16384       ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|camera:camIf|dualPortRam2k:lineBuffer|altsyncram:memory_rtl_0|altsyncram_23d1:auto_generated                       ; altsyncram_23d1    ; work         ;
@@ -446,7 +442,7 @@ https://fpgasoftware.intel.com/eula.
 ;       |synchroFlop:usync|                       ; 2 (2)               ; 3 (3)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|delayIse:delayMicro|synchroFlop:usync                                                                              ; synchroFlop        ; work         ;
 ;    |i2cCustomInstr:i2cm|                        ; 94 (6)              ; 78 (26)                   ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|i2cCustomInstr:i2cm                                                                                                ; i2cCustomInstr     ; work         ;
 ;       |i2cMaster:master|                        ; 88 (88)             ; 52 (52)                   ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|i2cCustomInstr:i2cm|i2cMaster:master                                                                               ; i2cMaster          ; work         ;
-;    |or1420Top:cpu1|                             ; 8267 (76)           ; 3608 (33)                 ; 81920       ; 6            ; 0       ; 3         ; 0    ; 0            ; |or1420SingleCore|or1420Top:cpu1                                                                                                     ; or1420Top          ; work         ;
+;    |or1420Top:cpu1|                             ; 8258 (76)           ; 3608 (33)                 ; 81920       ; 6            ; 0       ; 3         ; 0    ; 0            ; |or1420SingleCore|or1420Top:cpu1                                                                                                     ; or1420Top          ; work         ;
 ;       |dCache:loadStore|                        ; 168 (168)           ; 129 (129)                 ; 65536       ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|or1420Top:cpu1|dCache:loadStore                                                                                    ; dCache             ; work         ;
 ;          |dCacheSpm:spm|                        ; 0 (0)               ; 0 (0)                     ; 65536       ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|or1420Top:cpu1|dCache:loadStore|dCacheSpm:spm                                                                      ; dCacheSpm          ; work         ;
 ;             |altsyncram:byteRam0_rtl_0|         ; 0 (0)               ; 0 (0)                     ; 16384       ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|or1420Top:cpu1|dCache:loadStore|dCacheSpm:spm|altsyncram:byteRam0_rtl_0                                            ; altsyncram         ; work         ;
@@ -457,15 +453,15 @@ https://fpgasoftware.intel.com/eula.
 ;                |altsyncram_9f81:auto_generated| ; 0 (0)               ; 0 (0)                     ; 16384       ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|or1420Top:cpu1|dCache:loadStore|dCacheSpm:spm|altsyncram:byteRam2_rtl_0|altsyncram_9f81:auto_generated             ; altsyncram_9f81    ; work         ;
 ;             |altsyncram:byteRam3_rtl_0|         ; 0 (0)               ; 0 (0)                     ; 16384       ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|or1420Top:cpu1|dCache:loadStore|dCacheSpm:spm|altsyncram:byteRam3_rtl_0                                            ; altsyncram         ; work         ;
 ;                |altsyncram_9f81:auto_generated| ; 0 (0)               ; 0 (0)                     ; 16384       ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|or1420Top:cpu1|dCache:loadStore|dCacheSpm:spm|altsyncram:byteRam3_rtl_0|altsyncram_9f81:auto_generated             ; altsyncram_9f81    ; work         ;
-;       |decodeStage:decode|                      ; 306 (306)           ; 160 (160)                 ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|or1420Top:cpu1|decodeStage:decode                                                                                  ; decodeStage        ; work         ;
-;       |executeStage:exe|                        ; 1212 (609)          ; 174 (174)                 ; 0           ; 6            ; 0       ; 3         ; 0    ; 0            ; |or1420SingleCore|or1420Top:cpu1|executeStage:exe                                                                                    ; executeStage       ; work         ;
+;       |decodeStage:decode|                      ; 307 (307)           ; 160 (160)                 ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|or1420Top:cpu1|decodeStage:decode                                                                                  ; decodeStage        ; work         ;
+;       |executeStage:exe|                        ; 1208 (603)          ; 174 (174)                 ; 0           ; 6            ; 0       ; 3         ; 0    ; 0            ; |or1420SingleCore|or1420Top:cpu1|executeStage:exe                                                                                    ; executeStage       ; work         ;
 ;          |adder:addSub|                         ; 163 (163)           ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|or1420Top:cpu1|executeStage:exe|adder:addSub                                                                       ; adder              ; work         ;
-;          |logicUnit:logicU|                     ; 88 (88)             ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|or1420Top:cpu1|executeStage:exe|logicUnit:logicU                                                                   ; logicUnit          ; work         ;
+;          |logicUnit:logicU|                     ; 92 (92)             ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|or1420Top:cpu1|executeStage:exe|logicUnit:logicU                                                                   ; logicUnit          ; work         ;
 ;          |multiplier:mul|                       ; 28 (0)              ; 0 (0)                     ; 0           ; 6            ; 0       ; 3         ; 0    ; 0            ; |or1420SingleCore|or1420Top:cpu1|executeStage:exe|multiplier:mul                                                                     ; multiplier         ; work         ;
 ;             |lpm_mult:Mult0|                    ; 28 (0)              ; 0 (0)                     ; 0           ; 6            ; 0       ; 3         ; 0    ; 0            ; |or1420SingleCore|or1420Top:cpu1|executeStage:exe|multiplier:mul|lpm_mult:Mult0                                                      ; lpm_mult           ; work         ;
 ;                |mult_7dt:auto_generated|        ; 28 (28)             ; 0 (0)                     ; 0           ; 6            ; 0       ; 3         ; 0    ; 0            ; |or1420SingleCore|or1420Top:cpu1|executeStage:exe|multiplier:mul|lpm_mult:Mult0|mult_7dt:auto_generated                              ; mult_7dt           ; work         ;
-;          |shifter:shift|                        ; 324 (324)           ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|or1420Top:cpu1|executeStage:exe|shifter:shift                                                                      ; shifter            ; work         ;
-;       |fetchStage:fetch|                        ; 1002 (1002)         ; 882 (882)                 ; 16384       ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|or1420Top:cpu1|fetchStage:fetch                                                                                    ; fetchStage         ; work         ;
+;          |shifter:shift|                        ; 322 (322)           ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|or1420Top:cpu1|executeStage:exe|shifter:shift                                                                      ; shifter            ; work         ;
+;       |fetchStage:fetch|                        ; 996 (996)           ; 882 (882)                 ; 16384       ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|or1420Top:cpu1|fetchStage:fetch                                                                                    ; fetchStage         ; work         ;
 ;          |altsyncram:s_dataMemory_rtl_0|        ; 0 (0)               ; 0 (0)                     ; 16384       ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|or1420Top:cpu1|fetchStage:fetch|altsyncram:s_dataMemory_rtl_0                                                      ; altsyncram         ; work         ;
 ;             |altsyncram_nd81:auto_generated|    ; 0 (0)               ; 0 (0)                     ; 16384       ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|or1420Top:cpu1|fetchStage:fetch|altsyncram:s_dataMemory_rtl_0|altsyncram_nd81:auto_generated                       ; altsyncram_nd81    ; work         ;
 ;       |memoryStage:mem|                         ; 39 (39)             ; 39 (39)                   ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|or1420Top:cpu1|memoryStage:mem                                                                                     ; memoryStage        ; work         ;
@@ -548,17 +544,17 @@ https://fpgasoftware.intel.com/eula.
 ;       |counter:counter1|                        ; 33 (33)             ; 32 (32)                   ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|profileCi:hardwareCounters|counter:counter1                                                                        ; counter            ; work         ;
 ;       |counter:counter2|                        ; 33 (33)             ; 32 (32)                   ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|profileCi:hardwareCounters|counter:counter2                                                                        ; counter            ; work         ;
 ;       |counter:counter3|                        ; 32 (32)             ; 32 (32)                   ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|profileCi:hardwareCounters|counter:counter3                                                                        ; counter            ; work         ;
-;    |ramDmaCi:DMA|                               ; 304 (47)            ; 176 (39)                  ; 16384       ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|ramDmaCi:DMA                                                                                                       ; ramDmaCi           ; work         ;
-;       |DMAController:dmaController|             ; 257 (257)           ; 137 (137)                 ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|ramDmaCi:DMA|DMAController:dmaController                                                                           ; DMAController      ; work         ;
+;    |ramDmaCi:DMA|                               ; 302 (48)            ; 176 (39)                  ; 16384       ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|ramDmaCi:DMA                                                                                                       ; ramDmaCi           ; work         ;
+;       |DMAController:dmaController|             ; 254 (254)           ; 137 (137)                 ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|ramDmaCi:DMA|DMAController:dmaController                                                                           ; DMAController      ; work         ;
 ;       |dualPortSSRAM:memory|                    ; 0 (0)               ; 0 (0)                     ; 16384       ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|ramDmaCi:DMA|dualPortSSRAM:memory                                                                                  ; dualPortSSRAM      ; work         ;
 ;          |altsyncram:memoryContent_rtl_0|       ; 0 (0)               ; 0 (0)                     ; 16384       ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|ramDmaCi:DMA|dualPortSSRAM:memory|altsyncram:memoryContent_rtl_0                                                   ; altsyncram         ; work         ;
 ;             |altsyncram_l6v1:auto_generated|    ; 0 (0)               ; 0 (0)                     ; 16384       ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|ramDmaCi:DMA|dualPortSSRAM:memory|altsyncram:memoryContent_rtl_0|altsyncram_l6v1:auto_generated                    ; altsyncram_l6v1    ; work         ;
-;    |rgb565GrayscaleIse:grayPixel|               ; 326 (1)             ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|rgb565GrayscaleIse:grayPixel                                                                                       ; rgb565GrayscaleIse ; work         ;
-;       |rgb565Grayscale:pixel1|                  ; 82 (82)             ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|rgb565GrayscaleIse:grayPixel|rgb565Grayscale:pixel1                                                                ; rgb565Grayscale    ; work         ;
+;    |rgb565GrayscaleIse:grayPixel|               ; 328 (1)             ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|rgb565GrayscaleIse:grayPixel                                                                                       ; rgb565GrayscaleIse ; work         ;
+;       |rgb565Grayscale:pixel1|                  ; 84 (84)             ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|rgb565GrayscaleIse:grayPixel|rgb565Grayscale:pixel1                                                                ; rgb565Grayscale    ; work         ;
 ;       |rgb565Grayscale:pixel2|                  ; 81 (81)             ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|rgb565GrayscaleIse:grayPixel|rgb565Grayscale:pixel2                                                                ; rgb565Grayscale    ; work         ;
 ;       |rgb565Grayscale:pixel3|                  ; 81 (81)             ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|rgb565GrayscaleIse:grayPixel|rgb565Grayscale:pixel3                                                                ; rgb565Grayscale    ; work         ;
 ;       |rgb565Grayscale:pixel4|                  ; 81 (81)             ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|rgb565GrayscaleIse:grayPixel|rgb565Grayscale:pixel4                                                                ; rgb565Grayscale    ; work         ;
-;    |screens:hdmi|                               ; 1037 (292)          ; 468 (69)                  ; 94208       ; 3            ; 3       ; 0         ; 0    ; 0            ; |or1420SingleCore|screens:hdmi                                                                                                       ; screens            ; work         ;
+;    |screens:hdmi|                               ; 1037 (291)          ; 468 (69)                  ; 94208       ; 3            ; 3       ; 0         ; 0    ; 0            ; |or1420SingleCore|screens:hdmi                                                                                                       ; screens            ; work         ;
 ;       |charRom:asciiRom|                        ; 0 (0)               ; 0 (0)                     ; 8192        ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|screens:hdmi|charRom:asciiRom                                                                                      ; charRom            ; work         ;
 ;          |altsyncram:Ram0_rtl_0|                ; 0 (0)               ; 0 (0)                     ; 8192        ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|screens:hdmi|charRom:asciiRom|altsyncram:Ram0_rtl_0                                                                ; altsyncram         ; work         ;
 ;             |altsyncram_ul71:auto_generated|    ; 0 (0)               ; 0 (0)                     ; 8192        ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|screens:hdmi|charRom:asciiRom|altsyncram:Ram0_rtl_0|altsyncram_ul71:auto_generated                                 ; altsyncram_ul71    ; work         ;
@@ -578,7 +574,7 @@ https://fpgasoftware.intel.com/eula.
 ;       |hdmi_720p:generator|                     ; 111 (111)           ; 72 (72)                   ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|screens:hdmi|hdmi_720p:generator                                                                                   ; hdmi_720p          ; work         ;
 ;       |synchroFlop:syncNewLine|                 ; 2 (2)               ; 3 (3)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|screens:hdmi|synchroFlop:syncNewLine                                                                               ; synchroFlop        ; work         ;
 ;       |synchroFlop:syncNewScreen|               ; 2 (2)               ; 3 (3)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|screens:hdmi|synchroFlop:syncNewScreen                                                                             ; synchroFlop        ; work         ;
-;       |textController:textC1|                   ; 322 (322)           ; 103 (103)                 ; 0           ; 3            ; 3       ; 0         ; 0    ; 0            ; |or1420SingleCore|screens:hdmi|textController:textC1                                                                                 ; textController     ; work         ;
+;       |textController:textC1|                   ; 323 (323)           ; 103 (103)                 ; 0           ; 3            ; 3       ; 0         ; 0    ; 0            ; |or1420SingleCore|screens:hdmi|textController:textC1                                                                                 ; textController     ; work         ;
 ;          |lpm_mult:Mult0|                       ; 0 (0)               ; 0 (0)                     ; 0           ; 1            ; 1       ; 0         ; 0    ; 0            ; |or1420SingleCore|screens:hdmi|textController:textC1|lpm_mult:Mult0                                                                  ; lpm_mult           ; work         ;
 ;             |mult_6at:auto_generated|           ; 0 (0)               ; 0 (0)                     ; 0           ; 1            ; 1       ; 0         ; 0    ; 0            ; |or1420SingleCore|screens:hdmi|textController:textC1|lpm_mult:Mult0|mult_6at:auto_generated                                          ; mult_6at           ; work         ;
 ;          |lpm_mult:Mult1|                       ; 0 (0)               ; 0 (0)                     ; 0           ; 1            ; 1       ; 0         ; 0    ; 0            ; |or1420SingleCore|screens:hdmi|textController:textC1|lpm_mult:Mult1                                                                  ; lpm_mult           ; work         ;
@@ -590,7 +586,7 @@ https://fpgasoftware.intel.com/eula.
 ;          |sram512X32Dp:readMem|                 ; 38 (38)             ; 83 (83)                   ; 16384       ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|sdramController:sdram|sdramFifo:buffer|sram512X32Dp:readMem                                                        ; sram512X32Dp       ; work         ;
 ;             |altsyncram:memory_rtl_0|           ; 0 (0)               ; 0 (0)                     ; 16384       ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|sdramController:sdram|sdramFifo:buffer|sram512X32Dp:readMem|altsyncram:memory_rtl_0                                ; altsyncram         ; work         ;
 ;                |altsyncram_svg1:auto_generated| ; 0 (0)               ; 0 (0)                     ; 16384       ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|sdramController:sdram|sdramFifo:buffer|sram512X32Dp:readMem|altsyncram:memory_rtl_0|altsyncram_svg1:auto_generated ; altsyncram_svg1    ; work         ;
-;    |spiBus:flash|                               ; 745 (198)           ; 554 (299)                 ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|spiBus:flash                                                                                                       ; spiBus             ; work         ;
+;    |spiBus:flash|                               ; 746 (199)           ; 554 (299)                 ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|spiBus:flash                                                                                                       ; spiBus             ; work         ;
 ;       |spiShiftQuad:quad|                       ; 148 (148)           ; 95 (95)                   ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|spiBus:flash|spiShiftQuad:quad                                                                                     ; spiShiftQuad       ; work         ;
 ;       |spiShiftSingle:single|                   ; 399 (399)           ; 160 (160)                 ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|spiBus:flash|spiShiftSingle:single                                                                                 ; spiShiftSingle     ; work         ;
 ;    |swapByte:ise1|                              ; 2 (2)               ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |or1420SingleCore|swapByte:ise1                                                                                                      ; swapByte           ; work         ;
@@ -1734,29 +1730,29 @@ Note: All cells listed above may not be present at the end of synthesis due to v
 ; 3:1                ; 9 bits    ; 18 LEs        ; 9 LEs                ; 9 LEs                  ; No         ; |or1420SingleCore|spiBus:flash|spiShiftSingle:single|s_stateReg                         ;
 ; 3:1                ; 2 bits    ; 4 LEs         ; 2 LEs                ; 2 LEs                  ; No         ; |or1420SingleCore|spiBus:flash|spiShiftSingle:single|s_cntrlReg                         ;
 ; 3:1                ; 2 bits    ; 4 LEs         ; 2 LEs                ; 2 LEs                  ; No         ; |or1420SingleCore|spiBus:flash|spiShiftSingle:single|s_cntrlReg                         ;
-; 3:1                ; 32 bits   ; 64 LEs        ; 64 LEs               ; 0 LEs                  ; No         ; |or1420SingleCore|or1420Top:cpu1|dCache:loadStore|addressDataOut[7]                     ;
-; 3:1                ; 26 bits   ; 52 LEs        ; 52 LEs               ; 0 LEs                  ; No         ; |or1420SingleCore|or1420Top:cpu1|fetchStage:fetch|s_newTag[21]                          ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 64 LEs               ; 0 LEs                  ; No         ; |or1420SingleCore|or1420Top:cpu1|dCache:loadStore|addressDataOut[17]                    ;
+; 3:1                ; 26 bits   ; 52 LEs        ; 52 LEs               ; 0 LEs                  ; No         ; |or1420SingleCore|or1420Top:cpu1|fetchStage:fetch|s_newTag[20]                          ;
 ; 3:1                ; 19 bits   ; 38 LEs        ; 38 LEs               ; 0 LEs                  ; No         ; |or1420SingleCore|sdramController:sdram|s_sdramCurrentState                             ;
 ; 3:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; No         ; |or1420SingleCore|spiBus:flash|spiShiftSingle:single|s_stateReg                         ;
 ; 3:1                ; 2 bits    ; 4 LEs         ; 2 LEs                ; 2 LEs                  ; No         ; |or1420SingleCore|spiBus:flash|spiShiftSingle:single|s_cntrlNext                        ;
 ; 3:1                ; 3 bits    ; 6 LEs         ; 3 LEs                ; 3 LEs                  ; No         ; |or1420SingleCore|screens:hdmi|graphicsController:graphics|s_dmaStateNext               ;
-; 3:1                ; 7 bits    ; 14 LEs        ; 14 LEs               ; 0 LEs                  ; No         ; |or1420SingleCore|screens:hdmi|s_pixelReadAddress[3]                                    ;
+; 3:1                ; 7 bits    ; 14 LEs        ; 14 LEs               ; 0 LEs                  ; No         ; |or1420SingleCore|screens:hdmi|s_pixelReadAddress[2]                                    ;
 ; 3:1                ; 4 bits    ; 8 LEs         ; 8 LEs                ; 0 LEs                  ; No         ; |or1420SingleCore|screens:hdmi|hdmi_720p:generator|s_horizontalState                    ;
 ; 3:1                ; 4 bits    ; 8 LEs         ; 8 LEs                ; 0 LEs                  ; No         ; |or1420SingleCore|screens:hdmi|hdmi_720p:generator|s_verticalState                      ;
 ; 3:1                ; 27 bits   ; 54 LEs        ; 54 LEs               ; 0 LEs                  ; No         ; |or1420SingleCore|i2cCustomInstr:i2cm|i2cMaster:master|s_stateMachineReg                ;
-; 3:1                ; 32 bits   ; 64 LEs        ; 64 LEs               ; 0 LEs                  ; No         ; |or1420SingleCore|or1420Top:cpu1|executeStage:exe|s_customResult[13]                    ;
-; 3:1                ; 7 bits    ; 14 LEs        ; 14 LEs               ; 0 LEs                  ; No         ; |or1420SingleCore|screens:hdmi|textController:textC1|ramData[5]                         ;
-; 4:1                ; 32 bits   ; 64 LEs        ; 64 LEs               ; 0 LEs                  ; No         ; |or1420SingleCore|or1420Top:cpu1|executeStage:exe|Mux29                                 ;
-; 3:1                ; 22 bits   ; 44 LEs        ; 44 LEs               ; 0 LEs                  ; No         ; |or1420SingleCore|ramDmaCi:DMA|DMAController:dmaController|readSettings[31]             ;
-; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; No         ; |or1420SingleCore|uartBus:uart1|Mux5                                                    ;
-; 3:1                ; 32 bits   ; 64 LEs        ; 64 LEs               ; 0 LEs                  ; No         ; |or1420SingleCore|ramDmaCi:DMA|DMAController:dmaController|address_data_out[29]         ;
-; 4:1                ; 32 bits   ; 64 LEs        ; 64 LEs               ; 0 LEs                  ; No         ; |or1420SingleCore|or1420Top:cpu1|executeStage:exe|Mux42                                 ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 64 LEs               ; 0 LEs                  ; No         ; |or1420SingleCore|or1420Top:cpu1|executeStage:exe|s_customResult[17]                    ;
+; 3:1                ; 7 bits    ; 14 LEs        ; 14 LEs               ; 0 LEs                  ; No         ; |or1420SingleCore|screens:hdmi|textController:textC1|ramData[4]                         ;
+; 4:1                ; 32 bits   ; 64 LEs        ; 64 LEs               ; 0 LEs                  ; No         ; |or1420SingleCore|or1420Top:cpu1|executeStage:exe|Mux10                                 ;
+; 3:1                ; 22 bits   ; 44 LEs        ; 44 LEs               ; 0 LEs                  ; No         ; |or1420SingleCore|ramDmaCi:DMA|DMAController:dmaController|readSettings[22]             ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; No         ; |or1420SingleCore|uartBus:uart1|Mux3                                                    ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 64 LEs               ; 0 LEs                  ; No         ; |or1420SingleCore|ramDmaCi:DMA|DMAController:dmaController|address_data_out[18]         ;
+; 4:1                ; 32 bits   ; 64 LEs        ; 64 LEs               ; 0 LEs                  ; No         ; |or1420SingleCore|or1420Top:cpu1|executeStage:exe|Mux62                                 ;
 ; 3:1                ; 9 bits    ; 18 LEs        ; 18 LEs               ; 0 LEs                  ; No         ; |or1420SingleCore|camera:camIf|s_busSelectReg                                           ;
-; 3:1                ; 15 bits   ; 30 LEs        ; 15 LEs               ; 15 LEs                 ; No         ; |or1420SingleCore|camera:camIf|ciResult[24]                                             ;
-; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |or1420SingleCore|screens:hdmi|Mux1                                                     ;
+; 3:1                ; 15 bits   ; 30 LEs        ; 15 LEs               ; 15 LEs                 ; No         ; |or1420SingleCore|camera:camIf|ciResult[30]                                             ;
+; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |or1420SingleCore|screens:hdmi|Mux4                                                     ;
 ; 3:1                ; 9 bits    ; 18 LEs        ; 18 LEs               ; 0 LEs                  ; No         ; |or1420SingleCore|sdramController:sdram|sdramFifo:buffer|s_readPopAddressReg            ;
 ; 3:1                ; 7 bits    ; 14 LEs        ; 14 LEs               ; 0 LEs                  ; No         ; |or1420SingleCore|screens:hdmi|graphicsController:graphics|Add0                         ;
-; 3:1                ; 5 bits    ; 10 LEs        ; 5 LEs                ; 5 LEs                  ; No         ; |or1420SingleCore|screens:hdmi|textController:textC1|ciResult[20]                       ;
+; 3:1                ; 5 bits    ; 10 LEs        ; 5 LEs                ; 5 LEs                  ; No         ; |or1420SingleCore|screens:hdmi|textController:textC1|ciResult[17]                       ;
 ; 3:1                ; 4 bits    ; 8 LEs         ; 8 LEs                ; 0 LEs                  ; No         ; |or1420SingleCore|uartBus:uart1|uartTxFifo:TXF|s_readAddressReg                         ;
 ; 3:1                ; 9 bits    ; 18 LEs        ; 18 LEs               ; 0 LEs                  ; No         ; |or1420SingleCore|or1420Top:cpu1|fetchStage:fetch|s_dataMemory.raddr_a[7]               ;
 ; 3:1                ; 4 bits    ; 8 LEs         ; 8 LEs                ; 0 LEs                  ; No         ; |or1420SingleCore|uartBus:uart1|uartRxFifo:RXF|s_readAddressReg                         ;
@@ -4203,16 +4199,16 @@ Note: In order to hide this table in the UI and the text report file, please set
 ;     SLD               ; 95                          ;
 ;     plain             ; 2747                        ;
 ; cycloneiii_io_obuf    ; 21                          ;
-; cycloneiii_lcell_comb ; 13518                       ;
+; cycloneiii_lcell_comb ; 13509                       ;
 ;     arith             ; 1481                        ;
 ;         2 data inputs ; 818                         ;
 ;         3 data inputs ; 663                         ;
-;     normal            ; 12037                       ;
+;     normal            ; 12028                       ;
 ;         0 data inputs ; 36                          ;
 ;         1 data inputs ; 85                          ;
-;         2 data inputs ; 642                         ;
-;         3 data inputs ; 3601                        ;
-;         4 data inputs ; 7673                        ;
+;         2 data inputs ; 631                         ;
+;         3 data inputs ; 3605                        ;
+;         4 data inputs ; 7671                        ;
 ; cycloneiii_mac_mult   ; 6                           ;
 ; cycloneiii_mac_out    ; 6                           ;
 ; cycloneiii_pll        ; 1                           ;
@@ -4228,7 +4224,7 @@ Note: In order to hide this table in the UI and the text report file, please set
 +----------------+--------------+
 ; Partition Name ; Elapsed Time ;
 +----------------+--------------+
-; Top            ; 00:00:23     ;
+; Top            ; 00:00:30     ;
 +----------------+--------------+
 
 
@@ -4252,10 +4248,10 @@ Info: Running Quartus Prime Analysis & Synthesis
     Info: Intel and sold by Intel or its authorized distributors.  Please
     Info: refer to the applicable agreement for further details, at
     Info: https://fpgasoftware.intel.com/eula.
-    Info: Processing started: Tue May  7 12:47:09 2024
+    Info: Processing started: Sun May 12 17:19:17 2024
 Info: Command: quartus_map --family="Cyclone IV E" or1420SingleCore
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
-Info (20030): Parallel compilation is enabled and will use 8 of the 8 processors detected
+Info (20030): Parallel compilation is enabled and will use 4 of the 4 processors detected
 Info (12021): Found 1 design units, including 1 entities, in source file /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-7-2/virtual_prototype/modules/bios/verilog/bios1_rom.v
     Info (12023): Found entity 1: biosRom File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-7-2/virtual_prototype/modules/bios/verilog/bios1_rom.v Line: 1
 Info (12021): Found 1 design units, including 1 entities, in source file /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-7-2/virtual_prototype/modules/bios/verilog/bios.v
@@ -4501,7 +4497,6 @@ Info (10264): Verilog HDL Case Statement information at i2cMaster.v(170): all ca
 Info (12128): Elaborating entity "delayIse" for hierarchy "delayIse:delayMicro" File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-7-2/virtual_prototype/systems/singleCore/verilog/or1420SingleCore.v Line: 457
 Warning (10230): Verilog HDL assignment warning at delayIse.v(49): truncated value with size 32 to match size of target (4) File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-7-2/virtual_prototype/modules/delay/verilog/delayIse.v Line: 49
 Info (12128): Elaborating entity "camera" for hierarchy "camera:camIf" File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-7-2/virtual_prototype/systems/singleCore/verilog/or1420SingleCore.v Line: 493
-Warning (10036): Verilog HDL or VHDL warning at camera.v(169): object "s_weLineBuffer" assigned a value but never read File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-7-2/virtual_prototype/modules/camera/verilog/camera.v Line: 169
 Warning (10230): Verilog HDL assignment warning at camera.v(75): truncated value with size 32 to match size of target (17) File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-7-2/virtual_prototype/modules/camera/verilog/camera.v Line: 75
 Info (10264): Verilog HDL Case Statement information at camera.v(227): all case item expressions in this case statement are onehot File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-7-2/virtual_prototype/modules/camera/verilog/camera.v Line: 227
 Info (12128): Elaborating entity "rgb565Grayscale" for hierarchy "camera:camIf|rgb565Grayscale:pixel1" File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-7-2/virtual_prototype/modules/camera/verilog/camera.v Line: 188
@@ -5096,19 +5091,19 @@ Info (17049): 150 registers lost all their fanouts during netlist optimizations.
 Info (144001): Generated suppressed messages file /home/ajmone/Desktop/myfiles/theo/embedded-system-design/lab-7-2/virtual_prototype/systems/singleCore/sandbox/or1420SingleCore.map.smsg
 Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
     Info (16011): Adding 1 node(s), including 0 DDIO, 1 PLL, 0 transceiver and 0 LCELL
-Info (21057): Implemented 16085 device resources after synthesis - the final resource count might be different
+Info (21057): Implemented 16077 device resources after synthesis - the final resource count might be different
     Info (21058): Implemented 16 input pins
     Info (21059): Implemented 44 output pins
     Info (21060): Implemented 21 bidirectional pins
-    Info (21061): Implemented 15703 logic cells
+    Info (21061): Implemented 15695 logic cells
     Info (21064): Implemented 291 RAM segments
     Info (21065): Implemented 1 PLLs
     Info (21062): Implemented 9 DSP elements
-Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 28 warnings
-    Info: Peak virtual memory: 1142 megabytes
-    Info: Processing ended: Tue May  7 12:47:43 2024
-    Info: Elapsed time: 00:00:34
-    Info: Total CPU time (on all processors): 00:00:42
+Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 27 warnings
+    Info: Peak virtual memory: 1091 megabytes
+    Info: Processing ended: Sun May 12 17:20:01 2024
+    Info: Elapsed time: 00:00:44
+    Info: Total CPU time (on all processors): 00:00:52
 
 
 +------------------------------------------+
