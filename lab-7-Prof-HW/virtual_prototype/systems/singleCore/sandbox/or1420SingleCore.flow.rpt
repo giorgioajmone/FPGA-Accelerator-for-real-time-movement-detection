@@ -1,5 +1,5 @@
 Flow report for or1420SingleCore
-Sat May 11 08:40:51 2024
+Sun May 12 17:05:53 2024
 Quartus Prime Version 18.1.1 Build 646 04/11/2019 SJ Lite Edition
 
 
@@ -41,7 +41,7 @@ https://fpgasoftware.intel.com/eula.
 +----------------------------------------------------------------------------------+
 ; Flow Summary                                                                     ;
 +------------------------------------+---------------------------------------------+
-; Flow Status                        ; Successful - Sat May 11 08:40:39 2024       ;
+; Flow Status                        ; Successful - Sun May 12 17:05:41 2024       ;
 ; Quartus Prime Version              ; 18.1.1 Build 646 04/11/2019 SJ Lite Edition ;
 ; Revision Name                      ; or1420SingleCore                            ;
 ; Top-level Entity Name              ; or1420SingleCore                            ;
@@ -65,7 +65,7 @@ https://fpgasoftware.intel.com/eula.
 +-------------------+---------------------+
 ; Option            ; Setting             ;
 +-------------------+---------------------+
-; Start date & time ; 05/11/2024 08:38:05 ;
+; Start date & time ; 05/12/2024 17:03:13 ;
 ; Main task         ; Compilation         ;
 ; Revision Name     ; or1420SingleCore    ;
 +-------------------+---------------------+
@@ -76,7 +76,7 @@ https://fpgasoftware.intel.com/eula.
 +-----------------------+------------------------------+---------------+-------------+------------+
 ; Assignment Name       ; Value                        ; Default Value ; Entity Name ; Section Id ;
 +-----------------------+------------------------------+---------------+-------------+------------+
-; COMPILER_SIGNATURE_ID ; 345052322658.171540948546042 ; --            ; --          ; --         ;
+; COMPILER_SIGNATURE_ID ; 345052347251.171552619328838 ; --            ; --          ; --         ;
 +-----------------------+------------------------------+---------------+-------------+------------+
 
 
@@ -85,11 +85,11 @@ https://fpgasoftware.intel.com/eula.
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
 ; Module Name          ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
-; Analysis & Synthesis ; 00:00:46     ; 1.0                     ; 1072 MB             ; 00:00:51                           ;
-; Fitter               ; 00:01:38     ; 1.1                     ; 1746 MB             ; 00:02:35                           ;
+; Analysis & Synthesis ; 00:00:41     ; 1.0                     ; 1073 MB             ; 00:00:49                           ;
+; Fitter               ; 00:01:38     ; 1.1                     ; 1746 MB             ; 00:02:37                           ;
 ; Assembler            ; 00:00:02     ; 1.0                     ; 836 MB              ; 00:00:02                           ;
-; Timing Analyzer      ; 00:00:10     ; 1.5                     ; 1018 MB             ; 00:00:10                           ;
-; Total                ; 00:02:36     ; --                      ; --                  ; 00:03:38                           ;
+; Timing Analyzer      ; 00:00:10     ; 1.4                     ; 1033 MB             ; 00:00:10                           ;
+; Total                ; 00:02:31     ; --                      ; --                  ; 00:03:38                           ;
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
 
 
@@ -98,10 +98,10 @@ https://fpgasoftware.intel.com/eula.
 +----------------------+------------------+----------------+------------+----------------+
 ; Module Name          ; Machine Hostname ; OS Name        ; OS Version ; Processor type ;
 +----------------------+------------------+----------------+------------+----------------+
-; Analysis & Synthesis ; ic-24MA-spr-022  ; Ubuntu 22.04.4 ; 22         ; x86_64         ;
-; Fitter               ; ic-24MA-spr-022  ; Ubuntu 22.04.4 ; 22         ; x86_64         ;
-; Assembler            ; ic-24MA-spr-022  ; Ubuntu 22.04.4 ; 22         ; x86_64         ;
-; Timing Analyzer      ; ic-24MA-spr-022  ; Ubuntu 22.04.4 ; 22         ; x86_64         ;
+; Analysis & Synthesis ; ic-24MA-spr-023  ; Ubuntu 22.04.4 ; 22         ; x86_64         ;
+; Fitter               ; ic-24MA-spr-023  ; Ubuntu 22.04.4 ; 22         ; x86_64         ;
+; Assembler            ; ic-24MA-spr-023  ; Ubuntu 22.04.4 ; 22         ; x86_64         ;
+; Timing Analyzer      ; ic-24MA-spr-023  ; Ubuntu 22.04.4 ; 22         ; x86_64         ;
 +----------------------+------------------+----------------+------------+----------------+
 
 

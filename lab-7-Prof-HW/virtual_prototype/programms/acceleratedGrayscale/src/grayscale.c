@@ -49,7 +49,7 @@ int main () {
     } while(done & 0x1);
 
     for(uint32_t i = 0; i < 600; i++) {
-      uint32_t * rgbAddress = &((uint32_t *)rgb565)[(i + 1) << 8];
+      uint32_t * rgbAddress = &((uint32_t *)rgb565)[(i + 1)&0x1 << 8];
       uint32_t it_hold = (i&0x1) << 8;
       
 

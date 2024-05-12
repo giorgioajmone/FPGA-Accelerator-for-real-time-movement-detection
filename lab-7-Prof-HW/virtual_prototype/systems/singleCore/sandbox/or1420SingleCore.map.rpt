@@ -1,5 +1,5 @@
 Analysis & Synthesis report for or1420SingleCore
-Sat May 11 08:38:54 2024
+Sun May 12 17:03:57 2024
 Quartus Prime Version 18.1.1 Build 646 04/11/2019 SJ Lite Edition
 
 
@@ -155,7 +155,7 @@ https://fpgasoftware.intel.com/eula.
 +----------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                     ;
 +------------------------------------+---------------------------------------------+
-; Analysis & Synthesis Status        ; Successful - Sat May 11 08:38:54 2024       ;
+; Analysis & Synthesis Status        ; Successful - Sun May 12 17:03:56 2024       ;
 ; Quartus Prime Version              ; 18.1.1 Build 646 04/11/2019 SJ Lite Edition ;
 ; Revision Name                      ; or1420SingleCore                            ;
 ; Top-level Entity Name              ; or1420SingleCore                            ;
@@ -271,7 +271,7 @@ https://fpgasoftware.intel.com/eula.
 ;                            ;             ;
 ; Usage by Processor         ; % Time Used ;
 ;     Processor 1            ; 100.0%      ;
-;     Processor 2            ;   0.2%      ;
+;     Processor 2            ;   0.4%      ;
 ;     Processor 3            ;   0.2%      ;
 ;     Processor 4            ;   0.2%      ;
 +----------------------------+-------------+
@@ -4311,7 +4311,7 @@ Info: Running Quartus Prime Analysis & Synthesis
     Info: Intel and sold by Intel or its authorized distributors.  Please
     Info: refer to the applicable agreement for further details, at
     Info: https://fpgasoftware.intel.com/eula.
-    Info: Processing started: Sat May 11 08:38:05 2024
+    Info: Processing started: Sun May 12 17:03:13 2024
 Info: Command: quartus_map --family="Cyclone IV E" or1420SingleCore
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
 Info (20030): Parallel compilation is enabled and will use 4 of the 4 processors detected
@@ -5155,10 +5155,10 @@ Info (21057): Implemented 15705 device resources after synthesis - the final res
     Info (21065): Implemented 1 PLLs
     Info (21062): Implemented 9 DSP elements
 Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 22 warnings
-    Info: Peak virtual memory: 1089 megabytes
-    Info: Processing ended: Sat May 11 08:38:54 2024
-    Info: Elapsed time: 00:00:49
-    Info: Total CPU time (on all processors): 00:00:53
+    Info: Peak virtual memory: 1086 megabytes
+    Info: Processing ended: Sun May 12 17:03:57 2024
+    Info: Elapsed time: 00:00:44
+    Info: Total CPU time (on all processors): 00:00:51
 
 
 +------------------------------------------+

@@ -1,5 +1,5 @@
 Analysis & Synthesis report for or1420SingleCore
-Tue May  7 17:47:21 2024
+Sun May 12 15:59:42 2024
 Quartus Prime Version 18.1.1 Build 646 04/11/2019 SJ Lite Edition
 
 
@@ -15,103 +15,105 @@ Quartus Prime Version 18.1.1 Build 646 04/11/2019 SJ Lite Edition
   7. Analysis & Synthesis Resource Utilization by Entity
   8. Analysis & Synthesis RAM Summary
   9. Analysis & Synthesis DSP Block Usage Summary
- 10. State Machine - |or1420SingleCore|busArbiter:arbiter|s_stateReg
- 11. State Machine - |or1420SingleCore|bios:start|s_stateMachineReg
- 12. State Machine - |or1420SingleCore|spiBus:flash|spiShiftSingle:single|s_stateReg
- 13. State Machine - |or1420SingleCore|spiBus:flash|spiShiftSingle:single|s_cntrlReg
- 14. State Machine - |or1420SingleCore|spiBus:flash|spiShiftQuad:quad|s_stateReg
- 15. State Machine - |or1420SingleCore|screens:hdmi|graphicsController:graphics|s_dmaState
- 16. State Machine - |or1420SingleCore|screens:hdmi|hdmi_720p:generator|s_verticalState
- 17. State Machine - |or1420SingleCore|screens:hdmi|hdmi_720p:generator|s_horizontalState
- 18. State Machine - |or1420SingleCore|camera:camIf|s_stateMachineReg
- 19. State Machine - |or1420SingleCore|i2cCustomInstr:i2cm|i2cMaster:master|s_stateMachineReg
- 20. State Machine - |or1420SingleCore|or1420Top:cpu1|dCache:loadStore|s_busStateReg
- 21. State Machine - |or1420SingleCore|or1420Top:cpu1|dCache:loadStore|s_stateReg
- 22. State Machine - |or1420SingleCore|or1420Top:cpu1|decodeStage:decode|s_exceptionModeReg
- 23. State Machine - |or1420SingleCore|or1420Top:cpu1|fetchStage:fetch|s_busStateReg
- 24. State Machine - |or1420SingleCore|or1420Top:cpu1|fetchStage:fetch|s_stateReg
- 25. State Machine - |or1420SingleCore|sdramController:sdram|s_sdramCurrentState
- 26. State Machine - |or1420SingleCore|uartBus:uart1|s_readStateReg
- 27. State Machine - |or1420SingleCore|uartBus:uart1|uartRx:RXC|s_stateMachineReg
- 28. State Machine - |or1420SingleCore|uartBus:uart1|uartTx:TXC|s_stateMachineReg
- 29. Registers Removed During Synthesis
- 30. Removed Registers Triggering Further Register Optimizations
- 31. General Register Statistics
- 32. Inverted Register Statistics
- 33. Registers Packed Into Inferred Megafunctions
- 34. Registers Added for RAM Pass-Through Logic
- 35. Multiplexer Restructuring Statistics (Restructuring Performed)
- 36. Source assignments for busArbiter:arbiter|queueMemory:queue|altsyncram:s_memory_rtl_0|altsyncram_cpg1:auto_generated
- 37. Source assignments for uartBus:uart1|uartRxFifo:RXF|uartFifoMemory:fifoMem|altsyncram:s_memory_rtl_0|altsyncram_u9c1:auto_generated
- 38. Source assignments for or1420Top:cpu1|fetchStage:fetch|altsyncram:s_dataMemory_rtl_0|altsyncram_nd81:auto_generated
- 39. Source assignments for or1420Top:cpu1|dCache:loadStore|dCacheSpm:spm|altsyncram:byteRam3_rtl_0|altsyncram_9f81:auto_generated
- 40. Source assignments for or1420Top:cpu1|dCache:loadStore|dCacheSpm:spm|altsyncram:byteRam2_rtl_0|altsyncram_9f81:auto_generated
- 41. Source assignments for or1420Top:cpu1|dCache:loadStore|dCacheSpm:spm|altsyncram:byteRam1_rtl_0|altsyncram_9f81:auto_generated
- 42. Source assignments for or1420Top:cpu1|dCache:loadStore|dCacheSpm:spm|altsyncram:byteRam0_rtl_0|altsyncram_9f81:auto_generated
- 43. Source assignments for uartBus:uart1|uartTxFifo:TXF|uartFifoMemory:fifoMem|altsyncram:s_memory_rtl_0|altsyncram_u9c1:auto_generated
- 44. Source assignments for screens:hdmi|charRom:asciiRom|altsyncram:Ram0_rtl_0|altsyncram_ul71:auto_generated
- 45. Source assignments for screens:hdmi|dualPortRam2k:LineBuffer2|altsyncram:memory_rtl_0|altsyncram_c3d1:auto_generated
- 46. Source assignments for screens:hdmi|dualPortRam2k:LineBuffer1|altsyncram:memory_rtl_0|altsyncram_c3d1:auto_generated
- 47. Source assignments for camera:camIf|dualPortRam2k:lineBuffer|altsyncram:memory_rtl_0|altsyncram_23d1:auto_generated
- 48. Source assignments for bios:start|biosRom:rom|altsyncram:Ram0_rtl_0|altsyncram_5r71:auto_generated
- 49. Source assignments for sdramController:sdram|sdramFifo:buffer|sram512X32Dp:readMem|altsyncram:memory_rtl_0|altsyncram_svg1:auto_generated
- 50. Source assignments for screens:hdmi|dualPortRam4k:asciiRam1|altsyncram:memory_rtl_0|altsyncram_g6d1:auto_generated
- 51. Source assignments for screens:hdmi|dualPortRam4k:asciiRam2|altsyncram:memory_rtl_0|altsyncram_g6d1:auto_generated
- 52. Parameter Settings for User Entity Instance: altpll:altpll_component
- 53. Parameter Settings for User Entity Instance: uartBus:uart1
- 54. Parameter Settings for User Entity Instance: sdramController:sdram
- 55. Parameter Settings for User Entity Instance: or1420Top:cpu1
- 56. Parameter Settings for User Entity Instance: or1420Top:cpu1|fetchStage:fetch
- 57. Parameter Settings for User Entity Instance: processorId:cpuFreq
- 58. Parameter Settings for User Entity Instance: swapByte:ise1
- 59. Parameter Settings for User Entity Instance: i2cCustomInstr:i2cm
- 60. Parameter Settings for User Entity Instance: i2cCustomInstr:i2cm|i2cMaster:master
- 61. Parameter Settings for User Entity Instance: delayIse:delayMicro
- 62. Parameter Settings for User Entity Instance: camera:camIf
- 63. Parameter Settings for User Entity Instance: screens:hdmi
- 64. Parameter Settings for User Entity Instance: screens:hdmi|textController:textC1
- 65. Parameter Settings for User Entity Instance: screens:hdmi|textController:textC2
- 66. Parameter Settings for User Entity Instance: screens:hdmi|graphicsController:graphics
- 67. Parameter Settings for User Entity Instance: spiBus:flash
- 68. Parameter Settings for Inferred Entity Instance: busArbiter:arbiter|queueMemory:queue|altsyncram:s_memory_rtl_0
- 69. Parameter Settings for Inferred Entity Instance: uartBus:uart1|uartRxFifo:RXF|uartFifoMemory:fifoMem|altsyncram:s_memory_rtl_0
- 70. Parameter Settings for Inferred Entity Instance: or1420Top:cpu1|fetchStage:fetch|altsyncram:s_dataMemory_rtl_0
- 71. Parameter Settings for Inferred Entity Instance: or1420Top:cpu1|dCache:loadStore|dCacheSpm:spm|altsyncram:byteRam3_rtl_0
- 72. Parameter Settings for Inferred Entity Instance: or1420Top:cpu1|dCache:loadStore|dCacheSpm:spm|altsyncram:byteRam2_rtl_0
- 73. Parameter Settings for Inferred Entity Instance: or1420Top:cpu1|dCache:loadStore|dCacheSpm:spm|altsyncram:byteRam1_rtl_0
- 74. Parameter Settings for Inferred Entity Instance: or1420Top:cpu1|dCache:loadStore|dCacheSpm:spm|altsyncram:byteRam0_rtl_0
- 75. Parameter Settings for Inferred Entity Instance: uartBus:uart1|uartTxFifo:TXF|uartFifoMemory:fifoMem|altsyncram:s_memory_rtl_0
- 76. Parameter Settings for Inferred Entity Instance: screens:hdmi|charRom:asciiRom|altsyncram:Ram0_rtl_0
- 77. Parameter Settings for Inferred Entity Instance: screens:hdmi|dualPortRam2k:LineBuffer2|altsyncram:memory_rtl_0
- 78. Parameter Settings for Inferred Entity Instance: screens:hdmi|dualPortRam2k:LineBuffer1|altsyncram:memory_rtl_0
- 79. Parameter Settings for Inferred Entity Instance: camera:camIf|dualPortRam2k:lineBuffer|altsyncram:memory_rtl_0
- 80. Parameter Settings for Inferred Entity Instance: bios:start|biosRom:rom|altsyncram:Ram0_rtl_0
- 81. Parameter Settings for Inferred Entity Instance: sdramController:sdram|sdramFifo:buffer|sram512X32Dp:readMem|altsyncram:memory_rtl_0
- 82. Parameter Settings for Inferred Entity Instance: screens:hdmi|dualPortRam4k:asciiRam1|altsyncram:memory_rtl_0
- 83. Parameter Settings for Inferred Entity Instance: screens:hdmi|dualPortRam4k:asciiRam2|altsyncram:memory_rtl_0
- 84. Parameter Settings for Inferred Entity Instance: or1420Top:cpu1|executeStage:exe|multiplier:mul|lpm_mult:Mult0
- 85. Parameter Settings for Inferred Entity Instance: screens:hdmi|textController:textC1|lpm_mult:Mult0
- 86. Parameter Settings for Inferred Entity Instance: screens:hdmi|textController:textC1|lpm_mult:Mult2
- 87. Parameter Settings for Inferred Entity Instance: screens:hdmi|textController:textC1|lpm_mult:Mult1
- 88. altpll Parameter Settings by Entity Instance
- 89. altsyncram Parameter Settings by Entity Instance
- 90. lpm_mult Parameter Settings by Entity Instance
- 91. Port Connectivity Checks: "busArbiter:arbiter"
- 92. Port Connectivity Checks: "screens:hdmi|dualPortRam4k:asciiRam2"
- 93. Port Connectivity Checks: "screens:hdmi|dualPortRam4k:asciiRam1"
- 94. Port Connectivity Checks: "screens:hdmi|textController:textC2"
- 95. Port Connectivity Checks: "screens:hdmi"
- 96. Port Connectivity Checks: "swapByte:ise1"
- 97. Port Connectivity Checks: "processorId:cpuFreq|decimalCounter:cnt[5].dcount"
- 98. Port Connectivity Checks: "processorId:cpuFreq|decimalCounter:cnt[0].dcount"
- 99. Port Connectivity Checks: "or1420Top:cpu1"
-100. Port Connectivity Checks: "sdramController:sdram|sdramFifo:buffer|sram512X32Dp:readMem"
-101. Port Connectivity Checks: "sdramController:sdram"
-102. Port Connectivity Checks: "uartBus:uart1"
-103. Post-Synthesis Netlist Statistics for Top Partition
-104. Elapsed Time Per Partition
-105. Analysis & Synthesis Messages
-106. Analysis & Synthesis Suppressed Messages
+ 10. State Machine - |or1420SingleCore|sobelAccelerator:acc|stateReg
+ 11. State Machine - |or1420SingleCore|busArbiter:arbiter|s_stateReg
+ 12. State Machine - |or1420SingleCore|bios:start|s_stateMachineReg
+ 13. State Machine - |or1420SingleCore|spiBus:flash|spiShiftSingle:single|s_stateReg
+ 14. State Machine - |or1420SingleCore|spiBus:flash|spiShiftSingle:single|s_cntrlReg
+ 15. State Machine - |or1420SingleCore|spiBus:flash|spiShiftQuad:quad|s_stateReg
+ 16. State Machine - |or1420SingleCore|screens:hdmi|graphicsController:graphics|s_dmaState
+ 17. State Machine - |or1420SingleCore|screens:hdmi|hdmi_720p:generator|s_verticalState
+ 18. State Machine - |or1420SingleCore|screens:hdmi|hdmi_720p:generator|s_horizontalState
+ 19. State Machine - |or1420SingleCore|camera:camIf|s_stateMachineReg
+ 20. State Machine - |or1420SingleCore|i2cCustomInstr:i2cm|i2cMaster:master|s_stateMachineReg
+ 21. State Machine - |or1420SingleCore|or1420Top:cpu1|dCache:loadStore|s_busStateReg
+ 22. State Machine - |or1420SingleCore|or1420Top:cpu1|dCache:loadStore|s_stateReg
+ 23. State Machine - |or1420SingleCore|or1420Top:cpu1|decodeStage:decode|s_exceptionModeReg
+ 24. State Machine - |or1420SingleCore|or1420Top:cpu1|fetchStage:fetch|s_busStateReg
+ 25. State Machine - |or1420SingleCore|or1420Top:cpu1|fetchStage:fetch|s_stateReg
+ 26. State Machine - |or1420SingleCore|sdramController:sdram|s_sdramCurrentState
+ 27. State Machine - |or1420SingleCore|uartBus:uart1|s_readStateReg
+ 28. State Machine - |or1420SingleCore|uartBus:uart1|uartRx:RXC|s_stateMachineReg
+ 29. State Machine - |or1420SingleCore|uartBus:uart1|uartTx:TXC|s_stateMachineReg
+ 30. Registers Removed During Synthesis
+ 31. Removed Registers Triggering Further Register Optimizations
+ 32. General Register Statistics
+ 33. Inverted Register Statistics
+ 34. Registers Packed Into Inferred Megafunctions
+ 35. Registers Added for RAM Pass-Through Logic
+ 36. Multiplexer Restructuring Statistics (Restructuring Performed)
+ 37. Source assignments for busArbiter:arbiter|queueMemory:queue|altsyncram:s_memory_rtl_0|altsyncram_cpg1:auto_generated
+ 38. Source assignments for uartBus:uart1|uartRxFifo:RXF|uartFifoMemory:fifoMem|altsyncram:s_memory_rtl_0|altsyncram_u9c1:auto_generated
+ 39. Source assignments for or1420Top:cpu1|fetchStage:fetch|altsyncram:s_dataMemory_rtl_0|altsyncram_nd81:auto_generated
+ 40. Source assignments for or1420Top:cpu1|dCache:loadStore|dCacheSpm:spm|altsyncram:byteRam3_rtl_0|altsyncram_9f81:auto_generated
+ 41. Source assignments for or1420Top:cpu1|dCache:loadStore|dCacheSpm:spm|altsyncram:byteRam2_rtl_0|altsyncram_9f81:auto_generated
+ 42. Source assignments for or1420Top:cpu1|dCache:loadStore|dCacheSpm:spm|altsyncram:byteRam1_rtl_0|altsyncram_9f81:auto_generated
+ 43. Source assignments for or1420Top:cpu1|dCache:loadStore|dCacheSpm:spm|altsyncram:byteRam0_rtl_0|altsyncram_9f81:auto_generated
+ 44. Source assignments for uartBus:uart1|uartTxFifo:TXF|uartFifoMemory:fifoMem|altsyncram:s_memory_rtl_0|altsyncram_u9c1:auto_generated
+ 45. Source assignments for screens:hdmi|charRom:asciiRom|altsyncram:Ram0_rtl_0|altsyncram_ul71:auto_generated
+ 46. Source assignments for screens:hdmi|dualPortRam2k:LineBuffer2|altsyncram:memory_rtl_0|altsyncram_c3d1:auto_generated
+ 47. Source assignments for screens:hdmi|dualPortRam2k:LineBuffer1|altsyncram:memory_rtl_0|altsyncram_c3d1:auto_generated
+ 48. Source assignments for camera:camIf|dualPortRam2k:lineBuffer|altsyncram:memory_rtl_0|altsyncram_23d1:auto_generated
+ 49. Source assignments for bios:start|biosRom:rom|altsyncram:Ram0_rtl_0|altsyncram_5r71:auto_generated
+ 50. Source assignments for sdramController:sdram|sdramFifo:buffer|sram512X32Dp:readMem|altsyncram:memory_rtl_0|altsyncram_svg1:auto_generated
+ 51. Source assignments for screens:hdmi|dualPortRam4k:asciiRam1|altsyncram:memory_rtl_0|altsyncram_g6d1:auto_generated
+ 52. Source assignments for screens:hdmi|dualPortRam4k:asciiRam2|altsyncram:memory_rtl_0|altsyncram_g6d1:auto_generated
+ 53. Parameter Settings for User Entity Instance: altpll:altpll_component
+ 54. Parameter Settings for User Entity Instance: uartBus:uart1
+ 55. Parameter Settings for User Entity Instance: sdramController:sdram
+ 56. Parameter Settings for User Entity Instance: or1420Top:cpu1
+ 57. Parameter Settings for User Entity Instance: or1420Top:cpu1|fetchStage:fetch
+ 58. Parameter Settings for User Entity Instance: processorId:cpuFreq
+ 59. Parameter Settings for User Entity Instance: swapByte:ise1
+ 60. Parameter Settings for User Entity Instance: i2cCustomInstr:i2cm
+ 61. Parameter Settings for User Entity Instance: i2cCustomInstr:i2cm|i2cMaster:master
+ 62. Parameter Settings for User Entity Instance: delayIse:delayMicro
+ 63. Parameter Settings for User Entity Instance: camera:camIf
+ 64. Parameter Settings for User Entity Instance: screens:hdmi
+ 65. Parameter Settings for User Entity Instance: screens:hdmi|textController:textC1
+ 66. Parameter Settings for User Entity Instance: screens:hdmi|textController:textC2
+ 67. Parameter Settings for User Entity Instance: screens:hdmi|graphicsController:graphics
+ 68. Parameter Settings for User Entity Instance: spiBus:flash
+ 69. Parameter Settings for User Entity Instance: sobelAccelerator:acc
+ 70. Parameter Settings for Inferred Entity Instance: busArbiter:arbiter|queueMemory:queue|altsyncram:s_memory_rtl_0
+ 71. Parameter Settings for Inferred Entity Instance: uartBus:uart1|uartRxFifo:RXF|uartFifoMemory:fifoMem|altsyncram:s_memory_rtl_0
+ 72. Parameter Settings for Inferred Entity Instance: or1420Top:cpu1|fetchStage:fetch|altsyncram:s_dataMemory_rtl_0
+ 73. Parameter Settings for Inferred Entity Instance: or1420Top:cpu1|dCache:loadStore|dCacheSpm:spm|altsyncram:byteRam3_rtl_0
+ 74. Parameter Settings for Inferred Entity Instance: or1420Top:cpu1|dCache:loadStore|dCacheSpm:spm|altsyncram:byteRam2_rtl_0
+ 75. Parameter Settings for Inferred Entity Instance: or1420Top:cpu1|dCache:loadStore|dCacheSpm:spm|altsyncram:byteRam1_rtl_0
+ 76. Parameter Settings for Inferred Entity Instance: or1420Top:cpu1|dCache:loadStore|dCacheSpm:spm|altsyncram:byteRam0_rtl_0
+ 77. Parameter Settings for Inferred Entity Instance: uartBus:uart1|uartTxFifo:TXF|uartFifoMemory:fifoMem|altsyncram:s_memory_rtl_0
+ 78. Parameter Settings for Inferred Entity Instance: screens:hdmi|charRom:asciiRom|altsyncram:Ram0_rtl_0
+ 79. Parameter Settings for Inferred Entity Instance: screens:hdmi|dualPortRam2k:LineBuffer2|altsyncram:memory_rtl_0
+ 80. Parameter Settings for Inferred Entity Instance: screens:hdmi|dualPortRam2k:LineBuffer1|altsyncram:memory_rtl_0
+ 81. Parameter Settings for Inferred Entity Instance: camera:camIf|dualPortRam2k:lineBuffer|altsyncram:memory_rtl_0
+ 82. Parameter Settings for Inferred Entity Instance: bios:start|biosRom:rom|altsyncram:Ram0_rtl_0
+ 83. Parameter Settings for Inferred Entity Instance: sdramController:sdram|sdramFifo:buffer|sram512X32Dp:readMem|altsyncram:memory_rtl_0
+ 84. Parameter Settings for Inferred Entity Instance: screens:hdmi|dualPortRam4k:asciiRam1|altsyncram:memory_rtl_0
+ 85. Parameter Settings for Inferred Entity Instance: screens:hdmi|dualPortRam4k:asciiRam2|altsyncram:memory_rtl_0
+ 86. Parameter Settings for Inferred Entity Instance: or1420Top:cpu1|executeStage:exe|multiplier:mul|lpm_mult:Mult0
+ 87. Parameter Settings for Inferred Entity Instance: screens:hdmi|textController:textC1|lpm_mult:Mult0
+ 88. Parameter Settings for Inferred Entity Instance: screens:hdmi|textController:textC1|lpm_mult:Mult2
+ 89. Parameter Settings for Inferred Entity Instance: screens:hdmi|textController:textC1|lpm_mult:Mult1
+ 90. altpll Parameter Settings by Entity Instance
+ 91. altsyncram Parameter Settings by Entity Instance
+ 92. lpm_mult Parameter Settings by Entity Instance
+ 93. Port Connectivity Checks: "busArbiter:arbiter"
+ 94. Port Connectivity Checks: "screens:hdmi|dualPortRam4k:asciiRam2"
+ 95. Port Connectivity Checks: "screens:hdmi|dualPortRam4k:asciiRam1"
+ 96. Port Connectivity Checks: "screens:hdmi|textController:textC2"
+ 97. Port Connectivity Checks: "screens:hdmi"
+ 98. Port Connectivity Checks: "swapByte:ise1"
+ 99. Port Connectivity Checks: "processorId:cpuFreq|decimalCounter:cnt[5].dcount"
+100. Port Connectivity Checks: "processorId:cpuFreq|decimalCounter:cnt[0].dcount"
+101. Port Connectivity Checks: "or1420Top:cpu1"
+102. Port Connectivity Checks: "sdramController:sdram|sdramFifo:buffer|sram512X32Dp:readMem"
+103. Port Connectivity Checks: "sdramController:sdram"
+104. Port Connectivity Checks: "uartBus:uart1"
+105. Post-Synthesis Netlist Statistics for Top Partition
+106. Elapsed Time Per Partition
+107. Analysis & Synthesis Messages
+108. Analysis & Synthesis Suppressed Messages
 
 
 
@@ -138,7 +140,7 @@ https://fpgasoftware.intel.com/eula.
 +----------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                     ;
 +------------------------------------+---------------------------------------------+
-; Analysis & Synthesis Status        ; Successful - Tue May  7 17:47:20 2024       ;
+; Analysis & Synthesis Status        ; Successful - Sun May 12 15:59:42 2024       ;
 ; Quartus Prime Version              ; 18.1.1 Build 646 04/11/2019 SJ Lite Edition ;
 ; Revision Name                      ; or1420SingleCore                            ;
 ; Top-level Entity Name              ; or1420SingleCore                            ;
@@ -246,21 +248,17 @@ https://fpgasoftware.intel.com/eula.
 +----------------------------+-------------+
 ; Processors                 ; Number      ;
 +----------------------------+-------------+
-; Number detected on machine ; 8           ;
-; Maximum allowed            ; 8           ;
+; Number detected on machine ; 4           ;
+; Maximum allowed            ; 4           ;
 ;                            ;             ;
 ; Average used               ; 1.01        ;
-; Maximum used               ; 8           ;
+; Maximum used               ; 4           ;
 ;                            ;             ;
 ; Usage by Processor         ; % Time Used ;
 ;     Processor 1            ; 100.0%      ;
-;     Processor 2            ;   0.2%      ;
+;     Processor 2            ;   0.3%      ;
 ;     Processor 3            ;   0.2%      ;
 ;     Processor 4            ;   0.2%      ;
-;     Processor 5            ;   0.2%      ;
-;     Processor 6            ;   0.2%      ;
-;     Processor 7            ;   0.2%      ;
-;     Processor 8            ;   0.1%      ;
 +----------------------------+-------------+
 
 
@@ -315,6 +313,8 @@ https://fpgasoftware.intel.com/eula.
 ; ../../../modules/support/verilog/processorId.v          ; yes             ; User Verilog HDL File                                 ; /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/modules/support/verilog/processorId.v                                        ;         ;
 ; ../../../modules/support/verilog/synchroFlop.v          ; yes             ; User Verilog HDL File                                 ; /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/modules/support/verilog/synchroFlop.v                                        ;         ;
 ; ../../../modules/support/verilog/sram_512x32_dp.v       ; yes             ; User Verilog HDL File                                 ; /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/modules/support/verilog/sram_512x32_dp.v                                     ;         ;
+; ../../../modules/camera/verilog/sobelAccelerator.v      ; yes             ; User Verilog HDL File                                 ; /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/modules/camera/verilog/sobelAccelerator.v                                    ;         ;
+; ../../../modules/camera/verilog/sobelBuffer.v           ; yes             ; User Verilog HDL File                                 ; /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/modules/camera/verilog/sobelBuffer.v                                         ;         ;
 ; ../verilog/or1420SingleCore.v                           ; yes             ; User Verilog HDL File                                 ; /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/systems/singleCore/verilog/or1420SingleCore.v                                ;         ;
 ; altpll.tdf                                              ; yes             ; Megafunction                                          ; /opt/intelFPGA-lite/18.1/quartus/libraries/megafunctions/altpll.tdf                                                                                                   ;         ;
 ; aglobal181.inc                                          ; yes             ; Megafunction                                          ; /opt/intelFPGA-lite/18.1/quartus/libraries/megafunctions/aglobal181.inc                                                                                               ;         ;
@@ -607,6 +607,21 @@ Note: For table entries with two numbers listed, the numbers in parentheses indi
 ; Dedicated Input Shift Register Chains ; 0           ;
 +---------------------------------------+-------------+
 Note: number of Embedded Multiplier Blocks used is only available after a successful fit.
+
+
+Encoding Type:  One-Hot
++------------------------------------------------------------------------------------------------------------------------+
+; State Machine - |or1420SingleCore|sobelAccelerator:acc|stateReg                                                        ;
++------------------+----------------+----------------+----------------+---------------+------------------+---------------+
+; Name             ; stateReg.ERROR ; stateReg.WRITE ; stateReg.CLOSE ; stateReg.INIT ; stateReg.REQUEST ; stateReg.IDLE ;
++------------------+----------------+----------------+----------------+---------------+------------------+---------------+
+; stateReg.IDLE    ; 0              ; 0              ; 0              ; 0             ; 0                ; 0             ;
+; stateReg.REQUEST ; 0              ; 0              ; 0              ; 0             ; 1                ; 1             ;
+; stateReg.INIT    ; 0              ; 0              ; 0              ; 1             ; 0                ; 1             ;
+; stateReg.CLOSE   ; 0              ; 0              ; 1              ; 0             ; 0                ; 1             ;
+; stateReg.WRITE   ; 0              ; 1              ; 0              ; 0             ; 0                ; 1             ;
+; stateReg.ERROR   ; 1              ; 0              ; 0              ; 0             ; 0                ; 1             ;
++------------------+----------------+----------------+----------------+---------------+------------------+---------------+
 
 
 Encoding Type:  One-Hot
@@ -1000,6 +1015,8 @@ Encoding Type:  One-Hot
 +----------------------------------------------------------------------------+--------------------------------------------------------------------------+
 ; Register name                                                              ; Reason for Removal                                                       ;
 +----------------------------------------------------------------------------+--------------------------------------------------------------------------+
+; sobelAccelerator:acc|burstCountReg[0..8]                                   ; Stuck at GND due to stuck port clock                                     ;
+; sobelAccelerator:acc|pixelPerLineReg[0..8]                                 ; Stuck at GND due to stuck port clock                                     ;
 ; screens:hdmi|s_delayedDualTextReg                                          ; Stuck at GND due to stuck port data_in                                   ;
 ; screens:hdmi|textController:textC2|asciiLineIndex[0..2]                    ; Lost fanout                                                              ;
 ; screens:hdmi|textController:textC2|asciiBitSelector[2]                     ; Lost fanout                                                              ;
@@ -1220,6 +1237,15 @@ Encoding Type:  One-Hot
 ; uartBus:uart1|s_transactionActiveReg                                       ; Stuck at VCC due to stuck port data_in                                   ;
 ; processorId:cpuFreq|s_procFreqIdReg[4]                                     ; Stuck at VCC due to stuck port data_in                                   ;
 ; or1420Top:cpu1|decodeStage:decode|s_doneReg                                ; Lost fanout                                                              ;
+; sobelAccelerator:acc|stateReg.IDLE                                         ; Lost fanout                                                              ;
+; sobelAccelerator:acc|stateReg.CLOSE                                        ; Lost fanout                                                              ;
+; sobelAccelerator:acc|stateReg.ERROR                                        ; Lost fanout                                                              ;
+; sobelAccelerator:acc|stateReg~2                                            ; Lost fanout                                                              ;
+; sobelAccelerator:acc|stateReg~3                                            ; Lost fanout                                                              ;
+; sobelAccelerator:acc|stateReg~4                                            ; Lost fanout                                                              ;
+; sobelAccelerator:acc|stateReg.REQUEST                                      ; Stuck at GND due to stuck port clock                                     ;
+; sobelAccelerator:acc|stateReg.INIT                                         ; Stuck at GND due to stuck port clock                                     ;
+; sobelAccelerator:acc|stateReg.WRITE                                        ; Stuck at GND due to stuck port clock                                     ;
 ; busArbiter:arbiter|s_stateReg~2                                            ; Lost fanout                                                              ;
 ; busArbiter:arbiter|s_stateReg~3                                            ; Lost fanout                                                              ;
 ; busArbiter:arbiter|s_stateReg~4                                            ; Lost fanout                                                              ;
@@ -1280,7 +1306,7 @@ Encoding Type:  One-Hot
 ; or1420Top:cpu1|decodeStage:decode|s_exceptionModeReg.011                   ; Stuck at GND due to stuck port data_in                                   ;
 ; spiBus:flash|spiShiftSingle:single|s_cntrlReg.RES                          ; Merged with uartBus:uart1|baudGenerator:bdg|s_counterResetReg            ;
 ; screens:hdmi|graphicsController:graphics|s_startTransactionReg             ; Merged with uartBus:uart1|s_startTransactionReg                          ;
-; Total Number of Removed Registers = 414                                    ;                                                                          ;
+; Total Number of Removed Registers = 441                                    ;                                                                          ;
 +----------------------------------------------------------------------------+--------------------------------------------------------------------------+
 
 
@@ -1294,9 +1320,7 @@ Encoding Type:  One-Hot
 ;                                                                   ;                           ; screens:hdmi|textController:textC2|s_TextCorrectionReg[0]    ;
 ; or1420Top:cpu1|decodeStage:decode|s_irqRequestReg[0]              ; Stuck at GND              ; or1420Top:cpu1|decodeStage:decode|s_irqRequestReg[1],        ;
 ;                                                                   ; due to stuck port data_in ; or1420Top:cpu1|decodeStage:decode|s_irqRequestReg[3]         ;
-; busArbiter:arbiter|queueMemory:queue|dataReadPort[22]             ; Stuck at GND              ; busArbiter:arbiter|s_queuedRequests[22]                      ;
-;                                                                   ; due to stuck port data_in ;                                                              ;
-; busArbiter:arbiter|queueMemory:queue|dataReadPort[14]             ; Stuck at GND              ; busArbiter:arbiter|s_queuedRequests[14]                      ;
+; busArbiter:arbiter|queueMemory:queue|dataReadPort[23]             ; Stuck at GND              ; busArbiter:arbiter|s_queuedRequests[23]                      ;
 ;                                                                   ; due to stuck port data_in ;                                                              ;
 ; busArbiter:arbiter|queueMemory:queue|dataReadPort[15]             ; Stuck at GND              ; busArbiter:arbiter|s_queuedRequests[15]                      ;
 ;                                                                   ; due to stuck port data_in ;                                                              ;
@@ -1312,9 +1336,9 @@ Encoding Type:  One-Hot
 ;                                                                   ; due to stuck port data_in ;                                                              ;
 ; busArbiter:arbiter|queueMemory:queue|dataReadPort[21]             ; Stuck at GND              ; busArbiter:arbiter|s_queuedRequests[21]                      ;
 ;                                                                   ; due to stuck port data_in ;                                                              ;
-; busArbiter:arbiter|queueMemory:queue|dataReadPort[12]             ; Stuck at GND              ; busArbiter:arbiter|s_queuedRequests[12]                      ;
+; busArbiter:arbiter|queueMemory:queue|dataReadPort[22]             ; Stuck at GND              ; busArbiter:arbiter|s_queuedRequests[22]                      ;
 ;                                                                   ; due to stuck port data_in ;                                                              ;
-; busArbiter:arbiter|queueMemory:queue|dataReadPort[23]             ; Stuck at GND              ; busArbiter:arbiter|s_queuedRequests[23]                      ;
+; busArbiter:arbiter|queueMemory:queue|dataReadPort[13]             ; Stuck at GND              ; busArbiter:arbiter|s_queuedRequests[13]                      ;
 ;                                                                   ; due to stuck port data_in ;                                                              ;
 ; busArbiter:arbiter|queueMemory:queue|dataReadPort[24]             ; Stuck at GND              ; busArbiter:arbiter|s_queuedRequests[24]                      ;
 ;                                                                   ; due to stuck port data_in ;                                                              ;
@@ -1328,6 +1352,8 @@ Encoding Type:  One-Hot
 ;                                                                   ; due to stuck port data_in ;                                                              ;
 ; camera:camIf|s_frameBufferBaseReg[0]                              ; Stuck at GND              ; camera:camIf|s_busAddressReg[0]                              ;
 ;                                                                   ; due to stuck port data_in ;                                                              ;
+; sobelAccelerator:acc|stateReg.INIT                                ; Stuck at GND              ; sobelAccelerator:acc|stateReg.WRITE                          ;
+;                                                                   ; due to stuck port clock   ;                                                              ;
 ; or1420Top:cpu1|decodeStage:decode|s_exceptionModeReg~3            ; Lost Fanouts              ; or1420Top:cpu1|decodeStage:decode|s_exceptionModeReg.001     ;
 ; busArbiter:arbiter|queueMemory:queue|dataReadPort[4]              ; Stuck at GND              ; busArbiter:arbiter|s_queuedRequests[4]                       ;
 ;                                                                   ; due to stuck port data_in ;                                                              ;
@@ -1343,7 +1369,7 @@ Encoding Type:  One-Hot
 ;                                                                   ; due to stuck port data_in ;                                                              ;
 ; busArbiter:arbiter|queueMemory:queue|dataReadPort[3]              ; Stuck at GND              ; busArbiter:arbiter|s_queuedRequests[3]                       ;
 ;                                                                   ; due to stuck port data_in ;                                                              ;
-; busArbiter:arbiter|queueMemory:queue|dataReadPort[13]             ; Stuck at GND              ; busArbiter:arbiter|s_queuedRequests[13]                      ;
+; busArbiter:arbiter|queueMemory:queue|dataReadPort[14]             ; Stuck at GND              ; busArbiter:arbiter|s_queuedRequests[14]                      ;
 ;                                                                   ; due to stuck port data_in ;                                                              ;
 ; busArbiter:arbiter|queueMemory:queue|dataReadPort[5]              ; Stuck at GND              ; busArbiter:arbiter|s_queuedRequests[5]                       ;
 ;                                                                   ; due to stuck port data_in ;                                                              ;
@@ -1358,6 +1384,8 @@ Encoding Type:  One-Hot
 ; busArbiter:arbiter|queueMemory:queue|dataReadPort[10]             ; Stuck at GND              ; busArbiter:arbiter|s_queuedRequests[10]                      ;
 ;                                                                   ; due to stuck port data_in ;                                                              ;
 ; busArbiter:arbiter|queueMemory:queue|dataReadPort[11]             ; Stuck at GND              ; busArbiter:arbiter|s_queuedRequests[11]                      ;
+;                                                                   ; due to stuck port data_in ;                                                              ;
+; busArbiter:arbiter|queueMemory:queue|dataReadPort[12]             ; Stuck at GND              ; busArbiter:arbiter|s_queuedRequests[12]                      ;
 ;                                                                   ; due to stuck port data_in ;                                                              ;
 +-------------------------------------------------------------------+---------------------------+--------------------------------------------------------------+
 
@@ -2395,6 +2423,16 @@ Note: In order to hide this table in the UI and the text report file, please set
 ; baseAddress        ; 00000100000000000000000000000000 ; Unsigned Binary ;
 ; customIntructionNr ; 00000010                         ; Unsigned Binary ;
 +--------------------+----------------------------------+-----------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: sobelAccelerator:acc ;
++----------------+----------+---------------------------------------+
+; Parameter Name ; Value    ; Type                                  ;
++----------------+----------+---------------------------------------+
+; customId       ; 00000000 ; Unsigned Binary                       ;
++----------------+----------+---------------------------------------+
 Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
 
 
@@ -3941,7 +3979,7 @@ Note: In order to hide this table in the UI and the text report file, please set
 +----------------+--------------+
 ; Partition Name ; Elapsed Time ;
 +----------------+--------------+
-; Top            ; 00:00:21     ;
+; Top            ; 00:00:27     ;
 +----------------+--------------+
 
 
@@ -3965,10 +4003,10 @@ Info: Running Quartus Prime Analysis & Synthesis
     Info: Intel and sold by Intel or its authorized distributors.  Please
     Info: refer to the applicable agreement for further details, at
     Info: https://fpgasoftware.intel.com/eula.
-    Info: Processing started: Tue May  7 17:46:50 2024
+    Info: Processing started: Sun May 12 15:59:01 2024
 Info: Command: quartus_map --family="Cyclone IV E" or1420SingleCore
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
-Info (20030): Parallel compilation is enabled and will use 8 of the 8 processors detected
+Info (20030): Parallel compilation is enabled and will use 4 of the 4 processors detected
 Info (12021): Found 1 design units, including 1 entities, in source file /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/modules/bios/verilog/bios1_rom.v
     Info (12023): Found entity 1: biosRom File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/modules/bios/verilog/bios1_rom.v Line: 1
 Info (12021): Found 1 design units, including 1 entities, in source file /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/modules/bios/verilog/bios.v
@@ -4077,7 +4115,8 @@ Info (12021): Found 1 design units, including 1 entities, in source file /home/a
     Info (12023): Found entity 1: sobelAccelerator File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/modules/camera/verilog/sobelAccelerator.v Line: 1
 Info (12021): Found 1 design units, including 1 entities, in source file /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/modules/camera/verilog/sobelBuffer.v
     Info (12023): Found entity 1: sobelBuffer File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/modules/camera/verilog/sobelBuffer.v Line: 1
-Info (12021): Found 0 design units, including 0 entities, in source file /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/modules/camera/verilog/dHash.v
+Info (12021): Found 1 design units, including 1 entities, in source file /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/modules/camera/verilog/dHash.v
+    Info (12023): Found entity 1: dHash File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/modules/camera/verilog/dHash.v Line: 1
 Info (12021): Found 1 design units, including 1 entities, in source file /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/systems/singleCore/verilog/or1420SingleCore.v
     Info (12023): Found entity 1: or1420SingleCore File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/systems/singleCore/verilog/or1420SingleCore.v Line: 1
 Info (12127): Elaborating entity "or1420SingleCore" for the top level hierarchy
@@ -4233,6 +4272,19 @@ Info (12128): Elaborating entity "biosRom" for hierarchy "bios:start|biosRom:rom
 Info (12128): Elaborating entity "busArbiter" for hierarchy "busArbiter:arbiter" File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/systems/singleCore/verilog/or1420SingleCore.v Line: 630
 Info (10264): Verilog HDL Case Statement information at busArbiter.v(40): all case item expressions in this case statement are onehot File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/modules/bus_arbiter/verilog/busArbiter.v Line: 40
 Info (12128): Elaborating entity "queueMemory" for hierarchy "busArbiter:arbiter|queueMemory:queue" File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/modules/bus_arbiter/verilog/busArbiter.v Line: 125
+Info (12128): Elaborating entity "sobelAccelerator" for hierarchy "sobelAccelerator:acc" File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/systems/singleCore/verilog/or1420SingleCore.v Line: 652
+Warning (10858): Verilog HDL warning at sobelAccelerator.v(25): object statusReg used but never assigned File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/modules/camera/verilog/sobelAccelerator.v Line: 25
+Warning (10036): Verilog HDL or VHDL warning at sobelAccelerator.v(139): object "outputX" assigned a value but never read File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/modules/camera/verilog/sobelAccelerator.v Line: 139
+Warning (10858): Verilog HDL warning at sobelAccelerator.v(281): object rowCount used but never assigned File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/modules/camera/verilog/sobelAccelerator.v Line: 281
+Warning (10858): Verilog HDL warning at sobelAccelerator.v(309): object s_busPixelWord used but never assigned File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/modules/camera/verilog/sobelAccelerator.v Line: 309
+Warning (10230): Verilog HDL assignment warning at sobelAccelerator.v(126): truncated value with size 32 to match size of target (16) File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/modules/camera/verilog/sobelAccelerator.v Line: 126
+Warning (10230): Verilog HDL assignment warning at sobelAccelerator.v(127): truncated value with size 32 to match size of target (16) File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/modules/camera/verilog/sobelAccelerator.v Line: 127
+Info (10264): Verilog HDL Case Statement information at sobelAccelerator.v(284): all case item expressions in this case statement are onehot File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/modules/camera/verilog/sobelAccelerator.v Line: 284
+Info (10264): Verilog HDL Case Statement information at sobelAccelerator.v(293): all case item expressions in this case statement are onehot File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/modules/camera/verilog/sobelAccelerator.v Line: 293
+Warning (10030): Net "statusReg" at sobelAccelerator.v(25) has no driver or initial value, using a default initial value '0' File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/modules/camera/verilog/sobelAccelerator.v Line: 25
+Warning (10030): Net "rowCount" at sobelAccelerator.v(281) has no driver or initial value, using a default initial value '0' File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/modules/camera/verilog/sobelAccelerator.v Line: 281
+Warning (10030): Net "s_busPixelWord" at sobelAccelerator.v(309) has no driver or initial value, using a default initial value '0' File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/modules/camera/verilog/sobelAccelerator.v Line: 309
+Info (12128): Elaborating entity "sobelBuffer" for hierarchy "sobelAccelerator:acc|sobelBuffer:bufferX_instantiation[0].buffer" File: /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/modules/camera/verilog/sobelAccelerator.v Line: 63
 Warning (276020): Inferred RAM node "uartBus:uart1|uartRxFifo:RXF|uartFifoMemory:fifoMem|s_memory_rtl_0" from synchronous design logic.  Pass-through logic has been added to match the read-during-write behavior of the original design.
 Warning (276020): Inferred RAM node "uartBus:uart1|uartTxFifo:TXF|uartFifoMemory:fifoMem|s_memory_rtl_0" from synchronous design logic.  Pass-through logic has been added to match the read-during-write behavior of the original design.
 Warning (276027): Inferred dual-clock RAM node "screens:hdmi|dualPortRam2k:LineBuffer2|memory_rtl_0" from synchronous design logic.  The read-during-write behavior of a dual-clock RAM is undefined and may not match the behavior of the original design.
@@ -4739,7 +4791,7 @@ Warning (14284): Synthesized away the following node(s):
 Info (13014): Ignored 84 buffer(s)
     Info (13019): Ignored 84 SOFT buffer(s)
 Info (286030): Timing-Driven Synthesis is running
-Info (17049): 150 registers lost all their fanouts during netlist optimizations.
+Info (17049): 156 registers lost all their fanouts during netlist optimizations.
 Info (144001): Generated suppressed messages file /home/ajmone/Desktop/myfiles/theo/embedded-system-design/final-project/virtual_prototype/systems/singleCore/sandbox/or1420SingleCore.map.smsg
 Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
     Info (16011): Adding 1 node(s), including 0 DDIO, 1 PLL, 0 transceiver and 0 LCELL
@@ -4751,11 +4803,11 @@ Info (21057): Implemented 14656 device resources after synthesis - the final res
     Info (21064): Implemented 258 RAM segments
     Info (21065): Implemented 1 PLLs
     Info (21062): Implemented 9 DSP elements
-Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 21 warnings
-    Info: Peak virtual memory: 1111 megabytes
-    Info: Processing ended: Tue May  7 17:47:21 2024
-    Info: Elapsed time: 00:00:31
-    Info: Total CPU time (on all processors): 00:00:39
+Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 30 warnings
+    Info: Peak virtual memory: 1068 megabytes
+    Info: Processing ended: Sun May 12 15:59:42 2024
+    Info: Elapsed time: 00:00:41
+    Info: Total CPU time (on all processors): 00:00:49
 
 
 +------------------------------------------+
