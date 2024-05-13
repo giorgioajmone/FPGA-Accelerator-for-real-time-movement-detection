@@ -1,5 +1,26 @@
 Giorgio Ajmome 368146, Alessandro Cardinale 368411
 
+Task 1
+
+In the while(1) loop the algorithm described in the assignementis implemented.
+With th first instruction the profile counters are initialized.
+Then the transaction from the DMA to the first buffer is set and the done signal is polled. 
+
+Inside the for loop, new DMA transactions are initialized in a ping-pong buffer fashion, apart from the last iteration, where no new transaction is initialized.
+Once a buffer is full, we start processing its data, i.e. covnerting it to to grayscale and sending them to the VGA.
+
+The new cycles on average are:
+Execution cycles: 2.8 mln
+Stall cycles:     300 k
+Idle cycles:      800 k
+
+With a spike every three frames. These values can be compared with the old ones (4 pixels at a time):
+Execution cycles: 9.8 mln
+Stall cycles:     8   mln
+Idle cycles:      3.5 mln
+
+The number of stall cycles is highly reduced with an overall performance improvement.
+
 Task 2
 
 In the file virtual_prototype/modules/camera/camera.v has been modified to insert the grayscale conversion.
