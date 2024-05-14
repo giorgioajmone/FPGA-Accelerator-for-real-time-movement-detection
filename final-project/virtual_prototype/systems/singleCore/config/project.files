@@ -53,4 +53,6 @@
 ../../../modules/camera/verilog/sobelAccelerator.v
 ../../../modules/camera/verilog/sobelBuffer.v
 ../../../modules/camera/verilog/dHash.v
+../../../modules/grayscaleCi/verilog/rgb565Grayscale.v
+../../../modules/grayscaleCi/verilog/rgb565ISE.v
 ../verilog/or1420SingleCore.v

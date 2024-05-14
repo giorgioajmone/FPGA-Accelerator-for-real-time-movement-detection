@@ -17,11 +17,13 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     input wire         busyIn, busErrorIn
 );
 
+    // testbench
+
     reg[31:0] busStartReg;
     reg[9:0] blockSizeReg;
     reg[8:0] burstSizeReg;
     reg[15:0] thresholdReg;
-    reg[1:0] transferModeReg;
+    reg transferModeReg;
     reg[1:0] statusReg;
 
     wire validInstr = (ciN == customId) ? ciStart : 1'b0;
@@ -32,14 +34,15 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
                                 (ciValueA[12:10] == 3'b010) ? blockSizeReg : 
                                     (ciValueA[12:10] == 3'b011) ? burstSizeReg :
                                         (ciValueA[12:10] == 3'b100) ? thresholdReg :
-                                            (ciValueA[12:10] == 3'b101) ? statusReg : 32'b0; 
+                                            (ciValueA[12:10] == 3'b101) ? statusReg | {1'b0, transferModeReg}: 32'b0; 
 
-    always @ (posedge camClock) begin
+    always @ (posedge clock) begin
         busStartReg <= (reset == 1'b1) ? 32'b0 : (validInstr == 1'b1 && ciValueA[12:9] == 4'b0011) ? ciValueB : busStartReg;
         blockSizeReg <= (reset == 1'b1) ? 10'b0 : (validInstr == 1'b1 && ciValueA[12:9] == 4'b0101) ? ciValueB[9:0] : blockSizeReg;
         burstSizeReg <= (reset == 1'b1) ? 9'b0 : (validInstr == 1'b1 && ciValueA[12:9] == 4'b0111) ? ciValueB[7:0] : burstSizeReg;
         thresholdReg <= (reset == 1'b1) ? 16'b0 : (validInstr == 1'b1 && ciValueA[12:9] == 4'b1001) ? ciValueB[15:0] : thresholdReg;
-        transferModeReg <= (reset == 1'b1) ? 2'b0 : (validInstr == 1'b1 && ciValueA[12:9] == 4'b1011) ? ciValueB[1:0] : transferModeReg;
+        transferModeReg <= (reset == 1'b1 || statusReg[0] == 1'b1) ? 1'b0 : (validInstr == 1'b1 && ciValueA[12:9] == 4'b1011) ? 1'b1 : transferModeReg;
+        statusReg <= (reset == 1'b1 || (validInstr == 1'b1 && ciValueA[12:9] == 4'b1011)) ? 2'b0 : (newScreen == 1'b1) ? {statusReg[0], transferModeReg} : statusReg;
     end
 
     reg[7:0] addressReg [0:8];
@@ -89,7 +92,7 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     assign s_writeAddress[5] = addressReg[5] + (pixelCount[2] & rowCount[1] & firstTriplet);
     assign s_writeAddress[6] = addressReg[6] + (pixelCount[0] & rowCount[2] & firstTriplet);
     assign s_writeAddress[7] = addressReg[7] + (pixelCount[1] & rowCount[2] & firstTriplet);
-    assign s_writeAddress[8] = addressReg[8] + (pixelCount[2] & rowCount[2] & firstTriplet);
+    assign s_writeAddress[8] = addressReg[8] + (pixelCount[2] & rowCount[2] & firstTripls_singleShotActionReget);
 
     always @(posedge camClock) begin
         addressReg[0] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? s_writeAddress[0] : addressReg[0];
@@ -106,9 +109,9 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     reg[2:0] count3pixels, count3rows;
 
     always @(posedge camClock) begin
-        count3pixels <= (reset == 1'b1 || hsync == 1'b1) ? 3'b0 : (validCamera == 1'b1) ? 
+        count3pixels <= (reset == 1'b1 || hsync == 1'b1) ? 3'b001 : (validCamera == 1'b1) ? 
                                 {count3pixels[1:0], 1'b1} : count3pixels;
-        count3rows <= (reset == 1'b1 || vsync == 1'b1) ? 3'b0 : (hsync == 1'b1) ? 
+        count3rows <= (reset == 1'b1 || vsync == 1'b1) ? 3'b000 : (hsync == 1'b1) ? 
                                 {count3rows[1:0], 1'b1} : count3rows;                        
     end
 
@@ -126,9 +129,8 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
 
     wire[15:0] resultx1  = camData;
     wire[15:0] resultx2  = camData << 1;
-    wire[15:0] resultx_1 = ~camData - 1;
-    wire[15:0] resultx_2 = ~(camData << 1) - 1; 
-
+    wire[15:0] resultx_1 = ~camData + 1;
+    wire[15:0] resultx_2 = ~(camData << 1) + 1; 
     
     //mega wire
     wire[15:0] outputX =    writeDataX[0] & {16{rowCount[2] & pixelCount[2]}} |
@@ -153,12 +155,6 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     assign writeDataY[7] = readDataY[7] & {16{~rowCount[2] & ~pixelCount[1]}} + filteredDataY[7];
     assign writeDataY[8] = readDataY[8] & {16{~rowCount[2] & ~pixelCount[2]}} + filteredDataY[8];
 
-    wire[15:0] resulty1  = camData;
-    wire[15:0] resulty2  = camData << 1;
-    wire[15:0] resulty_1 = ~camData - 1;
-    wire[15:0] resulty_2 = ~(camData << 1) - 1; 
-
-    
     //mega wire
     wire[15:0] outputY =    writeDataY[0] & {16{rowCount[2] & pixelCount[2]}} |
                             writeDataY[1] & {16{rowCount[2] & pixelCount[0]}} |
@@ -172,6 +168,8 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
 
     wire[7:0] finalOutput = ((((outputX >> 15) ^ outputX) - (outputX >> 15)) 
                                 + (((outputY >> 15) ^ outputY) - (outputY >> 15))) > thresholdReg ? 8'hFF : 8'h0;
+
+    // Sobel X
 
     // MEM 0
     always @* begin
@@ -308,6 +306,145 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
         end        
     end
 
+    // Sobel Y
+
+    // MEM 0
+    always @* begin
+        if(rowCount[0] & (pixelCount[0] | pixelCount[2])) begin
+                filteredDataY[0] = resultx1;
+        end else if(rowCount[2] & (pixelCount[0] | pixelCount[2])) begin
+                filteredDataY[0] = resultx_1;
+        end else if(rowCount[2] & pixelCount[1]) begin
+                filteredDataY[0] = resultx_2;
+        end else if(rowCount[0] & pixelCount[1]) begin
+                filteredDataY[0] = resultx2;
+        end else begin
+                filteredDataY[0] = 16'd0;
+        end
+    end
+
+    // MEM 1
+    always @* begin
+        if(rowCount[0] & (pixelCount[1] | pixelCount[0])) begin
+                filteredDataY[1] = resultx1;
+        end else if(rowCount[2] & (pixelCount[1] | pixelCount[0])) begin
+                filteredDataY[1] = resultx_1;
+        end else if(rowCount[2] & pixelCount[2]) begin
+                filteredDataY[1] = resultx_2;
+        end else if(rowCount[0] & pixelCount[2]) begin
+                filteredDataY[1] = resultx2;
+        end else begin
+                filteredDataY[1] = 16'd0;
+        end
+    end
+
+    // MEM 2
+    always @* begin
+        if(rowCount[0] & (pixelCount[2] | pixelCount[1])) begin
+                filteredDataY[2] = resultx1;
+        end else if(rowCount[2] & (pixelCount[2] | pixelCount[1])) begin
+                filteredDataY[2] = resultx_1;
+        end else if(rowCount[2] & pixelCount[0]) begin
+                filteredDataY[2] = resultx_2;
+        end else if(rowCount[0] & pixelCount[0]) begin
+                filteredDataY[2] = resultx2;
+        end else begin
+                filteredDataY[2] = 16'd0;
+        end
+    end
+
+
+     // MEM 3
+    always @* begin
+        if(rowCount[1] & (pixelCount[0] | pixelCount[2])) begin
+                filteredDataY[3] = resultx1;
+        end else if(rowCount[0] & (pixelCount[0] | pixelCount[2])) begin
+                filteredDataY[3] = resultx_1;
+        end else if(rowCount[0] & pixelCount[1]) begin
+                filteredDataY[3] = resultx_2;
+        end else if(rowCount[1] & pixelCount[1]) begin
+                filteredDataY[3] = resultx2;
+        end else begin
+                filteredDataY[3] = 16'd0;
+        end
+    end 
+
+    // MEM 4
+    always @* begin
+        if(rowCount[1] & (pixelCount[1] | pixelCount[0])) begin
+                filteredDataY[4] = resultx1;
+        end else if(rowCount[0] & (pixelCount[1] | pixelCount[0])) begin
+                filteredDataY[4] = resultx_1;
+        end else if(rowCount[0] & pixelCount[2]) begin
+                filteredDataY[4] = resultx_2;
+        end else if(rowCount[1] & pixelCount[2]) begin
+                filteredDataY[4] = resultx2;
+        end else begin
+                filteredDataY[4] = 16'd0;
+        end
+    end
+
+    // MEM 5
+    always @* begin
+        if(rowCount[1] & (pixelCount[2] | pixelCount[1])) begin
+                filteredDataY[5] = resultx1;
+        end else if(rowCount[0] & (pixelCount[2] | pixelCount[1])) begin
+                filteredDataY[5] = resultx_1;
+        end else if(rowCount[0] & pixelCount[0]) begin
+                filteredDataY[5] = resultx_2;
+        end else if(rowCount[1] & pixelCount[0]) begin
+                filteredDataY[5] = resultx2;
+        end else begin
+                filteredDataY[5] = 16'd0;
+        end
+    end
+
+     // MEM 6
+    always @* begin
+        if(rowCount[2] & (pixelCount[0] | pixelCount[2])) begin
+                filteredDataY[6] = resultx1;
+        end else if(rowCount[1] & (pixelCount[0] | pixelCount[2])) begin
+                filteredDataY[6] = resultx_1;
+        end else if(rowCount[1] & pixelCount[1]) begin
+                filteredDataY[6] = resultx_2;
+        end else if(rowCount[2] & pixelCount[1]) begin
+                filteredDataY[6] = resultx2;
+        end else begin
+                filteredDataY[6] = 16'd0;
+        end
+    end 
+
+    // MEM 7
+    always @* begin
+        if(rowCount[2] & (pixelCount[1] | pixelCount[0])) begin
+                filteredDataY[7] = resultx1;
+        end else if(rowCount[1] & (pixelCount[1] | pixelCount[0])) begin
+                filteredDataY[7] = resultx_1;
+        end else if(rowCount[1] & pixelCount[2]) begin
+                filteredDataY[7] = resultx_2;
+        end else if(rowCount[2] & pixelCount[2]) begin
+                filteredDataY[7] = resultx2;
+        end else begin
+                filteredDataY[7] = 16'd0;
+        end
+    end
+
+    // MEM 8
+    always @* begin
+        if(rowCount[2] & (pixelCount[2] | pixelCount[1])) begin
+                filteredDataY[8] = resultx1;
+        end else if(rowCount[1] & (pixelCount[2] | pixelCount[1])) begin
+                filteredDataY[8] = resultx_1;
+        end else if(rowCount[1] & pixelCount[0]) begin
+                filteredDataY[8] = resultx_2;
+        end else if(rowCount[2] & pixelCount[0]) begin
+                filteredDataY[8] = resultx2;
+        end else begin
+                filteredDataY[8] = 16'd0;
+        end
+    end
+
+
     localparam S0  = 3'b001;
     localparam S1  = 3'b010;
     localparam S2  = 3'b100;
@@ -338,8 +475,7 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
         rowCount <= (reset == 1'b1) ? S0 : nextStateR;
     end
 
-    //divertimento per theo
-    wire startLine = firstTrirows & (addressReg[0] == 8'b0 || addressReg[3] == 8'b0 || addressReg[3] == 8'b0) & rowCount[2] & pixelCount[2];
+    wire startLine = firstTrirows & hsync; //controllare timing
     
     reg[10:0] writeBufferReg;
 
@@ -347,14 +483,12 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
         writeBufferReg <= (reset == 1'b1 || hsync == 1'b1) ? 11'b0 : (validCamera == 1'b1) ? writeBufferReg + 11'd1 : writeBufferReg;
     end
 
-    wire[31:0] fourSobelPixels = {finalOutput, pixel1Reg, pixel2Reg, pixel3Reg};
-    reg [7:0] pixel1Reg, pixel2Reg,pixel3Reg;
-    wire bufferEnable = (writeBufferReg[1:0] == 2'b11) ? validCamera : 1'b0;
+    wire bufferEnable = (writeBufferReg[4:0] == 5'b11111) ? validCamera: 1'b0;
+
+    reg[31:0] s2pReg;
 
     always @(posedge camClock) begin
-        pixel3Reg <= (writeBufferReg[1:0] == 2'b00 && validCamera == 1'b1) ? finalOutput : pixel3Reg;
-        pixel2Reg <= (writeBufferReg[1:0] == 2'b01 && validCamera == 1'b1) ? finalOutput : pixel2Reg;
-        pixel1Reg <= (writeBufferReg[1:0] == 2'b10 && validCamera == 1'b1) ? finalOutput : pixel1Reg;
+        s2pReg <= (reset == 1'b1 || hsync == 1'b1) ? 32'b0 : (validCamera == 1'b1) ? {s2pReg[30:0], finalOutput} : s2pReg;
     end
 
     dualPortRam2k lineBuffer (.address1(writeBufferReg[10:2]),
@@ -362,7 +496,7 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
                                 .clock1(camClock),
                                 .clock2(clock),
                                 .writeEnable(bufferEnable),
-                                .dataIn1(fourSobelPixels),
+                                .dataIn1(s2pReg),
                                 .dataOut2(busOutput));
 
     //clock2
@@ -393,7 +527,7 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     
     always @* begin
         case (stateReg)
-            IDLE        : nextState <= ((transferModeReg[1] == 1'b1 || transferModeReg[0] == 1'b1) && newLine == 1'b1) ? REQUEST : IDLE; 
+            IDLE        : nextState <= ((statusReg[0] == 1'b1) && newLine == 1'b1) ? REQUEST : IDLE; 
             REQUEST     : nextState <= (busGrant == 1'b1) ? INIT : REQUEST;
             INIT        : nextState <= WRITE;
             WRITE       : nextState <= (busErrorIn == 1'b1) ? ERROR :
@@ -405,7 +539,6 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     end
     
     always @(posedge clock) begin
-        busAddressReg           <= busAddressNext;
         stateReg                <= (reset == 1'b1) ? IDLE : nextState;
         beginTransactionOut     <= (stateReg == INIT) ? 1'd1 : 1'd0;
         byteEnablesOut          <= (stateReg == INIT) ? 4'hF : 4'd0;
@@ -422,6 +555,7 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
                                         (isWriting == 1'b1) ? memoryAddressReg + 9'd1 : memoryAddressReg;
         pixelPerLineReg         <= (newLine == 1'b1) ? 8'b0 : //da modificare per mettere counter dei pxel per riga
                                         (stateReg == INIT) ? pixelPerLineReg - {1'b0, burstSizeNext} : pixelPerLineReg;
+        busAddressReg           <= busAddressNext;
     end
 
     synchroFlop sns (.clockIn(camClock),

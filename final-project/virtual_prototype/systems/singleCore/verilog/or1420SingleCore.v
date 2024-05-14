@@ -326,8 +326,8 @@ module or1420SingleCore ( input wire         clock12MHz,
   wire [7:0]  s_cpu1BurstSize;
   wire        s_spm1Irq;
   
-  assign s_cpu1CiDone = s_hdmiDone | s_swapByteDone | s_flashDone | s_cpuFreqDone | s_i2cCiDone | s_delayCiDone | s_camCiDone;
-  assign s_cpu1CiResult = s_hdmiResult | s_swapByteResult | s_flashResult | s_cpuFreqResult | s_i2cCiResult | s_camCiResult | s_delayResult; 
+  assign s_cpu1CiDone = s_hdmiDone | s_swapByteDone | s_flashDone | s_cpuFreqDone | s_i2cCiDone | s_delayCiDone | s_camCiDone | s_sobelDone;
+  assign s_cpu1CiResult = s_hdmiResult | s_swapByteResult | s_flashResult | s_cpuFreqResult | s_i2cCiResult | s_camCiResult | s_delayResult | s_sobelResult; 
 
   or1420Top #( .NOP_INSTRUCTION(32'h1500FFFF)) cpu1
              (.cpuClock(s_systemClock),
@@ -443,6 +443,9 @@ module or1420SingleCore ( input wire         clock12MHz,
   wire [31:0] s_camAddressData;
   wire [3:0] s_camByteEnables;
   wire [7:0] s_camBurstSize;
+
+  wire validCamera, vsyncReg, hsyncReg;
+  wire[7:0]   grayCam;
   
   camera #(.customInstructionId(8'd7),
            .clockFrequencyInHz(74250000)) camIf
@@ -468,7 +471,11 @@ module or1420SingleCore ( input wire         clock12MHz,
            .dataValidOut(s_camDataValid),
            .burstSizeOut(s_camBurstSize),
            .busyIn(s_busy),
-           .busErrorIn(s_busError));
+           .busErrorIn(s_busError),
+           .validCamera(validCamera),
+           .vsyncReg(vsyncReg),
+           .hsyncReg(hsyncReg),
+           .grayCam(grayCam));
 
 
   /*
@@ -608,12 +615,14 @@ module or1420SingleCore ( input wire         clock12MHz,
  assign s_busRequests[30] = s_cpu1IcacheRequestBus;
  assign s_busRequests[29] = s_hdmiRequestBus;
  assign s_busRequests[28] =  s_camReqBus;
- assign s_busRequests[27:0] = 29'd0;
+ assign s_busRequests[27] =  s_sobelRequest;
+ assign s_busRequests[26:0] = 27'd0;
  
  assign s_cpu1DcacheBusAccessGranted = s_busGrants[31];
  assign s_cpu1IcacheBusAccessGranted = s_busGrants[30];
  assign s_hdmiBusgranted             = s_busGrants[29];
  assign s_camAckBus                  = s_busGrants[28];
+ assign s_sobelGrant                 = s_busGrants[27];
 
  busArbiter arbiter ( .clock(s_systemClock),
                       .reset(s_reset),
@@ -635,40 +644,48 @@ module or1420SingleCore ( input wire         clock12MHz,
    *
    */
  assign s_busError         = s_arbBusError | s_biosBusError | s_uartBusError | s_sdramBusError | s_flashBusError;
- assign s_beginTransaction = s_cpu1BeginTransaction | s_hdmiBeginTransaction | s_camBeginTransaction;
+ assign s_beginTransaction = s_cpu1BeginTransaction | s_hdmiBeginTransaction | s_camBeginTransaction | s_sobelBeginTransaction;
  assign s_endTransaction   = s_cpu1EndTransaction | s_arbEndTransaction | s_biosEndTransaction | s_uartEndTransaction |
-                             s_sdramEndTransaction | s_hdmiEndTransaction | s_flashEndTransaction | s_camEndTransaction;
+                             s_sdramEndTransaction | s_hdmiEndTransaction | s_flashEndTransaction | s_camEndTransaction | s_sobelEndTransaction;
  assign s_addressData      = s_cpu1AddressData | s_biosAddressData | s_uartAddressData | s_sdramAddressData | s_hdmiAddressData |
-                             s_flashAddressData | s_camAddressData;
- assign s_byteEnables      = s_cpu1byteEnables | s_hdmiByteEnables | s_camByteEnables;
- assign s_readNotWrite     = s_cpu1ReadNotWrite | s_hdmiReadNotWrite;
+                             s_flashAddressData | s_camAddressData | s_sobelAddressData;
+ assign s_byteEnables      = s_cpu1byteEnables | s_hdmiByteEnables | s_camByteEnables | s_sobelByteEnables;
+ assign s_readNotWrite     = s_cpu1ReadNotWrite | s_hdmiReadNotWrite | s_sobelReadNotWrite;
  assign s_dataValid        = s_cpu1DataValid | s_biosDataValid | s_uartDataValid | s_sdramDataValid | s_hdmiDataValid | 
-                             s_flashDataValid | s_camDataValid;
+                             s_flashDataValid | s_camDataValid | s_sobelDataValid;
  assign s_busy             = s_sdramBusy;
- assign s_burstSize        = s_cpu1BurstSize | s_hdmiBurstSize | s_camBurstSize;
+ assign s_burstSize        = s_cpu1BurstSize | s_hdmiBurstSize | s_camBurstSize | s_sobelBurstSize;
+
+
+  wire        s_sobelDone;
+  wire[31:0]  s_sobelResult;
+  wire[31:0]  s_sobelAddressData;
+  wire[3:0]   s_sobelByteEnables;
+  wire[7:0]   s_sobelBurstSize;
+  wire s_sobelReadNotWrite, s_sobelBeginTransaction, s_sobelEndTransaction, s_sobelDataValid, s_sobelGrant, s_sobelRequest;
 
 sobelAccelerator #(.customId(8'd111)) sobelino (
     .clock(s_systemClock), 
     .camClock(camPclk), 
     .reset(s_cpuReset), 
-    .hsync(1'b1), 
-    .vsync(1'b1), 
+    .hsync(hsyncReg), 
+    .vsync(vsyncReg), 
     .ciStart(s_cpu1CiStart), 
-    .validCamera(1'b1),
+    .validCamera(validCamera),
     .ciN(s_cpu1CiN), 
-    .camData(8'b1),
+    .camData(grayCam),
     .ciValueA(s_cpu1CiDataA), 
     .ciValueB(s_cpu1CiDataB),
-    .ciResult(),
-    .ciDone(),
-    .requestBus(),
-    .busGrant(s_camAckBus),
-    .beginTransactionOut(),
-    .addressDataOut(),
-    .endTransactionOut(),
-    .byteEnablesOut(),
-    .dataValidOut(),
-    .burstSizeOut(),
+    .ciResult(s_sobelResult),
+    .ciDone(s_sobelDone),
+    .requestBus(s_sobelRequest),
+    .busGrant(s_sobelGrant),
+    .beginTransactionOut(s_sobelBeginTransaction),
+    .addressDataOut(s_sobelAddressData),
+    .endTransactionOut(s_sobelEndTransaction),
+    .byteEnablesOut(s_sobelByteEnables),
+    .dataValidOut(s_sobelDataValid),
+    .burstSizeOut(s_sobelBurstSize),
     .busyIn(s_busy),
     .busErrorIn(s_busError)
 );

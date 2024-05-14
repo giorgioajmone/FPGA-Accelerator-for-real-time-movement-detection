@@ -23,7 +23,11 @@ module camera #(parameter [7:0] customInstructionId = 8'd0,
                 output wire        dataValidOut,
                 output reg  [7:0]  burstSizeOut,
                 input wire         busyIn,
-                                   busErrorIn);
+                                   busErrorIn,
+                output wire        validCamera,                    
+                output reg         vsyncReg, 
+                                   hsyncReg,
+                output reg [7:0]   grayCam);
 
   /*
    *
@@ -250,5 +254,27 @@ module camera #(parameter [7:0] customInstructionId = 8'd0,
                     .reset(reset),
                     .D(s_hsyncNegEdge),
                     .Q(s_newLine) );
+
+    
+    // ================================================= SOBEL ACCELERATOR ===========================================================
+
+    wire[7:0] s_grayPixel;
+    reg[7:0] s_MSBPixel;    
+
+    always @(posedge pclk)
+    begin
+      s_MSBPixel <= (s_pixelCountReg[0] == 1'b0 && hsync == 1'b1) ? camData : s_MSBPixel;
+    end
+
+    rgb565Grayscale pixel1 ( .rgb565({s_MSBPixel, camData}), .grayscale(s_grayPixel));
+
+    always @(posedge pclk) begin
+        vsyncReg <= (reset == 1'b1) ? 1'b0 : s_vsyncNegEdge;
+        hsyncReg <= (reset == 1'b1) ? 1'b0 : s_hsyncNegEdge;
+        grayCam <= (reset == 1'b1) ? 8'b0 : s_grayPixel;
+    end
+
+    assign validCamera = (s_pixelCountReg[0] == 1'b1) ? hsync : 1'b0;
+
   
 endmodule
