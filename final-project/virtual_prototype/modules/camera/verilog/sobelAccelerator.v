@@ -92,7 +92,7 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     assign s_writeAddress[5] = addressReg[5] + (pixelCount[2] & rowCount[1] & firstTriplet);
     assign s_writeAddress[6] = addressReg[6] + (pixelCount[0] & rowCount[2] & firstTriplet);
     assign s_writeAddress[7] = addressReg[7] + (pixelCount[1] & rowCount[2] & firstTriplet);
-    assign s_writeAddress[8] = addressReg[8] + (pixelCount[2] & rowCount[2] & firstTripls_singleShotActionReget);
+    assign s_writeAddress[8] = addressReg[8] + (pixelCount[2] & rowCount[2] & firstTriplet);
 
     always @(posedge camClock) begin
         addressReg[0] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? s_writeAddress[0] : addressReg[0];
@@ -109,7 +109,7 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     reg[2:0] count3pixels, count3rows;
 
     always @(posedge camClock) begin
-        count3pixels <= (reset == 1'b1 || hsync == 1'b1) ? 3'b001 : (validCamera == 1'b1) ? 
+        count3pixels <= (reset == 1'b1 || hsync == 1'b1 || vsync == 1'b1) ? 3'b001 : (validCamera == 1'b1) ? 
                                 {count3pixels[1:0], 1'b1} : count3pixels;
         count3rows <= (reset == 1'b1 || vsync == 1'b1) ? 3'b000 : (hsync == 1'b1) ? 
                                 {count3rows[1:0], 1'b1} : count3rows;                        
@@ -166,8 +166,8 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
                             writeDataY[7] & {16{rowCount[1] & pixelCount[0]}} |
                             writeDataY[8] & {16{rowCount[1] & pixelCount[1]}}; 
 
-    wire[7:0] finalOutput = ((((outputX >> 15) ^ outputX) - (outputX >> 15)) 
-                                + (((outputY >> 15) ^ outputY) - (outputY >> 15))) > thresholdReg ? 8'hFF : 8'h0;
+    wire finalOutput = ((((outputX >> 15) ^ outputX) - (outputX >> 15)) 
+                                + (((outputY >> 15) ^ outputY) - (outputY >> 15))) > thresholdReg ? 1'b1 : 1'b0;
 
     // Sobel X
 
@@ -454,9 +454,9 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
 
     always @* begin
         case(pixelCount)
-            S0:         nextStateP <= (hsync == 1'b1) ? S0 : (validCamera == 1'b1)  ? S1 : S0;
-            S1:         nextStateP <= (hsync == 1'b1) ? S0 : (validCamera == 1'b1)  ? S2 : S1; 
-            S2:         nextStateP <= (hsync == 1'b1) ? S0 : (validCamera == 1'b1)  ? S0 : S2;
+            S0:         nextStateP <= (hsync == 1'b1 || vsync == 1'b1) ? S0 : (validCamera == 1'b1)  ? S1 : S0;
+            S1:         nextStateP <= (hsync == 1'b1 || vsync == 1'b1) ? S0 : (validCamera == 1'b1)  ? S2 : S1; 
+            S2:         nextStateP <= (hsync == 1'b1 || vsync == 1'b1) ? S0 : (validCamera == 1'b1)  ? S0 : S2;
             default:    nextStateP <= S0;
         endcase
     end
@@ -488,7 +488,7 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     reg[31:0] s2pReg;
 
     always @(posedge camClock) begin
-        s2pReg <= (reset == 1'b1 || hsync == 1'b1) ? 32'b0 : (validCamera == 1'b1) ? {s2pReg[30:0], finalOutput} : s2pReg;
+        s2pReg <= (reset == 1'b1 || hsync == 1'b1 || vsync == 1'b1) ? 32'b0 : (validCamera == 1'b1) ? {s2pReg[30:0], finalOutput} : s2pReg;
     end
 
     dualPortRam2k lineBuffer (.address1(writeBufferReg[10:2]),

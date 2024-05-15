@@ -5,10 +5,13 @@ module sobelAcc_tb;
 parameter customId = 8'h27;
 
 // Inputs
-reg clock_tb, reset_tb, hsync_tb, vsync_tb;
+reg clock_tb, reset_tb, edgeHsync_tb, edgeVsync_tb, validCamera_tb, vsync_tb, hsync_tb;
 reg[7:0] camData_tb;
 
-integer i;
+reg vsyncClk, hsyncClk, validClk;
+reg[7:0] grayClk;
+
+integer i, frame, line;
 
 initial begin
     $dumpfile("sobellAcc.vcd");
@@ -17,13 +20,22 @@ end
 
 // insantiate the dut
 
-sobelAcc #(.customId(customId)) dut(
-    .clock(clock_tb),
-    .reset(reset_tb),
-    .hsync(hsync_tb),
-    .vsync(vsync_tb),
-    .camData(camData_tb)
+sobelAccelerator #(.customId(8'h27)) sobelino (
+    .clock(clock_tb), 
+    .camClock(clock_tb), 
+    .reset(reset_tb), 
+    .hsync(hsyncClk), 
+    .vsync(vsyncClk), 
+    .validCamera(validClk),
+    .camData(grayClk)
 );
+
+always @(posedge clock_tb) begin
+    vsyncClk <= (reset_tb == 1'b1) ? 1'b0 : edgeVsync_tb;
+    hsyncClk <= (reset_tb == 1'b1) ? 1'b0 : edgeHsync_tb;
+    grayClk <= (reset_tb == 1'b1) ? 8'b0 : camData_tb;
+    validClk <= (reset_tb == 1'b1) ? 1'b0 : validCamera_tb;
+end
 
 // Clock generation
 always #5 clock_tb = ~clock_tb;
@@ -33,6 +45,10 @@ initial begin
     clock_tb = 0;
     hsync_tb = 0;
     vsync_tb = 0;
+    edgeHsync_tb = 0;
+    edgeVsync_tb = 0;
+    validCamera_tb = 0;
+    camData_tb = 8'd0;
 
     // Wait to finish reset
     #100;
@@ -42,74 +58,63 @@ initial begin
     reset_tb = 0;
     #50;
 
-    // Start new frame
+
+    for(frame = 0; frame < 10; frame = frame + 1) begin
+
+    // 8============================================================= FRAME ======================================D
+    
     vsync_tb = 1;
-    #20;
+    #500;
+    
+    edgeVsync_tb = 1;
     vsync_tb = 0;
-    #50
 
-    // start new line
+    #10;
+    edgeVsync_tb = 0;
+    #500;
+
+    for(line = 0; line < 10; line = line + 1) begin
+
+    // 8================================== LINE ======================================D
+
     hsync_tb = 1;
 
-    camData_tb = 8'd0;
-    #10;
-    hsync_tb = 0;
-    for(i = 1; i < 640; i = i+1) begin
+
+    for(i = 0; i < 640; i = i+1) begin
+        
+        validCamera_tb = 1;
+
         if(camData_tb < 8'd255) begin
-            camData_tb = camData_tb + 8'd1;
+            camData_tb = 8'd1; //camData_tb + 8'd1;
         end else begin
-            camData_tb = 8'd0;
+            camData_tb = 8'd1; //8'd0;
         end
-        #10;
+
+        #10; 
+
+        validCamera_tb = 0;
+        #10;   
+
     end
 
-    #100;
-    // new line
-    hsync_tb = 1;
-
-    camData_tb = 8'd1;
-    #10;
     hsync_tb = 0;
-    for(i = 1; i < 640; i = i+1) begin
-        if(camData_tb < 8'd255) begin
-            camData_tb = camData_tb + 8'd1;
-        end else begin
-            camData_tb = 8'd0;
-        end
-        #10;
-    end
-
-    #100;
-    // new line
-    hsync_tb = 1;
-    camData_tb = 8'd2;
+    edgeHsync_tb = 1;
     #10;
-    hsync_tb = 0;
-    for(i = 1; i < 640; i = i+1) begin
-         if(camData_tb < 8'd255) begin
-            camData_tb = camData_tb + 8'd1;
-        end else begin
-            camData_tb = 8'd0;
-        end
-        #10;
+    edgeHsync_tb = 0;
+
+    #200;
+
+    // 8=============================================================================D--
+
     end
 
-    #100;
-    // new line
-    hsync_tb = 1;
+    #200;
 
-    camData_tb = 8'd3;
-    #10;
-    hsync_tb = 0;
-    for(i = 1; i < 640; i = i+1) begin
-        if(camData_tb < 8'd255) begin
-            camData_tb = camData_tb + 8'd1;
-        end else begin
-            camData_tb = 8'd0;
-        end
-        #10;
+    // 8============================================================= FRAME ======================================D--
+
     end
 
+    
     #10000;
 
     $finish;
