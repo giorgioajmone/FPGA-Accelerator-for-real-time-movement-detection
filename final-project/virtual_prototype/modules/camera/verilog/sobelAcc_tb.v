@@ -51,7 +51,7 @@ initial begin
     camData_tb = 8'd0;
 
     // Wait to finish reset
-    #100;
+    repeat (100);
 
     @(negedge clock_tb);
     

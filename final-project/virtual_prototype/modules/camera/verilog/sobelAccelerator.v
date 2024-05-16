@@ -84,17 +84,17 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
 
     wire[7:0] s_writeAddress [0:8];
 
-    assign s_writeAddress[0] = addressReg[0] + (pixelCount[0] & rowCount[0] & firstTriplet);
-    assign s_writeAddress[1] = addressReg[1] + (pixelCount[1] & rowCount[0] & firstTriplet);
-    assign s_writeAddress[2] = addressReg[2] + (pixelCount[2] & rowCount[0] & firstTriplet);
-    assign s_writeAddress[3] = addressReg[3] + (pixelCount[0] & rowCount[1] & firstTriplet);
-    assign s_writeAddress[4] = addressReg[4] + (pixelCount[1] & rowCount[1] & firstTriplet);
-    assign s_writeAddress[5] = addressReg[5] + (pixelCount[2] & rowCount[1] & firstTriplet);
-    assign s_writeAddress[6] = addressReg[6] + (pixelCount[0] & rowCount[2] & firstTriplet);
-    assign s_writeAddress[7] = addressReg[7] + (pixelCount[1] & rowCount[2] & firstTriplet);
-    assign s_writeAddress[8] = addressReg[8] + (pixelCount[2] & rowCount[2] & firstTriplet);
+    assign s_writeAddress[0] = addressReg[0] + (pixelCount[0] & firstTriplet);
+    assign s_writeAddress[1] = addressReg[1] + (pixelCount[1] & firstTriplet);
+    assign s_writeAddress[2] = addressReg[2] + (pixelCount[2] & firstTriplet);
+    assign s_writeAddress[3] = addressReg[3] + (pixelCount[0] & firstTriplet);
+    assign s_writeAddress[4] = addressReg[4] + (pixelCount[1] & firstTriplet);
+    assign s_writeAddress[5] = addressReg[5] + (pixelCount[2] & firstTriplet);
+    assign s_writeAddress[6] = addressReg[6] + (pixelCount[0] & firstTriplet);
+    assign s_writeAddress[7] = addressReg[7] + (pixelCount[1] & firstTriplet);
+    assign s_writeAddress[8] = addressReg[8] + (pixelCount[2] & firstTriplet);
 
-    always @(posedge camClock) begin
+    always @(negedge camClock) begin
         addressReg[0] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? s_writeAddress[0] : addressReg[0];
         addressReg[1] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? s_writeAddress[1] : addressReg[1];
         addressReg[2] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? s_writeAddress[2] : addressReg[2];
@@ -117,15 +117,15 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
 
     reg[15:0] filteredDataX[0:8];
 
-    assign writeDataX[0] = readDataX[0] & {16{~rowCount[0] & ~pixelCount[0]}} + filteredDataX[0];
-    assign writeDataX[1] = readDataX[1] & {16{~rowCount[0] & ~pixelCount[1]}} + filteredDataX[1];
-    assign writeDataX[2] = readDataX[2] & {16{~rowCount[0] & ~pixelCount[2]}} + filteredDataX[2];
-    assign writeDataX[3] = readDataX[3] & {16{~rowCount[1] & ~pixelCount[0]}} + filteredDataX[3];
-    assign writeDataX[4] = readDataX[4] & {16{~rowCount[1] & ~pixelCount[1]}} + filteredDataX[4];
-    assign writeDataX[5] = readDataX[5] & {16{~rowCount[1] & ~pixelCount[2]}} + filteredDataX[5];
-    assign writeDataX[6] = readDataX[6] & {16{~rowCount[2] & ~pixelCount[0]}} + filteredDataX[6];
-    assign writeDataX[7] = readDataX[7] & {16{~rowCount[2] & ~pixelCount[1]}} + filteredDataX[7];
-    assign writeDataX[8] = readDataX[8] & {16{~rowCount[2] & ~pixelCount[2]}} + filteredDataX[8];
+    assign writeDataX[0] = (rowCount[0] & pixelCount[0]) ? (filteredDataX[0]) : (readDataX[0] + filteredDataX[0]);
+    assign writeDataX[1] = readDataX[1] & (~{16{rowCount[0] & pixelCount[1]}}) + filteredDataX[1];
+    assign writeDataX[2] = readDataX[2] & (~{16{rowCount[0] & pixelCount[2]}}) + filteredDataX[2];
+    assign writeDataX[3] = readDataX[3] & (~{16{rowCount[1] & pixelCount[0]}}) + filteredDataX[3];
+    assign writeDataX[4] = readDataX[4] & (~{16{rowCount[1] & pixelCount[1]}}) + filteredDataX[4];
+    assign writeDataX[5] = readDataX[5] & (~{16{rowCount[1] & pixelCount[2]}}) + filteredDataX[5];
+    assign writeDataX[6] = readDataX[6] & (~{16{rowCount[2] & pixelCount[0]}}) + filteredDataX[6];
+    assign writeDataX[7] = readDataX[7] & (~{16{rowCount[2] & pixelCount[1]}}) + filteredDataX[7];
+    assign writeDataX[8] = readDataX[8] & (~{16{rowCount[2] & pixelCount[2]}}) + filteredDataX[8];
 
     wire[15:0] resultx1  = camData;
     wire[15:0] resultx2  = camData << 1;
