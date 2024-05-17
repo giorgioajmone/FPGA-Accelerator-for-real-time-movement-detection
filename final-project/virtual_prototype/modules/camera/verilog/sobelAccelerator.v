@@ -108,8 +108,8 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
 
     reg[2:0] count3pixels, count3rows;
 
-    always @(posedge camClock) begin
-        count3pixels <= (reset == 1'b1 || hsync == 1'b1 || vsync == 1'b1) ? 3'b001 : (validCamera == 1'b1) ? 
+    always @(posedge camClock) begin // modifica: resetta count3pixels a 000
+        count3pixels <= (reset == 1'b1 || hsync == 1'b1 || vsync == 1'b1) ? 3'b000 : (validCamera == 1'b1) ? 
                                 {count3pixels[1:0], 1'b1} : count3pixels;
         count3rows <= (reset == 1'b1 || vsync == 1'b1) ? 3'b000 : (hsync == 1'b1) ? 
                                 {count3rows[1:0], 1'b1} : count3rows;                        
