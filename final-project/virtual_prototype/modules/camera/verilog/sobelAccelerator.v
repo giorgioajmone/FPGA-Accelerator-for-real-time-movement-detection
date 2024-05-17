@@ -117,7 +117,7 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
 
     reg[15:0] filteredDataX[0:8];
 
-    assign writeDataX[0] = (rowCount[0] & pixelCount[0]) ? (filteredDataX[0]) : (readDataX[0] + filteredDataX[0]);
+    /* assign writeDataX[0] = (rowCount[0] & pixelCount[0]) ? (filteredDataX[0]) : (readDataX[0] + filteredDataX[0]);
     assign writeDataX[1] = readDataX[1] & (~{16{rowCount[0] & pixelCount[1]}}) + filteredDataX[1];
     assign writeDataX[2] = readDataX[2] & (~{16{rowCount[0] & pixelCount[2]}}) + filteredDataX[2];
     assign writeDataX[3] = readDataX[3] & (~{16{rowCount[1] & pixelCount[0]}}) + filteredDataX[3];
@@ -125,7 +125,17 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     assign writeDataX[5] = readDataX[5] & (~{16{rowCount[1] & pixelCount[2]}}) + filteredDataX[5];
     assign writeDataX[6] = readDataX[6] & (~{16{rowCount[2] & pixelCount[0]}}) + filteredDataX[6];
     assign writeDataX[7] = readDataX[7] & (~{16{rowCount[2] & pixelCount[1]}}) + filteredDataX[7];
-    assign writeDataX[8] = readDataX[8] & (~{16{rowCount[2] & pixelCount[2]}}) + filteredDataX[8];
+    assign writeDataX[8] = readDataX[8] & (~{16{rowCount[2] & pixelCount[2]}}) + filteredDataX[8]; */
+
+    assign writeDataX[0] = (rowCount[0] & pixelCount[0]) ? (filteredDataX[0]) : (readDataX[0] + filteredDataX[0]);
+    assign writeDataX[1] = (rowCount[0] & pixelCount[1]) ? (filteredDataX[1]) : (readDataX[1] + filteredDataX[1]);
+    assign writeDataX[2] = (rowCount[0] & pixelCount[2]) ? (filteredDataX[2]) : (readDataX[2] + filteredDataX[2]);
+    assign writeDataX[3] = (rowCount[1] & pixelCount[0]) ? (filteredDataX[3]) : (readDataX[3] + filteredDataX[3]);
+    assign writeDataX[4] = (rowCount[1] & pixelCount[1]) ? (filteredDataX[4]) : (readDataX[4] + filteredDataX[4]);
+    assign writeDataX[5] = (rowCount[1] & pixelCount[2]) ? (filteredDataX[5]) : (readDataX[5] + filteredDataX[5]);
+    assign writeDataX[6] = (rowCount[2] & pixelCount[0]) ? (filteredDataX[6]) : (readDataX[6] + filteredDataX[6]);
+    assign writeDataX[7] = (rowCount[2] & pixelCount[1]) ? (filteredDataX[7]) : (readDataX[7] + filteredDataX[7]);
+    assign writeDataX[8] = (rowCount[2] & pixelCount[2]) ? (filteredDataX[8]) : (readDataX[8] + filteredDataX[8]);
 
     wire[15:0] resultx1  = camData;
     wire[15:0] resultx2  = camData << 1;
@@ -145,7 +155,7 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
 
     reg[15:0] filteredDataY[0:8];
 
-    assign writeDataY[0] = readDataY[0] & {16{~rowCount[0] & ~pixelCount[0]}} + filteredDataY[0];
+    /* assign writeDataY[0] = readDataY[0] & {16{~rowCount[0] & ~pixelCount[0]}} + filteredDataY[0];
     assign writeDataY[1] = readDataY[1] & {16{~rowCount[0] & ~pixelCount[1]}} + filteredDataY[1];
     assign writeDataY[2] = readDataY[2] & {16{~rowCount[0] & ~pixelCount[2]}} + filteredDataY[2];
     assign writeDataY[3] = readDataY[3] & {16{~rowCount[1] & ~pixelCount[0]}} + filteredDataY[3];
@@ -153,7 +163,17 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     assign writeDataY[5] = readDataY[5] & {16{~rowCount[1] & ~pixelCount[2]}} + filteredDataY[5];
     assign writeDataY[6] = readDataY[6] & {16{~rowCount[2] & ~pixelCount[0]}} + filteredDataY[6];
     assign writeDataY[7] = readDataY[7] & {16{~rowCount[2] & ~pixelCount[1]}} + filteredDataY[7];
-    assign writeDataY[8] = readDataY[8] & {16{~rowCount[2] & ~pixelCount[2]}} + filteredDataY[8];
+    assign writeDataY[8] = readDataY[8] & {16{~rowCount[2] & ~pixelCount[2]}} + filteredDataY[8]; */
+
+    assign writeDataY[0] = (rowCount[0] & pixelCount[0]) ? (filteredDataY[0]) : (readDataY[0] + filteredDataY[0]);
+    assign writeDataY[1] = (rowCount[0] & pixelCount[1]) ? (filteredDataY[1]) : (readDataY[1] + filteredDataY[1]);
+    assign writeDataY[2] = (rowCount[0] & pixelCount[2]) ? (filteredDataY[2]) : (readDataY[2] + filteredDataY[2]);
+    assign writeDataY[3] = (rowCount[1] & pixelCount[0]) ? (filteredDataY[3]) : (readDataY[3] + filteredDataY[3]);
+    assign writeDataY[4] = (rowCount[1] & pixelCount[1]) ? (filteredDataY[4]) : (readDataY[4] + filteredDataY[4]);
+    assign writeDataY[5] = (rowCount[1] & pixelCount[2]) ? (filteredDataY[5]) : (readDataY[5] + filteredDataY[5]);
+    assign writeDataY[6] = (rowCount[2] & pixelCount[0]) ? (filteredDataY[6]) : (readDataY[6] + filteredDataY[6]);
+    assign writeDataY[7] = (rowCount[2] & pixelCount[1]) ? (filteredDataY[7]) : (readDataY[7] + filteredDataY[7]);
+    assign writeDataY[8] = (rowCount[2] & pixelCount[2]) ? (filteredDataY[8]) : (readDataY[8] + filteredDataY[8]);
 
     //mega wire
     wire[15:0] outputY =    writeDataY[0] & {16{rowCount[2] & pixelCount[2]}} |

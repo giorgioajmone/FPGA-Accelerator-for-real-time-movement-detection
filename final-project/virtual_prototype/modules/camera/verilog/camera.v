@@ -225,8 +225,10 @@ module camera #(parameter [7:0] customInstructionId = 8'd0,
       s_busAddressReg        <= s_busAddressNext;
       s_grabberRunningReg    <= (reset == 1'b1) ? 1'b0 : (s_newScreen == 1'b1) ? s_grabberActiveReg : s_grabberRunningReg; //se arriva un nuovo frame ti chiedi se cpu ti ha detto di partire, se si setti grabberRunning cosi che da idle puoi passare a request quando arriva new line
       //credo per gestire se si vuole fare una sola immagine oppure flusso continuo
-      s_singleShotActionReg  <= (reset == 1'b1 || s_singleShotActionReg[1] == 1'b1) ? 2'b0 : (s_newScreen == 1'b1) ? {1'b0,s_grabberSingleShotReg} : s_singleShotActionReg;
-      s_singleShotDoneReg    <= (reset == 1'b1 || (s_isMyCi == 1'b1 && ciValueA[2:0] == 3'd7)) ? 1'b1 : (s_singleShotActionReg[1] == 1'b1) ? 1'b1 : s_singleShotDoneReg;
+      s_singleShotActionReg  <= (reset == 1'b1 || s_singleShotActionReg[1] == 1'b1) ? 2'b0 : 
+                                  (s_newScreen == 1'b1) ? {s_singleShotActionReg[0],s_grabberSingleShotReg} : s_singleShotActionReg;
+      s_singleShotDoneReg    <= (reset == 1'b1 || (s_isMyCi == 1'b1 && ciValueA[2:0] == 3'd6 && ciValueB[1] == 1'b1 && ciValueB[0] == 1'b0)) ? 1'b0 : 
+                                  (s_singleShotActionReg[1] == 1'b1) ? 1'b1 : s_singleShotDoneReg;      
       s_stateMachineReg      <= (reset == 1'b1) ? IDLE : s_stateMachineNext;
       beginTransactionOut    <= (s_stateMachineReg == INIT_BURST1) ? 1'd1 : 1'd0;
       byteEnablesOut         <= (s_stateMachineReg == INIT_BURST1) ? 4'hF : 4'd0;
