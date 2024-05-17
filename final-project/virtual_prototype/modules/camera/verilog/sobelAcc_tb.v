@@ -6,7 +6,8 @@ parameter customId = 8'h27;
 
 // Inputs
 reg clock_tb, reset_tb, edgeHsync_tb, edgeVsync_tb, validCamera_tb, vsync_tb, hsync_tb;
-reg[7:0] camData_tb;
+reg[7:0] camData_tb, ciN_tb;
+reg[31:0] ciValueA_tb, ciValueB_tb;
 
 reg vsyncClk, hsyncClk, validClk;
 reg[7:0] grayClk;
@@ -27,7 +28,11 @@ sobelAccelerator #(.customId(8'h27)) sobelino (
     .hsync(hsyncClk), 
     .vsync(vsyncClk), 
     .validCamera(validClk),
-    .camData(grayClk)
+    .camData(grayClk),
+    .ciN(ciN_tb),
+    .ciValueA(ciValueA_tb),
+    .ciValueB(ciValueB_tb),
+    .ciStart(1'b1)
 );
 
 always @(posedge clock_tb) begin
@@ -49,7 +54,9 @@ initial begin
     edgeVsync_tb = 0;
     validCamera_tb = 0;
     camData_tb = 8'd0;
-
+    ciN_tb = 8'b0;
+    ciValueA_tb = 32'b0;
+    ciValueB_tb = 32'b0;
     // Wait to finish reset
     repeat (100);
 
@@ -58,6 +65,12 @@ initial begin
     reset_tb = 0;
     #50;
 
+    //set threshold
+    ciN_tb = 8'h27;
+    ciValueA_tb = 13'b1001000000000;
+    ciValueB_tb = 32'd1;
+    #50;
+    ciN_tb = 8'b0;
 
     for(frame = 0; frame < 10; frame = frame + 1) begin
 
