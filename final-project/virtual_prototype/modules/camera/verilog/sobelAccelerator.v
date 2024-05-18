@@ -76,44 +76,32 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
                                         .dataIn(writeDataY[k]), .dataOut(readDataY[k]));
         end
     endgenerate  
-    
-    wire firstTriplet = count3pixels[2] & count3pixels[1] & count3pixels[0];
-    wire firstTrirows = count3rows[2] & count3rows[1] & count3rows[0];
 
     wire[7:0] nextAddress [0:8];
 
-    assign nextAddress[0] = addressReg[0] + (pixelCount[0] & firstTriplet);
-    assign nextAddress[1] = addressReg[1] + (pixelCount[1] & firstTriplet);
-    assign nextAddress[2] = addressReg[2] + (pixelCount[2] & firstTriplet);
-    assign nextAddress[3] = addressReg[3] + (pixelCount[0] & firstTriplet);
-    assign nextAddress[4] = addressReg[4] + (pixelCount[1] & firstTriplet);
-    assign nextAddress[5] = addressReg[5] + (pixelCount[2] & firstTriplet);
-    assign nextAddress[6] = addressReg[6] + (pixelCount[0] & firstTriplet);
-    assign nextAddress[7] = addressReg[7] + (pixelCount[1] & firstTriplet);
-    assign nextAddress[8] = addressReg[8] + (pixelCount[2] & firstTriplet);
+    assign nextAddress[0] = addressReg[0] + (pixelCount[2]);
+    assign nextAddress[1] = addressReg[1] + (pixelCount[0]);
+    assign nextAddress[2] = addressReg[2] + (pixelCount[1]);
+    assign nextAddress[3] = addressReg[3] + (pixelCount[2]);
+    assign nextAddress[4] = addressReg[4] + (pixelCount[0]);
+    assign nextAddress[5] = addressReg[5] + (pixelCount[1]);
+    assign nextAddress[6] = addressReg[6] + (pixelCount[2]);
+    assign nextAddress[7] = addressReg[7] + (pixelCount[0]);
+    assign nextAddress[8] = addressReg[8] + (pixelCount[1]);
 
-    always @(negedge camClock) begin
-        addressReg[0] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? nextAddress[0] : addressReg[0];
-        addressReg[1] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? nextAddress[1] : addressReg[1];
-        addressReg[2] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? nextAddress[2] : addressReg[2];
-        addressReg[3] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? nextAddress[3] : addressReg[3];
-        addressReg[4] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? nextAddress[4] : addressReg[4];
-        addressReg[5] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? nextAddress[5] : addressReg[5];
-        addressReg[6] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? nextAddress[6] : addressReg[6];
-        addressReg[7] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? nextAddress[7] : addressReg[7];
-        addressReg[8] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? nextAddress[8] : addressReg[8];
+    always @(posedge camClock) begin
+        addressReg[0] <= (reset == 1'b1 || hsync == 1'b1 || vsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? nextAddress[0] : addressReg[0];
+        addressReg[1] <= (reset == 1'b1 || hsync == 1'b1 || vsync == 1'b1) ? 8'd255 : (validCamera == 1'b1) ? nextAddress[1] : addressReg[1];
+        addressReg[2] <= (reset == 1'b1 || hsync == 1'b1 || vsync == 1'b1) ? 8'd255 : (validCamera == 1'b1) ? nextAddress[2] : addressReg[2];
+        addressReg[3] <= (reset == 1'b1 || hsync == 1'b1 || vsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? nextAddress[3] : addressReg[3];
+        addressReg[4] <= (reset == 1'b1 || hsync == 1'b1 || vsync == 1'b1) ? 8'd255 : (validCamera == 1'b1) ? nextAddress[4] : addressReg[4];
+        addressReg[5] <= (reset == 1'b1 || hsync == 1'b1 || vsync == 1'b1) ? 8'd255 : (validCamera == 1'b1) ? nextAddress[5] : addressReg[5];
+        addressReg[6] <= (reset == 1'b1 || hsync == 1'b1 || vsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? nextAddress[6] : addressReg[6];
+        addressReg[7] <= (reset == 1'b1 || hsync == 1'b1 || vsync == 1'b1) ? 8'd255 : (validCamera == 1'b1) ? nextAddress[7] : addressReg[7];
+        addressReg[8] <= (reset == 1'b1 || hsync == 1'b1 || vsync == 1'b1) ? 8'd255 : (validCamera == 1'b1) ? nextAddress[8] : addressReg[8];
     end      
 
-    reg[2:0] count3pixels, count3rows;
-
-    always @(posedge camClock) begin // modifica: resetta count3pixels a 000
-        count3pixels <= (reset == 1'b1 || hsync == 1'b1 || vsync == 1'b1) ? 3'b000 : (validCamera == 1'b1) ? 
-                                {count3pixels[1:0], 1'b1} : count3pixels;
-        count3rows <= (reset == 1'b1 || vsync == 1'b1) ? 3'b000 : (hsync == 1'b1) ? 
-                                {count3rows[1:0], 1'b1} : count3rows;                        
-    end
-
-    reg[15:0] filteredDataX[0:8];
+    wire[15:0] filteredDataX[0:8];
 
     /* assign writeDataX[0] = (rowCount[0] & pixelCount[0]) ? (filteredDataX[0]) : (readDataX[0] + filteredDataX[0]);
     assign writeDataX[1] = readDataX[1] & (~{16{rowCount[0] & pixelCount[1]}}) + filteredDataX[1];
@@ -138,20 +126,9 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     wire[15:0] resultx1  = camData;
     wire[15:0] resultx2  = camData << 1;
     wire[15:0] resultx_1 = ~camData + 1;
-    wire[15:0] resultx_2 = ~(camData << 1) + 1; 
-    
-    //mega wire
-    wire[15:0] outputX =    writeDataX[0] & {16{rowCount[2] & pixelCount[2]}} |
-                            writeDataX[1] & {16{rowCount[2] & pixelCount[0]}} |
-                            writeDataX[2] & {16{rowCount[2] & pixelCount[1]}} |
-                            writeDataX[3] & {16{rowCount[0] & pixelCount[2]}} |
-                            writeDataX[4] & {16{rowCount[0] & pixelCount[0]}} |
-                            writeDataX[5] & {16{rowCount[0] & pixelCount[1]}} |
-                            writeDataX[6] & {16{rowCount[1] & pixelCount[2]}} |
-                            writeDataX[7] & {16{rowCount[1] & pixelCount[0]}} |
-                            writeDataX[8] & {16{rowCount[1] & pixelCount[1]}}; 
+    wire[15:0] resultx_2 = ~(camData << 1) + 1;   
 
-    reg[15:0] filteredDataY[0:8];
+    wire[15:0] filteredDataY[0:8];
 
     /* assign writeDataY[0] = readDataY[0] & {16{~rowCount[0] & ~pixelCount[0]}} + filteredDataY[0];
     assign writeDataY[1] = readDataY[1] & {16{~rowCount[0] & ~pixelCount[1]}} + filteredDataY[1];
@@ -174,7 +151,10 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     assign writeDataY[8] = (rowCount[2] & pixelCount[2]) ? (filteredDataY[8]) : (readDataY[8] + filteredDataY[8]);
 
     //mega wire
-    wire[15:0] outputY =    writeDataY[0] & {16{rowCount[2] & pixelCount[2]}} |
+    reg[15:0] outputY, outputX;
+
+    always @(posedge camClock) begin 
+        outputY =    writeDataY[0] & {16{rowCount[2] & pixelCount[2]}} |
                             writeDataY[1] & {16{rowCount[2] & pixelCount[0]}} |
                             writeDataY[2] & {16{rowCount[2] & pixelCount[1]}} |
                             writeDataY[3] & {16{rowCount[0] & pixelCount[2]}} |
@@ -183,6 +163,18 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
                             writeDataY[6] & {16{rowCount[1] & pixelCount[2]}} |
                             writeDataY[7] & {16{rowCount[1] & pixelCount[0]}} |
                             writeDataY[8] & {16{rowCount[1] & pixelCount[1]}}; 
+        
+        outputX =    writeDataX[0] & {16{rowCount[2] & pixelCount[2]}} |
+                            writeDataX[1] & {16{rowCount[2] & pixelCount[0]}} |
+                            writeDataX[2] & {16{rowCount[2] & pixelCount[1]}} |
+                            writeDataX[3] & {16{rowCount[0] & pixelCount[2]}} |
+                            writeDataX[4] & {16{rowCount[0] & pixelCount[0]}} |
+                            writeDataX[5] & {16{rowCount[0] & pixelCount[1]}} |
+                            writeDataX[6] & {16{rowCount[1] & pixelCount[2]}} |
+                            writeDataX[7] & {16{rowCount[1] & pixelCount[0]}} |
+                            writeDataX[8] & {16{rowCount[1] & pixelCount[1]}};
+    end
+                            
 
     wire finalOutput = ((((outputX >> 15) ^ outputX) - (outputX >> 15)) 
                                 + (((outputY >> 15) ^ outputY) - (outputY >> 15))) > thresholdReg ? 1'b1 : 1'b0;
@@ -314,7 +306,7 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     reg[10:0] writeBufferReg;
 
     always @(posedge camClock) begin
-        writeBufferReg <= (reset == 1'b1 || hsync == 1'b1) ? 11'b0 : (validCamera == 1'b1) ? writeBufferReg + 11'd1 : writeBufferReg;
+        writeBufferReg <= (reset == 1'b1 || hsync == 1'b1 || vsync == 1'b1) ? 11'b0 : (validCamera == 1'b1) ? writeBufferReg + 11'd1 : writeBufferReg;
     end
 
     wire bufferEnable = (writeBufferReg[4:0] == 5'b11111) ? validCamera: 1'b0;
