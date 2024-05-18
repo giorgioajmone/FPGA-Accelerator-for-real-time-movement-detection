@@ -17,8 +17,6 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     input wire         busyIn, busErrorIn
 );
 
-    // testbench
-
     reg[31:0] busStartReg;
     reg[9:0] blockSizeReg;
     reg[8:0] burstSizeReg;
@@ -82,28 +80,28 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     wire firstTriplet = count3pixels[2] & count3pixels[1] & count3pixels[0];
     wire firstTrirows = count3rows[2] & count3rows[1] & count3rows[0];
 
-    wire[7:0] s_writeAddress [0:8];
+    wire[7:0] nextAddress [0:8];
 
-    assign s_writeAddress[0] = addressReg[0] + (pixelCount[0] & firstTriplet);
-    assign s_writeAddress[1] = addressReg[1] + (pixelCount[1] & firstTriplet);
-    assign s_writeAddress[2] = addressReg[2] + (pixelCount[2] & firstTriplet);
-    assign s_writeAddress[3] = addressReg[3] + (pixelCount[0] & firstTriplet);
-    assign s_writeAddress[4] = addressReg[4] + (pixelCount[1] & firstTriplet);
-    assign s_writeAddress[5] = addressReg[5] + (pixelCount[2] & firstTriplet);
-    assign s_writeAddress[6] = addressReg[6] + (pixelCount[0] & firstTriplet);
-    assign s_writeAddress[7] = addressReg[7] + (pixelCount[1] & firstTriplet);
-    assign s_writeAddress[8] = addressReg[8] + (pixelCount[2] & firstTriplet);
+    assign nextAddress[0] = addressReg[0] + (pixelCount[0] & firstTriplet);
+    assign nextAddress[1] = addressReg[1] + (pixelCount[1] & firstTriplet);
+    assign nextAddress[2] = addressReg[2] + (pixelCount[2] & firstTriplet);
+    assign nextAddress[3] = addressReg[3] + (pixelCount[0] & firstTriplet);
+    assign nextAddress[4] = addressReg[4] + (pixelCount[1] & firstTriplet);
+    assign nextAddress[5] = addressReg[5] + (pixelCount[2] & firstTriplet);
+    assign nextAddress[6] = addressReg[6] + (pixelCount[0] & firstTriplet);
+    assign nextAddress[7] = addressReg[7] + (pixelCount[1] & firstTriplet);
+    assign nextAddress[8] = addressReg[8] + (pixelCount[2] & firstTriplet);
 
     always @(negedge camClock) begin
-        addressReg[0] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? s_writeAddress[0] : addressReg[0];
-        addressReg[1] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? s_writeAddress[1] : addressReg[1];
-        addressReg[2] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? s_writeAddress[2] : addressReg[2];
-        addressReg[3] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? s_writeAddress[3] : addressReg[3];
-        addressReg[4] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? s_writeAddress[4] : addressReg[4];
-        addressReg[5] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? s_writeAddress[5] : addressReg[5];
-        addressReg[6] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? s_writeAddress[6] : addressReg[6];
-        addressReg[7] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? s_writeAddress[7] : addressReg[7];
-        addressReg[8] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? s_writeAddress[8] : addressReg[8];
+        addressReg[0] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? nextAddress[0] : addressReg[0];
+        addressReg[1] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? nextAddress[1] : addressReg[1];
+        addressReg[2] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? nextAddress[2] : addressReg[2];
+        addressReg[3] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? nextAddress[3] : addressReg[3];
+        addressReg[4] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? nextAddress[4] : addressReg[4];
+        addressReg[5] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? nextAddress[5] : addressReg[5];
+        addressReg[6] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? nextAddress[6] : addressReg[6];
+        addressReg[7] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? nextAddress[7] : addressReg[7];
+        addressReg[8] <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? nextAddress[8] : addressReg[8];
     end      
 
     reg[2:0] count3pixels, count3rows;
@@ -191,7 +189,224 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
 
     // Sobel X
 
-    // MEM 0
+    assign filteredDataX[0] = (pixelCount[0] & (rowCount[0] | rowCount[2])) ? resultx_1 : 
+                                (pixelCount[2] & (rowCount[0] | rowCount[2])) ? resultx1 : 
+                                  (rowCount[1] & pixelCount[0]) ? resultx_2 :
+                                    (rowCount[1] & pixelCount[2]) ? resultx2 : 16'b0;
+    
+    assign filteredDataX[1] = (pixelCount[1] & (rowCount[0] | rowCount[2])) ? resultx_1 : 
+                                (pixelCount[0] & (rowCount[0] | rowCount[2])) ? resultx1 : 
+                                  (rowCount[1] & pixelCount[1]) ? resultx_2 :
+                                    (rowCount[1] & pixelCount[0]) ? resultx2 : 16'b0;
+    
+    assign filteredDataX[2] = (pixelCount[2] & (rowCount[0] | rowCount[2])) ? resultx_1 : 
+                                (pixelCount[1] & (rowCount[0] | rowCount[2])) ? resultx1 : 
+                                  (rowCount[1] & pixelCount[2]) ? resultx_2 :
+                                    (rowCount[1] & pixelCount[1]) ? resultx2 : 16'b0;
+
+    assign filteredDataX[3] = (pixelCount[0] & (rowCount[1] | rowCount[0])) ? resultx_1 : 
+                                (pixelCount[2] & (rowCount[1] | rowCount[0])) ? resultx1 : 
+                                  (rowCount[2] & pixelCount[0]) ? resultx_2 :
+                                    (rowCount[2] & pixelCount[2]) ? resultx2 : 16'b0;
+    
+    assign filteredDataX[4] = (pixelCount[1] & (rowCount[1] | rowCount[0])) ? resultx_1 : 
+                                (pixelCount[0] & (rowCount[1] | rowCount[0])) ? resultx1 : 
+                                  (rowCount[2] & pixelCount[1]) ? resultx_2 :
+                                    (rowCount[2] & pixelCount[0]) ? resultx2 : 16'b0;
+    
+    assign filteredDataX[5] = (pixelCount[2] & (rowCount[1] | rowCount[0])) ? resultx_1 : 
+                                (pixelCount[1] & (rowCount[1] | rowCount[0])) ? resultx1 : 
+                                  (rowCount[2] & pixelCount[2]) ? resultx_2 :
+                                    (rowCount[2] & pixelCount[1]) ? resultx2 : 16'b0;
+
+    assign filteredDataX[6] = (pixelCount[0] & (rowCount[2] | rowCount[1])) ? resultx_1 : 
+                                (pixelCount[2] & (rowCount[2] | rowCount[1])) ? resultx1 : 
+                                  (rowCount[0] & pixelCount[0]) ? resultx_2 :
+                                    (rowCount[0] & pixelCount[2]) ? resultx2 : 16'b0;
+    
+    assign filteredDataX[7] = (pixelCount[1] & (rowCount[2] | rowCount[1])) ? resultx_1 : 
+                                (pixelCount[0] & (rowCount[2] | rowCount[1])) ? resultx1 : 
+                                  (rowCount[0] & pixelCount[1]) ? resultx_2 :
+                                    (rowCount[0] & pixelCount[0]) ? resultx2 : 16'b0;
+    
+    assign filteredDataX[8] = (pixelCount[2] & (rowCount[2] | rowCount[1])) ? resultx_1 : 
+                                (pixelCount[1] & (rowCount[2] | rowCount[1])) ? resultx1 : 
+                                  (rowCount[0] & pixelCount[2]) ? resultx_2 :
+                                    (rowCount[0] & pixelCount[1]) ? resultx2 : 16'b0;
+
+    // Sobel Y
+
+    assign filteredDataY[0] = (rowCount[0] & (pixelCount[0] | pixelCount[2])) ? resultx1 :
+                                (rowCount[2] & (pixelCount[0] | pixelCount[2])) ? resultx_1 : 
+                                  (rowCount[2] & pixelCount[1]) ? resultx_2 : 
+                                    (rowCount[0] & pixelCount[1]) ? resultx2 : 16'b0;
+
+    assign filteredDataY[1] = (rowCount[0] & (pixelCount[1] | pixelCount[0])) ? resultx1 :
+                                (rowCount[2] & (pixelCount[1] | pixelCount[0])) ? resultx_1 : 
+                                  (rowCount[2] & pixelCount[2]) ? resultx_2 : 
+                                    (rowCount[0] & pixelCount[2]) ? resultx2 : 16'b0;
+
+    assign filteredDataY[2] = (rowCount[0] & (pixelCount[2] | pixelCount[1])) ? resultx1 :
+                                (rowCount[2] & (pixelCount[2] | pixelCount[1])) ? resultx_1 : 
+                                  (rowCount[2] & pixelCount[0]) ? resultx_2 : 
+                                    (rowCount[0] & pixelCount[0]) ? resultx2 : 16'b0;
+
+    assign filteredDataY[3] = (rowCount[1] & (pixelCount[0] | pixelCount[2])) ? resultx1 :
+                                (rowCount[0] & (pixelCount[0] | pixelCount[2])) ? resultx_1 : 
+                                  (rowCount[0] & pixelCount[1]) ? resultx_2 : 
+                                    (rowCount[1] & pixelCount[1]) ? resultx2 : 16'b0;
+
+    assign filteredDataY[4] = (rowCount[1] & (pixelCount[1] | pixelCount[0])) ? resultx1 :
+                                (rowCount[0] & (pixelCount[1] | pixelCount[0])) ? resultx_1 : 
+                                  (rowCount[0] & pixelCount[2]) ? resultx_2 : 
+                                    (rowCount[1] & pixelCount[2]) ? resultx2 : 16'b0;
+
+    assign filteredDataY[5] = (rowCount[1] & (pixelCount[2] | pixelCount[1])) ? resultx1 :
+                                (rowCount[0] & (pixelCount[2] | pixelCount[1])) ? resultx_1 : 
+                                  (rowCount[0] & pixelCount[0]) ? resultx_2 : 
+                                    (rowCount[1] & pixelCount[0]) ? resultx2 : 16'b0;      
+
+    assign filteredDataY[6] = (rowCount[2] & (pixelCount[0] | pixelCount[2])) ? resultx1 :
+                                (rowCount[1] & (pixelCount[0] | pixelCount[2])) ? resultx_1 : 
+                                  (rowCount[1] & pixelCount[1]) ? resultx_2 : 
+                                    (rowCount[2] & pixelCount[1]) ? resultx2 : 16'b0;
+
+    assign filteredDataY[7] = (rowCount[2] & (pixelCount[1] | pixelCount[0])) ? resultx1 :
+                                (rowCount[1] & (pixelCount[1] | pixelCount[0])) ? resultx_1 : 
+                                  (rowCount[1] & pixelCount[2]) ? resultx_2 : 
+                                    (rowCount[2] & pixelCount[2]) ? resultx2 : 16'b0;
+
+    assign filteredDataY[8] = (rowCount[2] & (pixelCount[2] | pixelCount[1])) ? resultx1 :
+                                (rowCount[1] & (pixelCount[2] | pixelCount[1])) ? resultx_1 : 
+                                  (rowCount[1] & pixelCount[0]) ? resultx_2 : 
+                                    (rowCount[2] & pixelCount[0]) ? resultx2 : 16'b0;                          
+
+    localparam S0  = 3'b001;
+    localparam S1  = 3'b010;
+    localparam S2  = 3'b100;
+
+    reg[2:0] pixelCount, nextStateP;
+    reg[2:0] rowCount, nextStateR;
+
+    always @* begin
+        case(pixelCount)
+            S0:         nextStateP <= (hsync == 1'b1 || vsync == 1'b1) ? S0 : (validCamera == 1'b1)  ? S1 : S0;
+            S1:         nextStateP <= (hsync == 1'b1 || vsync == 1'b1) ? S0 : (validCamera == 1'b1)  ? S2 : S1; 
+            S2:         nextStateP <= (hsync == 1'b1 || vsync == 1'b1) ? S0 : (validCamera == 1'b1)  ? S0 : S2;
+            default:    nextStateP <= S0;
+        endcase
+    end
+
+    always @* begin
+        case(rowCount)
+            S0:         nextStateR <= (vsync == 1'b1) ? S0 : (hsync == 1'b1) ? S1 : S0;
+            S1:         nextStateR <= (vsync == 1'b1) ? S0 : (hsync == 1'b1) ? S2 : S1;
+            S2:         nextStateR <= (vsync == 1'b1) ? S0 : (hsync == 1'b1) ? S0 : S2;
+            default:    nextStateR <= S0;
+        endcase
+    end
+
+    always @(posedge camClock) begin
+        pixelCount <= (reset == 1'b1) ? S0 : nextStateP; 
+        rowCount <= (reset == 1'b1) ? S0 : nextStateR;
+    end
+    
+    reg[10:0] writeBufferReg;
+
+    always @(posedge camClock) begin
+        writeBufferReg <= (reset == 1'b1 || hsync == 1'b1) ? 11'b0 : (validCamera == 1'b1) ? writeBufferReg + 11'd1 : writeBufferReg;
+    end
+
+    wire bufferEnable = (writeBufferReg[4:0] == 5'b11111) ? validCamera: 1'b0;
+
+    reg[31:0] s2pReg;
+
+    always @(posedge camClock) begin
+        s2pReg <= (reset == 1'b1 || hsync == 1'b1 || vsync == 1'b1) ? 32'b0 : (validCamera == 1'b1) ? {s2pReg[30:0], finalOutput} : s2pReg;
+    end
+
+    dualPortRam2k lineBuffer (.address1(writeBufferReg[10:2]),
+                                .address2(memoryAddressReg),
+                                .clock1(camClock),
+                                .clock2(clock),
+                                .writeEnable(bufferEnable),
+                                .dataIn1(s2pReg),
+                                .dataOut2(busOutput));
+
+    //clock2
+
+    wire[31:0] busOutput;
+
+    reg[2:0] stateReg, nextState;  
+    localparam IDLE     = 3'd0;
+    localparam REQUEST  = 3'd1;
+    localparam INIT     = 3'd2;
+    localparam CLOSE    = 3'd3;
+    localparam WRITE    = 3'd4;
+    localparam ERROR    = 3'd5;
+
+    reg [31:0] busAddressReg, addressDataOutReg;
+    reg [8:0] pixelPerLineReg;
+    reg [8:0] memoryAddressReg;
+    reg dataValidReg;
+    reg [8:0] burstCountReg;
+    wire isWriting = ((stateReg == WRITE) && burstCountReg[8] == 1'b0) ? ~busyIn : 1'b0;
+    wire [31:0] busAddressNext = (reset == 1'b1 || newScreen == 1'b1) ? busStartReg : 
+                                    (isWriting == 1'b1) ? busAddressReg + 32'd4 : busAddressReg;
+    wire [7:0] burstSizeNext = ((stateReg == INIT) && pixelPerLineReg > 9'd16) ? 8'd16 : pixelPerLineReg[7:0];
+    
+    assign requestBus        = (stateReg == REQUEST) ? 1'b1 : 1'b0;
+    assign addressDataOut    = addressDataOutReg;
+    assign dataValidOut      = dataValidReg;
+    
+    always @* begin
+        case (stateReg)
+            IDLE        : nextState <= ((statusReg[0] == 1'b1) && newLine == 1'b1) ? REQUEST : IDLE; 
+            REQUEST     : nextState <= (busGrant == 1'b1) ? INIT : REQUEST;
+            INIT        : nextState <= WRITE;
+            WRITE       : nextState <= (busErrorIn == 1'b1) ? ERROR :
+                                            (burstCountReg[8] == 1'b1 && busyIn == 1'b0) ? CLOSE : WRITE;
+            CLOSE       : nextState <= (pixelPerLineReg != 9'd0) ? REQUEST : IDLE;
+            ERROR       : nextState <= IDLE;
+            default     : nextState <= IDLE;
+        endcase
+    end
+    
+    always @(posedge clock) begin
+        stateReg                <= (reset == 1'b1) ? IDLE : nextState;
+        beginTransactionOut     <= (stateReg == INIT) ? 1'd1 : 1'd0;
+        byteEnablesOut          <= (stateReg == INIT) ? 4'hF : 4'd0;
+        addressDataOutReg       <= (stateReg == INIT) ? busAddressReg : 
+                                        (isWriting == 1'b1) ? busOutput : 
+                                            (busyIn == 1'b1) ? addressDataOutReg : 32'd0;
+        dataValidReg            <= (isWriting == 1'b1) ? 1'b1 : 
+                                        (busyIn == 1'b1) ? dataValidReg : 1'b0;
+        endTransactionOut       <= (stateReg == CLOSE || stateReg == ERROR) ? 1'b1 : 1'b0;
+        burstSizeOut            <= (stateReg == INIT) ? burstSizeNext - 8'd1 : 8'd0;
+        burstCountReg           <= (stateReg == INIT) ? burstSizeNext - 8'd1 : 
+                                        (isWriting == 1'b1) ? burstCountReg - 9'd1 : burstCountReg;
+        memoryAddressReg          <= (stateReg == IDLE) ? 9'd0 : 
+                                        (isWriting == 1'b1) ? memoryAddressReg + 9'd1 : memoryAddressReg;
+        pixelPerLineReg         <= (newLine == 1'b1) ? 8'b0 : //da modificare per mettere counter dei pxel per riga
+                                        (stateReg == INIT) ? pixelPerLineReg - {1'b0, burstSizeNext} : pixelPerLineReg;
+        busAddressReg           <= busAddressNext;
+    end
+
+    synchroFlop sns (.clockIn(camClock),
+                    .clockOut(clock),
+                    .reset(reset),
+                    .D(vsync),
+                    .Q(newScreen));
+  
+    synchroFlop snl (.clockIn(camClock),
+                    .clockOut(clock),
+                    .reset(reset),
+                    .D(hsync),
+                    .Q(newLine));
+
+endmodule
+
+    /* // MEM 0
     always @* begin
         if((rowCount[0] & pixelCount[0]) | rowCount[2] & pixelCount[0]) begin
                 filteredDataX[0] = resultx_1;
@@ -324,11 +539,9 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
         end else begin
                 filteredDataX[8] = 16'd0;
         end        
-    end
+    end */
 
-    // Sobel Y
-
-    // MEM 0
+        /* // MEM 0
     always @* begin
         if(rowCount[0] & (pixelCount[0] | pixelCount[2])) begin
                 filteredDataY[0] = resultx1;
@@ -462,132 +675,4 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
         end else begin
                 filteredDataY[8] = 16'd0;
         end
-    end
-
-
-    localparam S0  = 3'b001;
-    localparam S1  = 3'b010;
-    localparam S2  = 3'b100;
-
-    reg[2:0] pixelCount, nextStateP;
-    reg[2:0] rowCount, nextStateR;
-
-    always @* begin
-        case(pixelCount)
-            S0:         nextStateP <= (hsync == 1'b1 || vsync == 1'b1) ? S0 : (validCamera == 1'b1)  ? S1 : S0;
-            S1:         nextStateP <= (hsync == 1'b1 || vsync == 1'b1) ? S0 : (validCamera == 1'b1)  ? S2 : S1; 
-            S2:         nextStateP <= (hsync == 1'b1 || vsync == 1'b1) ? S0 : (validCamera == 1'b1)  ? S0 : S2;
-            default:    nextStateP <= S0;
-        endcase
-    end
-
-    always @* begin
-        case(rowCount)
-            S0:         nextStateR <= (vsync == 1'b1) ? S0 : (hsync == 1'b1) ? S1 : S0;
-            S1:         nextStateR <= (vsync == 1'b1) ? S0 : (hsync == 1'b1) ? S2 : S1;
-            S2:         nextStateR <= (vsync == 1'b1) ? S0 : (hsync == 1'b1) ? S0 : S2;
-            default:    nextStateR <= S0;
-        endcase
-    end
-
-    always @(posedge camClock) begin
-        pixelCount <= (reset == 1'b1) ? S0 : nextStateP; 
-        rowCount <= (reset == 1'b1) ? S0 : nextStateR;
-    end
-
-    wire startLine = firstTrirows & hsync; //controllare timing
-    
-    reg[10:0] writeBufferReg;
-
-    always @(posedge camClock) begin
-        writeBufferReg <= (reset == 1'b1 || hsync == 1'b1) ? 11'b0 : (validCamera == 1'b1) ? writeBufferReg + 11'd1 : writeBufferReg;
-    end
-
-    wire bufferEnable = (writeBufferReg[4:0] == 5'b11111) ? validCamera: 1'b0;
-
-    reg[31:0] s2pReg;
-
-    always @(posedge camClock) begin
-        s2pReg <= (reset == 1'b1 || hsync == 1'b1 || vsync == 1'b1) ? 32'b0 : (validCamera == 1'b1) ? {s2pReg[30:0], finalOutput} : s2pReg;
-    end
-
-    dualPortRam2k lineBuffer (.address1(writeBufferReg[10:2]),
-                                .address2(memoryAddressReg),
-                                .clock1(camClock),
-                                .clock2(clock),
-                                .writeEnable(bufferEnable),
-                                .dataIn1(s2pReg),
-                                .dataOut2(busOutput));
-
-    //clock2
-
-    wire[31:0] busOutput;
-
-    reg[2:0] stateReg, nextState;  
-    localparam IDLE     = 3'd0;
-    localparam REQUEST  = 3'd1;
-    localparam INIT     = 3'd2;
-    localparam CLOSE    = 3'd3;
-    localparam WRITE    = 3'd4;
-    localparam ERROR    = 3'd5;
-
-    reg [31:0] busAddressReg, addressDataOutReg;
-    reg [8:0] pixelPerLineReg;
-    reg [8:0] memoryAddressReg;
-    reg dataValidReg;
-    reg [8:0] burstCountReg;
-    wire isWriting = ((stateReg == WRITE) && burstCountReg[8] == 1'b0) ? ~busyIn : 1'b0;
-    wire [31:0] busAddressNext = (reset == 1'b1 || newScreen == 1'b1) ? busStartReg : 
-                                    (isWriting == 1'b1) ? busAddressReg + 32'd4 : busAddressReg;
-    wire [7:0] burstSizeNext = ((stateReg == INIT) && pixelPerLineReg > 9'd16) ? 8'd16 : pixelPerLineReg[7:0];
-    
-    assign requestBus        = (stateReg == REQUEST) ? 1'b1 : 1'b0;
-    assign addressDataOut    = addressDataOutReg;
-    assign dataValidOut      = dataValidReg;
-    
-    always @* begin
-        case (stateReg)
-            IDLE        : nextState <= ((statusReg[0] == 1'b1) && newLine == 1'b1) ? REQUEST : IDLE; 
-            REQUEST     : nextState <= (busGrant == 1'b1) ? INIT : REQUEST;
-            INIT        : nextState <= WRITE;
-            WRITE       : nextState <= (busErrorIn == 1'b1) ? ERROR :
-                                            (burstCountReg[8] == 1'b1 && busyIn == 1'b0) ? CLOSE : WRITE;
-            CLOSE       : nextState <= (pixelPerLineReg != 9'd0) ? REQUEST : IDLE;
-            ERROR       : nextState <= IDLE;
-            default     : nextState <= IDLE;
-        endcase
-    end
-    
-    always @(posedge clock) begin
-        stateReg                <= (reset == 1'b1) ? IDLE : nextState;
-        beginTransactionOut     <= (stateReg == INIT) ? 1'd1 : 1'd0;
-        byteEnablesOut          <= (stateReg == INIT) ? 4'hF : 4'd0;
-        addressDataOutReg       <= (stateReg == INIT) ? busAddressReg : 
-                                        (isWriting == 1'b1) ? busOutput : 
-                                            (busyIn == 1'b1) ? addressDataOutReg : 32'd0;
-        dataValidReg            <= (isWriting == 1'b1) ? 1'b1 : 
-                                        (busyIn == 1'b1) ? dataValidReg : 1'b0;
-        endTransactionOut       <= (stateReg == CLOSE || stateReg == ERROR) ? 1'b1 : 1'b0;
-        burstSizeOut            <= (stateReg == INIT) ? burstSizeNext - 8'd1 : 8'd0;
-        burstCountReg           <= (stateReg == INIT) ? burstSizeNext - 8'd1 : 
-                                        (isWriting == 1'b1) ? burstCountReg - 9'd1 : burstCountReg;
-        memoryAddressReg          <= (stateReg == IDLE) ? 9'd0 : 
-                                        (isWriting == 1'b1) ? memoryAddressReg + 9'd1 : memoryAddressReg;
-        pixelPerLineReg         <= (newLine == 1'b1) ? 8'b0 : //da modificare per mettere counter dei pxel per riga
-                                        (stateReg == INIT) ? pixelPerLineReg - {1'b0, burstSizeNext} : pixelPerLineReg;
-        busAddressReg           <= busAddressNext;
-    end
-
-    synchroFlop sns (.clockIn(camClock),
-                    .clockOut(clock),
-                    .reset(reset),
-                    .D(vsync),
-                    .Q(newScreen));
-  
-    synchroFlop snl (.clockIn(camClock),
-                    .clockOut(clock),
-                    .reset(reset),
-                    .D(startLine),
-                    .Q(newLine));
-
-endmodule
+    end */
