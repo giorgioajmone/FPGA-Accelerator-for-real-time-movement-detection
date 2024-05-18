@@ -326,8 +326,8 @@ module or1420SingleCore ( input wire         clock12MHz,
   wire [7:0]  s_cpu1BurstSize;
   wire        s_spm1Irq;
   
-  assign s_cpu1CiDone = s_hdmiDone | s_swapByteDone | s_flashDone | s_cpuFreqDone | s_i2cCiDone | s_delayCiDone | s_camCiDone | s_sobelDone;
-  assign s_cpu1CiResult = s_hdmiResult | s_swapByteResult | s_flashResult | s_cpuFreqResult | s_i2cCiResult | s_camCiResult | s_delayResult | s_sobelResult; 
+  assign s_cpu1CiDone = s_hdmiDone | s_swapByteDone | s_flashDone | s_cpuFreqDone | s_i2cCiDone | s_delayCiDone | s_camCiDone | s_sobelDone | s_comparatorDone;
+  assign s_cpu1CiResult = s_hdmiResult | s_swapByteResult | s_flashResult | s_cpuFreqResult | s_i2cCiResult | s_camCiResult | s_delayResult | s_sobelResult | s_comparatorResult; 
 
   or1420Top #( .NOP_INSTRUCTION(32'h1500FFFF)) cpu1
              (.cpuClock(s_systemClock),
@@ -689,5 +689,16 @@ sobelAccelerator #(.customId(8'd111)) sobelino (
     .busyIn(s_busy),
     .busErrorIn(s_busError)
 );
+
+wire        s_comparatorDone;
+wire[31:0]  s_comparatorResult;
+
+comparator #(.customId(8'd112)) comparatorino (
+  .ciN(s_cpu1CiN), 
+  .ciValueA(s_cpu1CiDataA), 
+  .ciValueB(s_cpu1CiDataB),
+  .ciResult(s_comparatorResult),
+  .ciDone(s_comparatorDone),
+)
  
 endmodule

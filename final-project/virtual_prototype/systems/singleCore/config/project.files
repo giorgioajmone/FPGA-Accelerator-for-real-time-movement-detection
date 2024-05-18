@@ -55,4 +55,5 @@
 ../../../modules/camera/verilog/dHash.v
 ../../../modules/grayscaleCi/verilog/rgb565Grayscale.v
 ../../../modules/grayscaleCi/verilog/rgb565ISE.v
+../../../modules/bit_comparator/comparator.v
 ../verilog/or1420SingleCore.v
