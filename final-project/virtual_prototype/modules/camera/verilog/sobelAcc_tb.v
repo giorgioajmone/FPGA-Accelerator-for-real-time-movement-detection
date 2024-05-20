@@ -32,7 +32,8 @@ sobelAccelerator #(.customId(8'h27)) sobelino (
     .ciN(ciN_tb),
     .ciValueA(ciValueA_tb),
     .ciValueB(ciValueB_tb),
-    .ciStart(1'b1)
+    .ciStart(1'b1),
+    .busGrant(1'b1)
 );
 
 always @(posedge clock_tb) begin

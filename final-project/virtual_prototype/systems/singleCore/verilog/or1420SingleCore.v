@@ -695,10 +695,11 @@ wire[31:0]  s_comparatorResult;
 
 comparator #(.customId(8'hC)) comparatorino (
   .ciN(s_cpu1CiN), 
-  .ciValueA(s_cpu1CiDataA), 
-  .ciValueB(s_cpu1CiDataB),
-  .ciResult(s_comparatorResult),
-  .ciDone(s_comparatorDone),
-)
+  .start(s_cpu1CiStart),
+  .valueA(s_cpu1CiDataA), 
+  .valueB(s_cpu1CiDataB),
+  .result(s_comparatorResult),
+  .done(s_comparatorDone)
+);
  
 endmodule

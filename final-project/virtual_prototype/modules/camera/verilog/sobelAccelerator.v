@@ -21,8 +21,10 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     reg[9:0] blockSizeReg;
     reg[8:0] burstSizeReg;
     reg[15:0] thresholdReg;
+
     reg transferModeReg;
     reg[1:0] statusReg;
+    reg transferDoneReg;
 
     wire validInstr = (ciN == customId) ? ciStart : 1'b0;
     
@@ -32,7 +34,7 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
                                 (ciValueA[12:10] == 3'b010) ? blockSizeReg : 
                                     (ciValueA[12:10] == 3'b011) ? burstSizeReg :
                                         (ciValueA[12:10] == 3'b100) ? thresholdReg :
-                                            (ciValueA[12:10] == 3'b101) ? statusReg | {1'b0, transferModeReg}: 32'b0; 
+                                            (ciValueA[12:10] == 3'b101) ? transferDoneReg: 32'b0; 
 
     always @ (posedge clock) begin
         busStartReg <= (reset == 1'b1) ? 32'b0 : (validInstr == 1'b1 && ciValueA[12:9] == 4'b0011) ? ciValueB : busStartReg;
@@ -40,7 +42,8 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
         burstSizeReg <= (reset == 1'b1) ? 9'b0 : (validInstr == 1'b1 && ciValueA[12:9] == 4'b0111) ? ciValueB[7:0] : burstSizeReg;
         thresholdReg <= (reset == 1'b1) ? 16'b0 : (validInstr == 1'b1 && ciValueA[12:9] == 4'b1001) ? ciValueB[15:0] : thresholdReg;
         transferModeReg <= (reset == 1'b1 || statusReg[0] == 1'b1) ? 1'b0 : (validInstr == 1'b1 && ciValueA[12:9] == 4'b1011) ? 1'b1 : transferModeReg;
-        statusReg <= (reset == 1'b1 || (validInstr == 1'b1 && ciValueA[12:9] == 4'b1011)) ? 2'b0 : (newScreen == 1'b1) ? {statusReg[0], transferModeReg} : statusReg;
+        statusReg <= (reset == 1'b1 || statusReg[1] == 1'b1) ? 2'b0 : (newScreen == 1'b1) ? {statusReg[0], transferModeReg} : statusReg;
+        transferDoneReg <= (reset == 1'b1 || (validInstr == 1'b1 && ciValueA[12:9] == 4'b1011)) ? 1'b0 : (statusReg[1] == 1'b1) ? 1'b1 : transferDoneReg;
     end
 
     reg[7:0] addressReg [0:8];
@@ -151,10 +154,10 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     assign writeDataY[8] = (rowCount[2] & pixelCount[2]) ? (filteredDataY[8]) : (readDataY[8] + filteredDataY[8]);
 
     //mega wire
-    reg[15:0] outputY, outputX;
+    wire[15:0] outputY, outputX;
 
-    always @(posedge camClock) begin //adesso che è clocckato rischia di essere in ritardo rispetto a quando campioniamo
-        outputY =    writeDataY[0] & {16{rowCount[2] & pixelCount[2]}} |
+    //always @(negedge camClock) begin
+    assign    outputY =    writeDataY[0] & {16{rowCount[2] & pixelCount[2]}} |
                             writeDataY[1] & {16{rowCount[2] & pixelCount[0]}} |
                             writeDataY[2] & {16{rowCount[2] & pixelCount[1]}} |
                             writeDataY[3] & {16{rowCount[0] & pixelCount[2]}} |
@@ -164,7 +167,7 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
                             writeDataY[7] & {16{rowCount[1] & pixelCount[0]}} |
                             writeDataY[8] & {16{rowCount[1] & pixelCount[1]}}; 
         
-        outputX =    writeDataX[0] & {16{rowCount[2] & pixelCount[2]}} |
+    assign    outputX =    writeDataX[0] & {16{rowCount[2] & pixelCount[2]}} |
                             writeDataX[1] & {16{rowCount[2] & pixelCount[0]}} |
                             writeDataX[2] & {16{rowCount[2] & pixelCount[1]}} |
                             writeDataX[3] & {16{rowCount[0] & pixelCount[2]}} |
@@ -173,11 +176,11 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
                             writeDataX[6] & {16{rowCount[1] & pixelCount[2]}} |
                             writeDataX[7] & {16{rowCount[1] & pixelCount[0]}} |
                             writeDataX[8] & {16{rowCount[1] & pixelCount[1]}};
-    end
+    //end
                             
 
-    wire finalOutput = ((((outputX >> 15) ^ outputX) - (outputX >> 15)) 
-                                + (((outputY >> 15) ^ outputY) - (outputY >> 15))) > thresholdReg ? 1'b1 : 1'b0;
+    wire finalOutput = (((((outputX >> 15) ^ outputX) + ((outputX >> 15) & 16'd1)) 
+                                + (((outputY >> 15) ^ outputY) + ((outputY >> 15) & 16'd1)))) > thresholdReg ? 1'b1 : 1'b0;
 
     // Sobel X
 
