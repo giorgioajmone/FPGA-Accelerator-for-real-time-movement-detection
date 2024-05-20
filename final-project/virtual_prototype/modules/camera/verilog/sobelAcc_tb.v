@@ -108,12 +108,11 @@ initial begin
         
         validCamera_tb = 1;
 
-        if(camData_tb < 8'd255) begin
-            camData_tb = 8'd1; //camData_tb + 8'd1;
+        if(i == 50 || i == 590 || line == 3 || line == 7) begin
+            camData_tb = 8'd100;
         end else begin
-            camData_tb = 8'd1; //8'd0;
+            camData_tb = 8'd0;
         end
-
         #10; 
 
         validCamera_tb = 0;
