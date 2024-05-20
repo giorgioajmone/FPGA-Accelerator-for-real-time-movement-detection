@@ -664,7 +664,7 @@ module or1420SingleCore ( input wire         clock12MHz,
   wire[7:0]   s_sobelBurstSize;
   wire s_sobelReadNotWrite, s_sobelBeginTransaction, s_sobelEndTransaction, s_sobelDataValid, s_sobelGrant, s_sobelRequest;
 
-sobelAccelerator #(.customId(8'd111)) sobelino (
+sobelAccelerator #(.customId(8'hB)) sobelino (
     .clock(s_systemClock), 
     .camClock(camPclk), 
     .reset(s_cpuReset), 
@@ -693,7 +693,7 @@ sobelAccelerator #(.customId(8'd111)) sobelino (
 wire        s_comparatorDone;
 wire[31:0]  s_comparatorResult;
 
-comparator #(.customId(8'd112)) comparatorino (
+comparator #(.customId(8'hC)) comparatorino (
   .ciN(s_cpu1CiN), 
   .ciValueA(s_cpu1CiDataA), 
   .ciValueB(s_cpu1CiDataB),

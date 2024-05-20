@@ -64,6 +64,10 @@ initial begin
     
     reset_tb = 0;
     #50;
+    //set transfer
+    ciN_tb = 8'h27;
+    ciValueA_tb = 13'b1011000000000;
+    #50;
 
     //set threshold
     ciN_tb = 8'h27;
@@ -85,6 +89,13 @@ initial begin
     #10;
     edgeVsync_tb = 0;
     #500;
+
+    if(frame == 2) begin
+        ciN_tb = 8'h27;
+        ciValueA_tb = 13'b1011000000000;
+        #50;
+        ciN_tb = 8'b0;
+    end
 
     for(line = 0; line < 10; line = line + 1) begin
 

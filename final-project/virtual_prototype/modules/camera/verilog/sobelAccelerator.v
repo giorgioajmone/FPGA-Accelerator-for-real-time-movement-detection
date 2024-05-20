@@ -153,7 +153,7 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     //mega wire
     reg[15:0] outputY, outputX;
 
-    always @(posedge camClock) begin 
+    always @(posedge camClock) begin //adesso che è clocckato rischia di essere in ritardo rispetto a quando campioniamo
         outputY =    writeDataY[0] & {16{rowCount[2] & pixelCount[2]}} |
                             writeDataY[1] & {16{rowCount[2] & pixelCount[0]}} |
                             writeDataY[2] & {16{rowCount[2] & pixelCount[1]}} |
@@ -317,7 +317,7 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
         s2pReg <= (reset == 1'b1 || hsync == 1'b1 || vsync == 1'b1) ? 32'b0 : (validCamera == 1'b1) ? {s2pReg[30:0], finalOutput} : s2pReg;
     end
 
-    dualPortRam2k lineBuffer (.address1(writeBufferReg[10:2]),
+    dualPortRam2k lineBuffer (.address1({3'b000, writeBufferReg[10:5]}),
                                 .address2(memoryAddressReg),
                                 .clock1(camClock),
                                 .clock2(clock),
@@ -376,10 +376,10 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
         endTransactionOut       <= (stateReg == CLOSE || stateReg == ERROR) ? 1'b1 : 1'b0;
         burstSizeOut            <= (stateReg == INIT) ? burstSizeNext - 8'd1 : 8'd0;
         burstCountReg           <= (stateReg == INIT) ? burstSizeNext - 8'd1 : 
-                                        (isWriting == 1'b1) ? burstCountReg - 9'd1 : burstCountReg;
+                                        (isWriting == 1'b1) ? burstCountReg - 9'd1 : burstCountReg; //mai inizializzato
         memoryAddressReg          <= (stateReg == IDLE) ? 9'd0 : 
                                         (isWriting == 1'b1) ? memoryAddressReg + 9'd1 : memoryAddressReg;
-        pixelPerLineReg         <= (newLine == 1'b1) ? 8'b0 : //da modificare per mettere counter dei pxel per riga
+        pixelPerLineReg         <= (newLine == 1'b1) ? 8'd20 :
                                         (stateReg == INIT) ? pixelPerLineReg - {1'b0, burstSizeNext} : pixelPerLineReg;
         busAddressReg           <= busAddressNext;
     end
