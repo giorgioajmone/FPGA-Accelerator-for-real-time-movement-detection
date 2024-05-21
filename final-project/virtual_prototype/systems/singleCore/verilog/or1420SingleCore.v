@@ -326,8 +326,8 @@ module or1420SingleCore ( input wire         clock12MHz,
   wire [7:0]  s_cpu1BurstSize;
   wire        s_spm1Irq;
   
-  assign s_cpu1CiDone = s_hdmiDone | s_swapByteDone | s_flashDone | s_cpuFreqDone | s_i2cCiDone | s_delayCiDone | s_camCiDone | s_sobelDone | s_comparatorDone;
-  assign s_cpu1CiResult = s_hdmiResult | s_swapByteResult | s_flashResult | s_cpuFreqResult | s_i2cCiResult | s_camCiResult | s_delayResult | s_sobelResult | s_comparatorResult; 
+  assign s_cpu1CiDone = s_hdmiDone | s_swapByteDone | s_flashDone | s_cpuFreqDone | s_i2cCiDone | s_delayCiDone | s_camCiDone | s_sobelDone | s_dHashDone | s_profileDone;
+  assign s_cpu1CiResult = s_hdmiResult | s_swapByteResult | s_flashResult | s_cpuFreqResult | s_i2cCiResult | s_camCiResult | s_delayResult | s_sobelResult | s_dHashResult | s_profileResult; 
 
   or1420Top #( .NOP_INSTRUCTION(32'h1500FFFF)) cpu1
              (.cpuClock(s_systemClock),
@@ -690,16 +690,38 @@ sobelAccelerator #(.customId(8'hB)) sobelino (
     .busErrorIn(s_busError)
 );
 
-wire        s_comparatorDone;
-wire[31:0]  s_comparatorResult;
+wire        s_dHashDone;
+wire[31:0]  s_dHashResult;
 
-comparator #(.customId(8'hC)) comparatorino (
+dHash #(.customId(8'hC)) hashino (
+  .reset(s_cpuReset),
+  .clock(s_systemClock),  
+  .hsync(hsyncReg), 
+  .vsync(vsyncReg), 
   .ciN(s_cpu1CiN), 
-  .start(s_cpu1CiStart),
-  .valueA(s_cpu1CiDataA), 
-  .valueB(s_cpu1CiDataB),
-  .result(s_comparatorResult),
-  .done(s_comparatorDone)
+  .ciStart(s_cpu1CiStart),
+  .ciValueA(s_cpu1CiDataA), 
+  .ciValueB(s_cpu1CiDataB),
+  .ciResult(s_dHashResult),
+  .done(s_dHashDone),
+  .camData(grayCam),
+  .validCamera(validCamera)
+);
+
+wire        s_profileDone;
+wire[31:0]  s_profileResult;
+
+profileCi #(.customId(8'hD)) profiler
+            (.start(s_cpu1CiStart),
+            .clock(s_systemClock),
+            .reset(s_cpuReset),
+            .stall(s_stall),
+            .busIdle(s_busIdle),
+            .valueA(s_cpu1CiDataA),
+            .valueB(s_cpu1CiDataB),
+            .ciN(s_cpu1CiN),
+            .done(s_profileDone),
+            .result(s_profileResult) 
 );
  
 endmodule

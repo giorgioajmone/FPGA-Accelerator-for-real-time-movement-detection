@@ -13,7 +13,6 @@ module dHash #(parameter [7:0] customId = 8'd0) (
     reg firstPixelReg;
 
     wire validInstr = (ciN == customId) ? ciStart : 1'b0;
-    wire[127:0] nextSignature = currentSignatureReg << 1;
 
     assign ciDone = validInstr;
     assign ciResult = (validInstr == 1'b0) ? 32'b0 : 
@@ -23,16 +22,21 @@ module dHash #(parameter [7:0] customId = 8'd0) (
                                         (ciValueA[1:0] == 2'b11) ? signatureReg[127:96] : 32'b0; 
 
     always @(posedge clock) begin
-        pixelCounterReg     <= (reset == 1'b1 || hsync == 1'b1) ? 6'd0 : (validCamera == 1'b1) ? 
-                                    (pixelCounterReg == 6'd49) ? 6'd0 : pixelCounterReg + 6'd1 : pixelCounterReg;
+        pixelCounterReg     <= (reset == 1'b1 || hsync == 1'b1) ? 6'd62 : (validCamera == 1'b1) ? 
+                                    (pixelCounterReg == 6'd44) ? 6'd0 : pixelCounterReg + 6'd1 : pixelCounterReg;
+
         rowCounterReg       <= (reset == 1'b1 || vsync == 1'b1) ? 6'd0 : (hsync == 1'b1) ? 
-                                    (rowCounterReg == 6'd48) ? 6'd0 : rowCounterReg + 6'd1 : rowCounterReg;
-        firstPixelReg          <= (reset == 1'b1 || hsync == 1'b1) ? 1'b0 : (validCamera == 1'b1) ? 1'b1 : firstPixelReg;
+                                    (rowCounterReg == 6'd47) ? 6'd0 : rowCounterReg + 6'd1 : rowCounterReg;
+
+        firstPixelReg       <= (reset == 1'b1 || hsync == 1'b1) ? 1'b0 : (validCamera == 1'b1) ? 1'b1 : firstPixelReg;
+
         currentSignatureReg <= (reset == 1'b1 || vsync == 1'b1) ? 128'b0 : 
                                     (validCamera == 1'b1 && pixelCounterReg == 6'd0 && rowCounterReg == 6'd0 && firstPixelReg == 1'b1) ? 
-                                        nextSignature | (camData > previousPixelReg) : currentSignatureReg;
+                                        {currentSignatureReg[126:0], (camData > previousPixelReg) ? 1'b1 : 1'b0} : currentSignatureReg;
+
         previousPixelReg    <= (reset == 1'b1 || hsync == 1'b1) ? 8'd0 : 
                                     (validCamera == 1'b1 && pixelCounterReg == 6'd0 && rowCounterReg == 6'd0) ? camData : previousPixelReg;
+
         signatureReg        <= (reset == 1'b1) ? 128'b0 : (vsync == 1'b1) ? currentSignatureReg : signatureReg;
     end
     
