@@ -178,9 +178,10 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
                             writeDataX[8] & {16{rowCount[1] & pixelCount[1]}};
     //end
                             
+    wire[15:0] absX = ({16{outputX[15]}} ^ outputX) + outputX[15];
+    wire[15:0] absY = ({16{outputY[15]}} ^ outputY) + outputY[15];
 
-    wire finalOutput = (((((outputX >> 15) ^ outputX) + ((outputX >> 15) & 16'd1)) 
-                                + (((outputY >> 15) ^ outputY) + ((outputY >> 15) & 16'd1)))) > thresholdReg ? 1'b1 : 1'b0;
+    wire finalOutput = ((absX + absY) > thresholdReg) ? 1'b1 : 1'b0;
 
     // Sobel X
 

@@ -37,7 +37,7 @@ int main () {
   vga[2] = swap_u32(2);
   vga[3] = swap_u32((uint32_t) &dataToVga[0]);
 
-  asm volatile ("l.nios_rrr r0,%[in1],%[in2],0xB"::[in1]"r"(9 << 9), [in2]"r"(32768));
+  asm volatile ("l.nios_rrr r0,%[in1],%[in2],0xB"::[in1]"r"(9 << 9), [in2]"r"(128));
 
   //takeSobelBlocking((uint32_t) &sobelPast[0]);
   //takeSobelBlocking((uint32_t) &sobelPresent[0]);
