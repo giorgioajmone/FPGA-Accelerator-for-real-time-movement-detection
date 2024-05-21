@@ -154,10 +154,10 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     assign writeDataY[8] = (rowCount[2] & pixelCount[2]) ? (filteredDataY[8]) : (readDataY[8] + filteredDataY[8]);
 
     //mega wire
-    wire[15:0] outputY, outputX;
+    reg[15:0] outputY, outputX;
 
-    //always @(negedge camClock) begin
-    assign    outputY =    writeDataY[0] & {16{rowCount[2] & pixelCount[2]}} |
+    always @(negedge camClock) begin
+    outputY <=    writeDataY[0] & {16{rowCount[2] & pixelCount[2]}} |
                             writeDataY[1] & {16{rowCount[2] & pixelCount[0]}} |
                             writeDataY[2] & {16{rowCount[2] & pixelCount[1]}} |
                             writeDataY[3] & {16{rowCount[0] & pixelCount[2]}} |
@@ -167,7 +167,7 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
                             writeDataY[7] & {16{rowCount[1] & pixelCount[0]}} |
                             writeDataY[8] & {16{rowCount[1] & pixelCount[1]}}; 
         
-    assign    outputX =    writeDataX[0] & {16{rowCount[2] & pixelCount[2]}} |
+    outputX <=    writeDataX[0] & {16{rowCount[2] & pixelCount[2]}} |
                             writeDataX[1] & {16{rowCount[2] & pixelCount[0]}} |
                             writeDataX[2] & {16{rowCount[2] & pixelCount[1]}} |
                             writeDataX[3] & {16{rowCount[0] & pixelCount[2]}} |
@@ -176,7 +176,7 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
                             writeDataX[6] & {16{rowCount[1] & pixelCount[2]}} |
                             writeDataX[7] & {16{rowCount[1] & pixelCount[0]}} |
                             writeDataX[8] & {16{rowCount[1] & pixelCount[1]}};
-    //end
+    end
                             
     wire[15:0] absX = ({16{outputX[15]}} ^ outputX) + outputX[15];
     wire[15:0] absY = ({16{outputY[15]}} ^ outputY) + outputY[15];
@@ -373,14 +373,14 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
         beginTransactionOut     <= (stateReg == INIT) ? 1'd1 : 1'd0;
         byteEnablesOut          <= (stateReg == INIT) ? 4'hF : 4'd0;
         addressDataOutReg       <= (stateReg == INIT) ? busAddressReg : 
-                                        (isWriting == 1'b1) ? busOutput : 
+                                        (isWriting == 1'b1) ? {busOutput[7:0], busOutput[15:8], busOutput[23:16], busOutput[31:24]} : 
                                             (busyIn == 1'b1) ? addressDataOutReg : 32'd0;
         dataValidReg            <= (isWriting == 1'b1) ? 1'b1 : 
                                         (busyIn == 1'b1) ? dataValidReg : 1'b0;
         endTransactionOut       <= (stateReg == CLOSE || stateReg == ERROR) ? 1'b1 : 1'b0;
         burstSizeOut            <= (stateReg == INIT) ? burstSizeNext - 8'd1 : 8'd0;
         burstCountReg           <= (stateReg == INIT) ? burstSizeNext - 8'd1 : 
-                                        (isWriting == 1'b1) ? burstCountReg - 9'd1 : burstCountReg; //mai inizializzato
+                                        (isWriting == 1'b1) ? burstCountReg - 9'd1 : burstCountReg;
         memoryAddressReg          <= (stateReg == IDLE) ? 9'd0 : 
                                         (isWriting == 1'b1) ? memoryAddressReg + 9'd1 : memoryAddressReg;
         pixelPerLineReg         <= (newLine == 1'b1) ? 8'd20 :
