@@ -6,6 +6,10 @@
 
 #define BUFFER_SIZE 640*480/32
 
+#define _profileITERATION
+//#define _profileMOVEMENT_DETECTION
+//#define _profileHASHING
+
 int BitsSetTable256[256];
 
 void initializeBitTable() { 
@@ -33,6 +37,7 @@ int main () {
   uint32_t bufferA[BUFFER_SIZE];
   uint32_t bufferB[BUFFER_SIZE];
   uint32_t bufferC[BUFFER_SIZE];
+  
   uint32_t bufferD[4];
   uint32_t bufferE[4];
 
@@ -40,13 +45,15 @@ int main () {
   uint32_t* sobelPast = &bufferB[0]; 
   uint32_t* sobelFuture = &bufferC[0];
 
-  uint32_t *signaturePast;
-  uint32_t *signaturePresent;
+  uint32_t *signaturePast = &bufferD[0];
+  uint32_t *signaturePresent = &bufferE[0];;
 
   volatile uint16_t dataToVga[640*480];
   volatile uint32_t result, cycles,stall,idle;
   volatile unsigned int *vga = (unsigned int *) 0X50000020;
   camParameters camParams;
+  int frameSize = ((camParams.nrOfLinesPerImage*camParams.nrOfPixelsPerLine) >> 5);
+
   vga_clear();
   
   printf("Initialising camera (this takes up to 3 seconds)!\n" );
@@ -72,34 +79,64 @@ int main () {
   takeSobelBlocking((uint32_t) &sobelPresent[0]);
   getSignature(signaturePresent);
 
-  int frameSize = ((camParams.nrOfLinesPerImage*camParams.nrOfPixelsPerLine) >> 5);
+  #ifdef _profileITERATION
+      printf("================================ PROFILING ITERATION ================================\n");
+  #endif
+  #ifdef _profileMOVEMENT_DETECTION
+      printf("============================ PROFILING MOVEMENTDETECTION ============================\n");
+  #endif
+  #ifdef _profileHASHING
+      printf("================================= PROFILING HASHING =================================\n");
+  #endif
  
   while(1) {
 
-    // PROFILING
-    asm volatile("l.nios_rrr r0,r0,%[in2],0xB"::[in2]"r"(7));
+    #ifdef _profileITERATION
+      asm volatile ("l.nios_rrr r0,r0,%[in2],0xB"::[in2]"r"(7));
+    #endif
 
     takeSobelNonBlocking((uint32_t) &sobelFuture[0]);
+
+    #ifdef _profileMOVEMENT_DETECTION
+      asm volatile ("l.nios_rrr r0,r0,%[in2],0xB"::[in2]"r"(7));
+    #endif
+
     for(int pixel = 0, pVGA = 0; pixel < frameSize; pixel++) {
       uint32_t pixelPresent = sobelPresent[pixel];
       uint32_t pixelPast = sobelPast[pixel];
       for(int j = 0; j < 32; j++){
-        if(pixelPresent & (1<<(31-j)))
-            if(pixelPast & (1<<(31-j)))
-                dataToVga[pVGA++] = 0xFFFF;
-            else
-                dataToVga[pVGA++] = 0x08F0;
-        else
-            dataToVga[pVGA++] = 0x0000;
+        if(pixelPresent & (1<<(31-j))){
+            if(pixelPast & (1<<(31-j))) dataToVga[pVGA++] = 0xFFFF;
+            else dataToVga[pVGA++] = 0x08F0;
+        }
+        else dataToVga[pVGA++] = 0x0000;
       }
     }
+
+    #ifdef _profileMOVEMENT_DETECTION
+      asm volatile ("l.nios_rrr %[out1],r0,%[in2],0xB":[out1]"=r"(cycles):[in2]"r"(1<<8|7<<4));
+      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xB":[out1]"=r"(stall):[in1]"r"(1),[in2]"r"(1<<9));
+      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xB":[out1]"=r"(idle):[in1]"r"(2),[in2]"r"(1<<10));
+      printf("cycles =  %d | stall = %d | idle = %d\n", cycles, stall, idle);
+    #endif
+
+    #ifdef _profileHASHING
+      asm volatile ("l.nios_rrr r0,r0,%[in2],0xB"::[in2]"r"(7));
+    #endif
 
     uint32_t hammingDistance = 0;
 
     for(int i = 0; i < 4; i++)
         hammingDistance += countSetBits(signaturePast[i] ^ signaturePresent[i]);
 
-    if(hammingDistance > 5) printf("TI SEI MOSSO BASTARDO\n");
+    if(hammingDistance > 5) printf("Movement Detected\n");
+
+    #ifdef _profileHASHING
+      asm volatile ("l.nios_rrr %[out1],r0,%[in2],0xB":[out1]"=r"(cycles):[in2]"r"(1<<8|7<<4));
+      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xB":[out1]"=r"(stall):[in1]"r"(1),[in2]"r"(1<<9));
+      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xB":[out1]"=r"(idle):[in1]"r"(2),[in2]"r"(1<<10));
+      printf("cycles =  %d | stall = %d | idle = %d\n", cycles, stall, idle);
+    #endif
 
     waitSobel();
 
@@ -112,10 +149,12 @@ int main () {
     sobelPast = sobelPresent;
     sobelPresent = tmp;
 
-    asm volatile ("l.nios_rrr %[out1],r0,%[in2],0xD":[out1]"=r"(cycles):[in2]"r"(1<<8|7<<4));
-    asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xD":[out1]"=r"(stall):[in1]"r"(1),[in2]"r"(1<<9));
-    asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xD":[out1]"=r"(idle):[in1]"r"(2),[in2]"r"(1<<10));
+    #ifdef _profileITERATION
+      asm volatile ("l.nios_rrr %[out1],r0,%[in2],0xB":[out1]"=r"(cycles):[in2]"r"(1<<8|7<<4));
+      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xB":[out1]"=r"(stall):[in1]"r"(1),[in2]"r"(1<<9));
+      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xB":[out1]"=r"(idle):[in1]"r"(2),[in2]"r"(1<<10));
+      printf("cycles =  %d | stall = %d | idle = %d\n", cycles, stall, idle);
+    #endif
 
-    printf("Stats: %d %d %d\n", cycles, stall, idle);
   }
 }
