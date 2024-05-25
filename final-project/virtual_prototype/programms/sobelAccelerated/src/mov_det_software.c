@@ -3,9 +3,9 @@
 #include <swap.h>
 #include <vga.h>
 
-#define _profileITERATION
+//#define _profileITERATION
 //#define _profileIMAGE
-//#define _profileGRAYSCALE
+//define _profileGRAYSCALE
 //#define _profileSOBEL
 //#define _profileMOVEMENT_DETECTION
 
@@ -33,7 +33,7 @@ void edgeDetection( volatile uint8_t *grayscale, volatile uint8_t *sobelResult, 
   }
 }
 
-int main () {
+int main1 () {
 
   volatile uint16_t rgb565[640*480];
   volatile uint16_t dataToVga[640*480];
@@ -84,27 +84,27 @@ int main () {
   while(1) {
 
     #ifdef _profileITERATION
-      asm volatile ("l.nios_rrr r0,r0,%[in2],0xB"::[in2]"r"(7));
+      asm volatile ("l.nios_rrr r0,r0,%[in2],0xC"::[in2]"r"(7));
     #endif
 
 
     buffer = ~buffer;
 
     #ifdef _profileIMAGE
-      asm volatile ("l.nios_rrr r0,r0,%[in2],0xB"::[in2]"r"(7));
+      asm volatile ("l.nios_rrr r0,r0,%[in2],0xC"::[in2]"r"(7));
     #endif
     
     takeSingleImageBlocking((uint32_t) &rgb565[0]);
 
     #ifdef _profileIMAGE
-      asm volatile ("l.nios_rrr %[out1],r0,%[in2],0xB":[out1]"=r"(cycles):[in2]"r"(1<<8|7<<4));
-      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xB":[out1]"=r"(stall):[in1]"r"(1),[in2]"r"(1<<9));
-      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xB":[out1]"=r"(idle):[in1]"r"(2),[in2]"r"(1<<10));
+      asm volatile ("l.nios_rrr %[out1],r0,%[in2],0xC":[out1]"=r"(cycles):[in2]"r"(1<<8|7<<4));
+      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xC":[out1]"=r"(stall):[in1]"r"(1),[in2]"r"(1<<9));
+      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xC":[out1]"=r"(idle):[in1]"r"(2),[in2]"r"(1<<10));
       printf("cycles =  %d | stall = %d | idle = %d\n", cycles, stall, idle);
     #endif
 
     #ifdef _profileGRAYSCALE
-      asm volatile ("l.nios_rrr r0,r0,%[in2],0xB"::[in2]"r"(7));
+      asm volatile ("l.nios_rrr r0,r0,%[in2],0xC"::[in2]"r"(7));
     #endif
 
     for (int line = 0; line < camParams.nrOfLinesPerImage; line++) {
@@ -119,32 +119,33 @@ int main () {
     }
 
     #ifdef _profileGRAYSCALE
-      asm volatile ("l.nios_rrr %[out1],r0,%[in2],0xB":[out1]"=r"(cycles):[in2]"r"(1<<8|7<<4));
-      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xB":[out1]"=r"(stall):[in1]"r"(1),[in2]"r"(1<<9));
-      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xB":[out1]"=r"(idle):[in1]"r"(2),[in2]"r"(1<<10));
+      asm volatile ("l.nios_rrr %[out1],r0,%[in2],0xC":[out1]"=r"(cycles):[in2]"r"(1<<8|7<<4));
+      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xC":[out1]"=r"(stall):[in1]"r"(1),[in2]"r"(1<<9));
+      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xC":[out1]"=r"(idle):[in1]"r"(2),[in2]"r"(1<<10));
       printf("cycles =  %d | stall = %d | idle = %d\n", cycles, stall, idle);
     #endif
 
     #ifdef _profileSOBEL
-      asm volatile ("l.nios_rrr r0,r0,%[in2],0xB"::[in2]"r"(7));
+      asm volatile ("l.nios_rrr r0,r0,%[in2],0xC"::[in2]"r"(7));
     #endif
 
     edgeDetection(grayscale, (buffer == 0 ? sobelA : sobelB), camParams.nrOfPixelsPerLine, camParams.nrOfLinesPerImage, 128);
 
     #ifdef _profileSOBEL
-      asm volatile ("l.nios_rrr %[out1],r0,%[in2],0xB":[out1]"=r"(cycles):[in2]"r"(1<<8|7<<4));
-      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xB":[out1]"=r"(stall):[in1]"r"(1),[in2]"r"(1<<9));
-      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xB":[out1]"=r"(idle):[in1]"r"(2),[in2]"r"(1<<10));
+      asm volatile ("l.nios_rrr %[out1],r0,%[in2],0xC":[out1]"=r"(cycles):[in2]"r"(1<<8|7<<4));
+      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xC":[out1]"=r"(stall):[in1]"r"(1),[in2]"r"(1<<9));
+      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xC":[out1]"=r"(idle):[in1]"r"(2),[in2]"r"(1<<10));
       printf("cycles =  %d | stall = %d | idle = %d\n", cycles, stall, idle);
     #endif
 
     #ifdef _profileMOVEMENT_DETECTION
-      asm volatile ("l.nios_rrr r0,r0,%[in2],0xB"::[in2]"r"(7));
+      asm volatile ("l.nios_rrr r0,r0,%[in2],0xC"::[in2]"r"(7));
     #endif
 
     for (int pixel = 0; pixel < camParams.nrOfLinesPerImage*camParams.nrOfPixelsPerLine; pixel++) {
       if(sobelA[pixel] == sobelB[pixel]){
-        dataToVga[pixel] = (((uint16_t)sobelA[pixel]) << 16) | sobelA[pixel]; 
+        if(sobelA[pixel] == 0) dataToVga[pixel] = 0x0000;
+        else dataToVga[pixel] = 0xFFFF;
       }
       else{
         dataToVga[pixel] = 0x08F0;
@@ -152,16 +153,16 @@ int main () {
     }
 
     #ifdef _profileMOVEMENT_DETECTION
-      asm volatile ("l.nios_rrr %[out1],r0,%[in2],0xB":[out1]"=r"(cycles):[in2]"r"(1<<8|7<<4));
-      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xB":[out1]"=r"(stall):[in1]"r"(1),[in2]"r"(1<<9));
-      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xB":[out1]"=r"(idle):[in1]"r"(2),[in2]"r"(1<<10));
+      asm volatile ("l.nios_rrr %[out1],r0,%[in2],0xC":[out1]"=r"(cycles):[in2]"r"(1<<8|7<<4));
+      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xC":[out1]"=r"(stall):[in1]"r"(1),[in2]"r"(1<<9));
+      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xC":[out1]"=r"(idle):[in1]"r"(2),[in2]"r"(1<<10));
       printf("cycles =  %d | stall = %d | idle = %d\n", cycles, stall, idle);
     #endif
 
     #ifdef _profileITERATION
-      asm volatile ("l.nios_rrr %[out1],r0,%[in2],0xB":[out1]"=r"(cycles):[in2]"r"(1<<8|7<<4));
-      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xB":[out1]"=r"(stall):[in1]"r"(1),[in2]"r"(1<<9));
-      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xB":[out1]"=r"(idle):[in1]"r"(2),[in2]"r"(1<<10));
+      asm volatile ("l.nios_rrr %[out1],r0,%[in2],0xC":[out1]"=r"(cycles):[in2]"r"(1<<8|7<<4));
+      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xC":[out1]"=r"(stall):[in1]"r"(1),[in2]"r"(1<<9));
+      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xC":[out1]"=r"(idle):[in1]"r"(2),[in2]"r"(1<<10));
       printf("cycles =  %d | stall = %d | idle = %d\n", cycles, stall, idle);
     #endif
   }

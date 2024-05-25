@@ -693,7 +693,7 @@ sobelAccelerator #(.customId(8'hB)) sobelino (
 wire        s_dHashDone;
 wire[31:0]  s_dHashResult;
 
-dHash #(.customId(8'hC)) hashino (
+dHash #(.customId(8'hD)) hashino (
   .reset(s_cpuReset),
   .clock(s_systemClock),  
   .hsync(hsyncReg), 
@@ -703,7 +703,7 @@ dHash #(.customId(8'hC)) hashino (
   .ciValueA(s_cpu1CiDataA), 
   .ciValueB(s_cpu1CiDataB),
   .ciResult(s_dHashResult),
-  .done(s_dHashDone),
+  .ciDone(s_dHashDone),
   .camData(grayCam),
   .validCamera(validCamera)
 );
@@ -711,7 +711,7 @@ dHash #(.customId(8'hC)) hashino (
 wire        s_profileDone;
 wire[31:0]  s_profileResult;
 
-profileCi #(.customId(8'hD)) profiler
+profileCi #(.customId(8'hC)) profiler
             (.start(s_cpu1CiStart),
             .clock(s_systemClock),
             .reset(s_cpuReset),

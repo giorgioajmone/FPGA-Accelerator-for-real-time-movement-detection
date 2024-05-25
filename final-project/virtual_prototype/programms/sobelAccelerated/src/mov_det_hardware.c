@@ -6,7 +6,7 @@
 
 #define BUFFER_SIZE 640*480/32
 
-#define _profileITERATION
+//#define _profileITERATION
 //#define _profileMOVEMENT_DETECTION
 
 int main () {
@@ -23,7 +23,6 @@ int main () {
   volatile uint32_t result, cycles,stall,idle;
   volatile unsigned int *vga = (unsigned int *) 0X50000020;
   camParameters camParams;
-  int frameSize = ((camParams.nrOfLinesPerImage*camParams.nrOfPixelsPerLine) >> 5);
 
   vga_clear();
   
@@ -52,17 +51,19 @@ int main () {
   #ifdef _profileMOVEMENT_DETECTION
       printf("============================ PROFILING MOVEMENTDETECTION ============================\n");
   #endif
+
+  int frameSize = ((camParams.nrOfLinesPerImage*camParams.nrOfPixelsPerLine) >> 5);
  
   while(1) {
 
     #ifdef _profileITERATION
-      asm volatile ("l.nios_rrr r0,r0,%[in2],0xB"::[in2]"r"(7));
+      asm volatile ("l.nios_rrr r0,r0,%[in2],0xC"::[in2]"r"(7));
     #endif
 
     takeSobelNonBlocking((uint32_t) &sobelFuture[0]);
 
     #ifdef _profileMOVEMENT_DETECTION
-      asm volatile ("l.nios_rrr r0,r0,%[in2],0xB"::[in2]"r"(7));
+      asm volatile ("l.nios_rrr r0,r0,%[in2],0xC"::[in2]"r"(7));
     #endif
 
     for(int pixel = 0, pVGA = 0; pixel < frameSize; pixel++) {
@@ -78,11 +79,13 @@ int main () {
     }
 
     #ifdef _profileMOVEMENT_DETECTION
-      asm volatile ("l.nios_rrr %[out1],r0,%[in2],0xB":[out1]"=r"(cycles):[in2]"r"(1<<8|7<<4));
-      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xB":[out1]"=r"(stall):[in1]"r"(1),[in2]"r"(1<<9));
-      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xB":[out1]"=r"(idle):[in1]"r"(2),[in2]"r"(1<<10));
+      asm volatile ("l.nios_rrr %[out1],r0,%[in2],0xC":[out1]"=r"(cycles):[in2]"r"(1<<8|7<<4));
+      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xC":[out1]"=r"(stall):[in1]"r"(1),[in2]"r"(1<<9));
+      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xC":[out1]"=r"(idle):[in1]"r"(2),[in2]"r"(1<<10));
       printf("cycles =  %d | stall = %d | idle = %d\n", cycles, stall, idle);
     #endif
+
+    waitSobel();
 
     uint32_t *tmp;
     tmp = sobelFuture;
@@ -91,9 +94,9 @@ int main () {
     sobelPresent = tmp;
 
     #ifdef _profileITERATION
-      asm volatile ("l.nios_rrr %[out1],r0,%[in2],0xB":[out1]"=r"(cycles):[in2]"r"(1<<8|7<<4));
-      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xB":[out1]"=r"(stall):[in1]"r"(1),[in2]"r"(1<<9));
-      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xB":[out1]"=r"(idle):[in1]"r"(2),[in2]"r"(1<<10));
+      asm volatile ("l.nios_rrr %[out1],r0,%[in2],0xC":[out1]"=r"(cycles):[in2]"r"(1<<8|7<<4));
+      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xC":[out1]"=r"(stall):[in1]"r"(1),[in2]"r"(1<<9));
+      asm volatile ("l.nios_rrr %[out1],%[in1],%[in2],0xC":[out1]"=r"(idle):[in1]"r"(2),[in2]"r"(1<<10));
       printf("cycles =  %d | stall = %d | idle = %d\n", cycles, stall, idle);
     #endif
 
