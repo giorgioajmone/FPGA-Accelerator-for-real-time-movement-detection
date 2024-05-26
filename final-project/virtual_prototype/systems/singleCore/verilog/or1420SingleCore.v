@@ -696,6 +696,7 @@ wire[31:0]  s_dHashResult;
 dHash #(.customId(8'hD)) hashino (
   .reset(s_cpuReset),
   .clock(s_systemClock),  
+  .camClock(camPclk),
   .hsync(hsyncReg), 
   .vsync(vsyncReg), 
   .ciN(s_cpu1CiN), 
