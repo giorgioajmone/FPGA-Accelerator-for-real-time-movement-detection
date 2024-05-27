@@ -321,13 +321,14 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
         s2pReg <= (reset == 1'b1 || hsync == 1'b1 || vsync == 1'b1) ? 32'b0 : (validCamera == 1'b1) ? {s2pReg[30:0], finalOutput} : s2pReg;
     end
 
-    dualPortRam2k lineBuffer (.address1({3'b000, writeBufferReg[10:5]}),
-                                .address2(memoryAddressReg),
-                                .clock1(camClock),
-                                .clock2(clock),
-                                .writeEnable(bufferEnable),
-                                .dataIn1(s2pReg),
-                                .dataOut2(busOutput));
+    dualPortRam2k #(.nrOfEntries(512)) lineBuffer 
+                        (.address1({3'b000, writeBufferReg[10:5]}),
+                        .address2(memoryAddressReg),
+                        .clock1(camClock),
+                        .clock2(clock),
+                        .writeEnable(bufferEnable),
+                        .dataIn1(s2pReg),
+                        .dataOut2(busOutput));
 
     //clock2
 

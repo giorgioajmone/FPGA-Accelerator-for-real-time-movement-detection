@@ -1,12 +1,13 @@
-module dualPortRam2k ( input wire [8:0]  address1,
-                                         address2,
+module dualPortRam2k #(parameter nrOfEntries = 512)
+                       ( input wire [$clog2(nrOfEntries)-1 :0]  address1,
+                                                                address2,
                        input wire        clock1,
                                          clock2,
                                          writeEnable,
                        input wire [31:0] dataIn1,
                        output reg [31:0] dataOut2);
 
-  reg [31:0] memory [511:0];
+  reg [31:0] memory [nrOfEntries-1:0];
   
   always @(posedge clock1)
   begin

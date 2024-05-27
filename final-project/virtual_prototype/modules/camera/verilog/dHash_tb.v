@@ -12,11 +12,11 @@ reg[31:0] ciValueA_tb, ciValueB_tb;
 reg vsyncClk, hsyncClk, validClk;
 reg[7:0] grayClk;
 
-integer i, frame, line;
+integer i, frame, line, k;
 
 initial begin
     $dumpfile("dHash.vcd");
-    $dumpvars(2, dHash_tb);
+    $dumpvars(0, dHash_tb);
 end
 
 // insantiate the dut
@@ -130,9 +130,18 @@ initial begin
 
     end
 
-    #200;
+    #100;
 
     // 8============================================================= FRAME ======================================D--
+    for(k = 0; k<4; k = k+1) begin
+        ciN_tb = 8'h27;
+        ciValueA_tb = 32'd1 * k;
+        #50;
+        ciN_tb = 8'h0;
+        #20;
+    end 
+
+    #200;
 
     end
 
