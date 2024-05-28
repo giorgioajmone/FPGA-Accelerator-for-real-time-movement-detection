@@ -1,0 +1,9 @@
+INFO: Performing automated altera bitfile generation...
+make[1]: Entering directory '/home/acardina/Desktop/myfiles/My Documents/Visual Studio 2015/theo/embedded-system-design/lab-6/virtual_prototype/systems/singleCore/sandbox'
+===========================================================
+  Prepare project or1420SingleCore 
+===========================================================
+make[1]: Leaving directory '/home/acardina/Desktop/myfiles/My Documents/Visual Studio 2015/theo/embedded-system-design/lab-6/virtual_prototype/systems/singleCore/sandbox'
+****************************************************************************
+INFO: copy the files sandbox/or1420SingleCore.cfg and sandbox/or1420SingleCore.rbf to your local machine. Execute "openocd -f or1420SingleCore.cfg" to download the bit-file to your board
+****************************************************************************
