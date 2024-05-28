@@ -85,6 +85,15 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
 
     wire[7:0] nextAddress [0:8];
 
+
+    generate
+      for(i = 0; i < 3; i = i + 1) begin : generateAddr1
+        for(j = 0; j < 3; j = j + 1) begin : generateAddr2
+          assign nextAddress[i * 3 + j] = addressReg[j] + pixelCount[(j+2)%3];
+        end
+      end          
+    endgenerate
+    /*
     assign nextAddress[0] = addressReg[0] + (pixelCount[2]);
     assign nextAddress[1] = addressReg[1] + (pixelCount[0]);
     assign nextAddress[2] = addressReg[2] + (pixelCount[1]);
@@ -94,7 +103,7 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     assign nextAddress[6] = addressReg[6] + (pixelCount[2]);
     assign nextAddress[7] = addressReg[7] + (pixelCount[0]);
     assign nextAddress[8] = addressReg[8] + (pixelCount[1]);
-
+*/
     always @(posedge camClock) begin
         addressReg[0] <= (reset == 1'b1 || hsync == 1'b1 || vsync == 1'b1) ? 8'd0 : (validCamera == 1'b1) ? nextAddress[0] : addressReg[0];
         addressReg[1] <= (reset == 1'b1 || hsync == 1'b1 || vsync == 1'b1) ? 8'd255 : (validCamera == 1'b1) ? nextAddress[1] : addressReg[1];
@@ -109,17 +118,6 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
 
     wire[15:0] filteredDataX[0:8];
 
-    assign writeDataX[0] = readDataX[0] & (~{16{rowCount[0] & pixelCount[0]}}) + filteredDataX[0];
-    assign writeDataX[1] = readDataX[1] & (~{16{rowCount[0] & pixelCount[1]}}) + filteredDataX[1];
-    assign writeDataX[2] = readDataX[2] & (~{16{rowCount[0] & pixelCount[2]}}) + filteredDataX[2];
-    assign writeDataX[3] = readDataX[3] & (~{16{rowCount[1] & pixelCount[0]}}) + filteredDataX[3];
-    assign writeDataX[4] = readDataX[4] & (~{16{rowCount[1] & pixelCount[1]}}) + filteredDataX[4];
-    assign writeDataX[5] = readDataX[5] & (~{16{rowCount[1] & pixelCount[2]}}) + filteredDataX[5];
-    assign writeDataX[6] = readDataX[6] & (~{16{rowCount[2] & pixelCount[0]}}) + filteredDataX[6];
-    assign writeDataX[7] = readDataX[7] & (~{16{rowCount[2] & pixelCount[1]}}) + filteredDataX[7];
-    assign writeDataX[8] = readDataX[8] & (~{16{rowCount[2] & pixelCount[2]}}) + filteredDataX[8];
-
-    /*
     assign writeDataX[0] = (rowCount[0] & pixelCount[0]) ? (filteredDataX[0]) : (readDataX[0] + filteredDataX[0]);
     assign writeDataX[1] = (rowCount[0] & pixelCount[1]) ? (filteredDataX[1]) : (readDataX[1] + filteredDataX[1]);
     assign writeDataX[2] = (rowCount[0] & pixelCount[2]) ? (filteredDataX[2]) : (readDataX[2] + filteredDataX[2]);
@@ -129,7 +127,7 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     assign writeDataX[6] = (rowCount[2] & pixelCount[0]) ? (filteredDataX[6]) : (readDataX[6] + filteredDataX[6]);
     assign writeDataX[7] = (rowCount[2] & pixelCount[1]) ? (filteredDataX[7]) : (readDataX[7] + filteredDataX[7]);
     assign writeDataX[8] = (rowCount[2] & pixelCount[2]) ? (filteredDataX[8]) : (readDataX[8] + filteredDataX[8]);
-*/
+
 
     wire[15:0] resultx1  = camData;
     wire[15:0] resultx2  = camData << 1;
@@ -137,19 +135,7 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     wire[15:0] resultx_2 = ~(camData << 1) + 1;   
 
     wire[15:0] filteredDataY[0:8];
-
-    assign writeDataY[0] = readDataY[0] & (~{16{rowCount[0] & pixelCount[0]}}) + filteredDataY[0];
-    assign writeDataY[1] = readDataY[1] & (~{16{rowCount[0] & pixelCount[1]}}) + filteredDataY[1];
-    assign writeDataY[2] = readDataY[2] & (~{16{rowCount[0] & pixelCount[2]}}) + filteredDataY[2];
-    assign writeDataY[3] = readDataY[3] & (~{16{rowCount[1] & pixelCount[0]}}) + filteredDataY[3];
-    assign writeDataY[4] = readDataY[4] & (~{16{rowCount[1] & pixelCount[1]}}) + filteredDataY[4];
-    assign writeDataY[5] = readDataY[5] & (~{16{rowCount[1] & pixelCount[2]}}) + filteredDataY[5];
-    assign writeDataY[6] = readDataY[6] & (~{16{rowCount[2] & pixelCount[0]}}) + filteredDataY[6];
-    assign writeDataY[7] = readDataY[7] & (~{16{rowCount[2] & pixelCount[1]}}) + filteredDataY[7];
-    assign writeDataY[8] = readDataY[8] & (~{16{rowCount[2] & pixelCount[2]}}) + filteredDataY[8];
-
-
-    /*
+ 
     assign writeDataY[0] = (rowCount[0] & pixelCount[0]) ? (filteredDataY[0]) : (readDataY[0] + filteredDataY[0]);
     assign writeDataY[1] = (rowCount[0] & pixelCount[1]) ? (filteredDataY[1]) : (readDataY[1] + filteredDataY[1]);
     assign writeDataY[2] = (rowCount[0] & pixelCount[2]) ? (filteredDataY[2]) : (readDataY[2] + filteredDataY[2]);
@@ -159,7 +145,7 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     assign writeDataY[6] = (rowCount[2] & pixelCount[0]) ? (filteredDataY[6]) : (readDataY[6] + filteredDataY[6]);
     assign writeDataY[7] = (rowCount[2] & pixelCount[1]) ? (filteredDataY[7]) : (readDataY[7] + filteredDataY[7]);
     assign writeDataY[8] = (rowCount[2] & pixelCount[2]) ? (filteredDataY[8]) : (readDataY[8] + filteredDataY[8]);
-    */
+    
 
     //mega wire
     reg[15:0] outputY, outputX;
@@ -192,24 +178,29 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     wire finalOutput = ((absX + absY) > thresholdReg) ? 1'b1 : 1'b0;
 
     // Sobel X
+    
+    generate
+      for(i = 0; i < 3; i = i + 1) begin : Xrow
+        for(j = 0; j < 3; j = j + 1) begin : Xpixel
+          assign filteredDataX[i * 3 + j] = (pixelCount[j] & (rowCount[i] | rowCount[(i+2)%3])) ? resultx_1 : 
+                                              (pixelCount[(j+2)%3] & (rowCount[i] | rowCount[(i+2)%3])) ? resultx1 : 
+                                                (rowCount[(i+1)%3] & pixelCount[j]) ? resultx_2 :
+                                                  (rowCount[(i+1)%3] & pixelCount[(j+2)%3]) ? resultx2 : 16'b0;
+        end
+      end          
+    endgenerate
 
-    for(Integer i = 0; i < 3; i = i + 1){
-      for(Integer j = 0; i < 3; i = i + 1){
-        assign filteredDataX[i * 3 + j] = (pixelCount[j] & (rowCount[i] | rowCount[(i+2)%3])) ? resultx_1 : 
-                                            (pixelCount[(j+2)%3] & (rowCount[i] | rowCount[(i+2)%3])) ? resultx1 : 
-                                              (rowCount[(i+1)%3] & pixelCount[j]) ? resultx_2 :
-                                                (rowCount[(i+1)%3] & pixelCount[(j+2)%3]) ? resultx2 : 16'b0;
-                  }
-    }
-
-    for(Integer i = 0; i < 3; i = i + 1){
-      for(Integer j = 0; i < 3; i = i + 1){
-        assign filteredDataY[i * 3 + j] =  (rowCount[i] & (pixelCount[j] | pixelCount[(j+2)%3])) ? resultx1 :
-                                            (rowCount[(i+2)%3] & (pixelCount[j] | pixelCount[(j+2)%3])) ? resultx_1 : 
-                                              (rowCount[(i+2)%3] & pixelCount[(j+1)%3]) ? resultx_2 : 
-                                                (rowCount[i] & pixelCount[(j+1)%3]) ? resultx2 : 16'b0;
-                  }
-    }
+    generate
+      for(i = 0; i < 3; i = i + 1) begin : Yrow
+        for(j = 0; j < 3; j = j + 1) begin : Ypixel
+          assign filteredDataY[i * 3 + j] =  (rowCount[i] & (pixelCount[j] | pixelCount[(j+2)%3])) ? resultx1 :
+                                              (rowCount[(i+2)%3] & (pixelCount[j] | pixelCount[(j+2)%3])) ? resultx_1 : 
+                                                (rowCount[(i+2)%3] & pixelCount[(j+1)%3]) ? resultx_2 : 
+                                                  (rowCount[i] & pixelCount[(j+1)%3]) ? resultx2 : 16'b0;
+        end
+      end
+    endgenerate             
+    
 
 
   /*
@@ -304,8 +295,7 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
                                 (rowCount[1] & (pixelCount[2] | pixelCount[1])) ? resultx_1 : 
                                   (rowCount[1] & pixelCount[0]) ? resultx_2 : 
                                     (rowCount[2] & pixelCount[0]) ? resultx2 : 16'b0;              
-
-    */            
+  */        
 
     localparam S0  = 3'b001;
     localparam S1  = 3'b010;
