@@ -50,7 +50,7 @@ module dHash #(parameter [7:0] customId = 8'd0) (
 
     assign bufferEnable = (comparisonCounterReg[4:0] == 5'b11111 && pixelCounterReg == 6'd0 && rowCounterReg == 6'd0 && validCamera == 1'b1) ? 1'b1 : 1'b0;
 
-    dualPortRam128bit signatureBuffer (.address1(comparisonCounterReg[6:5]),
+    dualPortRam #(.nrOfEntries(4), .entryLength(32)) signatureBuffer (.address1(comparisonCounterReg[6:5]),
                                         .address2(ciValueA[1:0]),
                                         .clock1(camClock),
                                         .clock2(clock),

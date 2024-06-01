@@ -333,7 +333,7 @@ module or1420SingleCore ( input wire         clock12MHz,
              (.cpuClock(s_systemClock),
               .cpuReset(s_cpuReset),
               .irq(1'b0),
-              .cpuIsStalled(),
+              .cpuIsStalled(s_stall),
               .iCacheReqBus(s_cpu1IcacheRequestBus),
               .dCacheReqBus(s_cpu1DcacheRequestBus),
               .iCacheBusGrant(s_cpu1IcacheBusAccessGranted),
@@ -715,6 +715,7 @@ dHash #(.customId(8'hD)) hashino (
 
 wire        s_profileDone;
 wire[31:0]  s_profileResult;
+wire s_stall;
 
 profileCi #(.customId(8'hC)) profiler
             (.start(s_cpu1CiStart),

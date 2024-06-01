@@ -53,7 +53,7 @@
 ../../../modules/sobel/verilog/sobelAccelerator.v
 ../../../modules/sobel/verilog/sobelBuffer.v
 ../../../modules/sobel/verilog/dHash.v
-../../../modules/sobel/verilog/ram128bdp.v
+../../../modules/sobel/verilog/dualPortRam.v
 ../../../modules/grayscaleCi/verilog/rgb565Grayscale.v
 ../../../modules/grayscaleCi/verilog/rgb565ISE.v
 ../../../modules/profileCi/verilog/profileCi.v

@@ -66,7 +66,7 @@ int main2 () {
     #ifdef _profileMOVEMENT_DETECTION
       asm volatile ("l.nios_rrr r0,r0,%[in2],0xC"::[in2]"r"(7));
     #endif
-    /*
+    
     for(int pixel = 0, pVGA = 0; pixel < frameSize; pixel++) {
       uint32_t pixelPresent = sobelPresent[pixel];
       uint32_t pixelPast = sobelPast[pixel];
@@ -78,40 +78,6 @@ int main2 () {
         else dataToVga[pVGA++] = 0x0000;
       }
     }
-
-    
-    for(int pixel = 0, pVGA = 0; pixel < frameSize; pixel++) {
-        uint32_t pixelPresent = sobelPresent[pixel];
-        uint32_t pixelPast = sobelPast[pixel];
-
-        // Process 32 bits in one go
-        for(int j = 0; j < 32; j += 4) {
-            uint32_t mask = 0xF << (28 - j);
-            uint32_t presentBits = (pixelPresent & mask) >> (28 - j);
-            uint32_t pastBits = (pixelPast & mask) >> (28 - j);
-
-            for (int k = 0; k < 4; ++k) {
-                uint16_t presentBit = (presentBits >> (3 - k)) & 1;
-                uint16_t pastBit = (pastBits >> (3 - k)) & 1;
-                
-                uint16_t index = (presentBit << 1) | pastBit;
-                dataToVga[pVGA++] = index; //lookup[index];
-            }
-        }
-      }*/
-
-      for(int pixel = 0, pVGA = 0; pixel < frameSize; pixel++) {
-        uint32_t pixelPresent = sobelPresent[pixel];
-        uint32_t pixelPast = sobelPast[pixel];
-
-        for(int j = 0; j < 32; j++) {
-            uint8_t presentBit = (pixelPresent >> (31 - j)) & 1;
-            uint8_t pastBit = (pixelPast >> (31 - j)) & 1;
-            dataToVga[pVGA++] = (presentBit << 1) | pastBit;
-        }
-    }
-
-    
 
     #ifdef _profileMOVEMENT_DETECTION
       asm volatile ("l.nios_rrr %[out1],r0,%[in2],0xC":[out1]"=r"(cycles):[in2]"r"(1<<8|7<<4));

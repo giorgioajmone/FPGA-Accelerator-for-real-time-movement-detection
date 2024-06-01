@@ -70,7 +70,7 @@ int main () {
   vga[3] = swap_u32((uint32_t) &dataToVga[0]);
 
   initializeBitTable();
-  asm volatile ("l.nios_rrr r0,%[in1],%[in2],0xB"::[in1]"r"(9 << 9), [in2]"r"(64));
+  asm volatile ("l.nios_rrr r0,%[in1],%[in2],0xB"::[in1]"r"(9 << 9), [in2]"r"(200));
 
 
   takeSobelBlocking((uint32_t) &sobelPast[0]);
