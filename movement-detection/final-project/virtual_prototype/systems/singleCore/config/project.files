@@ -51,7 +51,6 @@
 ../../../modules/support/verilog/sram_1024x16_dp.v
 ../../../modules/support/verilog/sram2048x8Dp.v
 ../../../modules/sobel/verilog/sobelAccelerator.v
-../../../modules/sobel/verilog/sobelBuffer.v
 ../../../modules/sobel/verilog/dHash.v
 ../../../modules/sobel/verilog/dualPortRam.v
 ../../../modules/grayscaleCi/verilog/rgb565Grayscale.v

@@ -6,7 +6,7 @@
 //#define _profileITERATION
 //#define _profileIMAGE
 //define _profileGRAYSCALE
-#define _profileSOBEL
+//#define _profileSOBEL
 //#define _profileMOVEMENT_DETECTION
 
 void edgeDetection( volatile uint8_t *grayscale, volatile uint8_t *sobelResult, int32_t width, int32_t height, int32_t threshold ) {

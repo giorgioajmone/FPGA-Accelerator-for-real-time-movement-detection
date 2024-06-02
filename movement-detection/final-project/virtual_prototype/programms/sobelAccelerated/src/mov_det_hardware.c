@@ -7,7 +7,7 @@
 #define BUFFER_SIZE 640*480/32
 
 //#define _profileITERATION
-#define _profileMOVEMENT_DETECTION
+//#define _profileMOVEMENT_DETECTION
 
 int main2 () {
 

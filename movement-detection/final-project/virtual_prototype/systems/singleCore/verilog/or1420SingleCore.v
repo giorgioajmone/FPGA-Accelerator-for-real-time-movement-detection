@@ -608,53 +608,53 @@ module or1420SingleCore ( input wire         clock12MHz,
    * Here we define the bus arbiter
    *
    */
- wire [31:0] s_busRequests, s_busGrants;
- wire        s_arbBusError, s_arbEndTransaction;
- 
- assign s_busRequests[31] = s_cpu1DcacheRequestBus;
- assign s_busRequests[30] = s_cpu1IcacheRequestBus;
- assign s_busRequests[29] = s_hdmiRequestBus;
- assign s_busRequests[28] =  s_camReqBus;
- assign s_busRequests[27] =  s_sobelRequest;
- assign s_busRequests[26:0] = 27'd0;
- 
- assign s_cpu1DcacheBusAccessGranted = s_busGrants[31];
- assign s_cpu1IcacheBusAccessGranted = s_busGrants[30];
- assign s_hdmiBusgranted             = s_busGrants[29];
- assign s_camAckBus                  = s_busGrants[28];
- assign s_sobelGrant                 = s_busGrants[27];
+  wire [31:0] s_busRequests, s_busGrants;
+  wire        s_arbBusError, s_arbEndTransaction;
+  
+  assign s_busRequests[31] = s_cpu1DcacheRequestBus;
+  assign s_busRequests[30] = s_cpu1IcacheRequestBus;
+  assign s_busRequests[29] = s_hdmiRequestBus;
+  assign s_busRequests[28] =  s_camReqBus;
+  assign s_busRequests[27] =  s_sobelRequest;
+  assign s_busRequests[26:0] = 27'd0;
+  
+  assign s_cpu1DcacheBusAccessGranted = s_busGrants[31];
+  assign s_cpu1IcacheBusAccessGranted = s_busGrants[30];
+  assign s_hdmiBusgranted             = s_busGrants[29];
+  assign s_camAckBus                  = s_busGrants[28];
+  assign s_sobelGrant                 = s_busGrants[27];
 
- busArbiter arbiter ( .clock(s_systemClock),
-                      .reset(s_reset),
-                      .busRequests(s_busRequests),
-                      .busGrants(s_busGrants),
-                      .busErrorOut(s_arbBusError),
-                      .endTransactionOut(s_arbEndTransaction),
-                      .busIdle(s_busIdle),
-                      .snoopableBurst(s_snoopableBurst),
-                      .beginTransactionIn(s_beginTransaction),
-                      .endTransactionIn(s_endTransaction),
-                      .dataValidIn(s_dataValid),
-                      .addressDataIn(s_addressData[31:30]),
-                      .burstSizeIn(s_burstSize));
+  busArbiter arbiter ( .clock(s_systemClock),
+                        .reset(s_reset),
+                        .busRequests(s_busRequests),
+                        .busGrants(s_busGrants),
+                        .busErrorOut(s_arbBusError),
+                        .endTransactionOut(s_arbEndTransaction),
+                        .busIdle(s_busIdle),
+                        .snoopableBurst(s_snoopableBurst),
+                        .beginTransactionIn(s_beginTransaction),
+                        .endTransactionIn(s_endTransaction),
+                        .dataValidIn(s_dataValid),
+                        .addressDataIn(s_addressData[31:30]),
+                        .burstSizeIn(s_burstSize));
  
   /*
    *
    * Here we define the bus architecture
    *
    */
- assign s_busError         = s_arbBusError | s_biosBusError | s_uartBusError | s_sdramBusError | s_flashBusError;
- assign s_beginTransaction = s_cpu1BeginTransaction | s_hdmiBeginTransaction | s_camBeginTransaction | s_sobelBeginTransaction;
- assign s_endTransaction   = s_cpu1EndTransaction | s_arbEndTransaction | s_biosEndTransaction | s_uartEndTransaction |
-                             s_sdramEndTransaction | s_hdmiEndTransaction | s_flashEndTransaction | s_camEndTransaction | s_sobelEndTransaction;
- assign s_addressData      = s_cpu1AddressData | s_biosAddressData | s_uartAddressData | s_sdramAddressData | s_hdmiAddressData |
-                             s_flashAddressData | s_camAddressData | s_sobelAddressData;
- assign s_byteEnables      = s_cpu1byteEnables | s_hdmiByteEnables | s_camByteEnables | s_sobelByteEnables;
- assign s_readNotWrite     = s_cpu1ReadNotWrite | s_hdmiReadNotWrite | s_sobelReadNotWrite;
- assign s_dataValid        = s_cpu1DataValid | s_biosDataValid | s_uartDataValid | s_sdramDataValid | s_hdmiDataValid | 
-                             s_flashDataValid | s_camDataValid | s_sobelDataValid;
- assign s_busy             = s_sdramBusy;
- assign s_burstSize        = s_cpu1BurstSize | s_hdmiBurstSize | s_camBurstSize | s_sobelBurstSize;
+  assign s_busError         = s_arbBusError | s_biosBusError | s_uartBusError | s_sdramBusError | s_flashBusError;
+  assign s_beginTransaction = s_cpu1BeginTransaction | s_hdmiBeginTransaction | s_camBeginTransaction | s_sobelBeginTransaction;
+  assign s_endTransaction   = s_cpu1EndTransaction | s_arbEndTransaction | s_biosEndTransaction | s_uartEndTransaction |
+                              s_sdramEndTransaction | s_hdmiEndTransaction | s_flashEndTransaction | s_camEndTransaction | s_sobelEndTransaction;
+  assign s_addressData      = s_cpu1AddressData | s_biosAddressData | s_uartAddressData | s_sdramAddressData | s_hdmiAddressData |
+                              s_flashAddressData | s_camAddressData | s_sobelAddressData;
+  assign s_byteEnables      = s_cpu1byteEnables | s_hdmiByteEnables | s_camByteEnables | s_sobelByteEnables;
+  assign s_readNotWrite     = s_cpu1ReadNotWrite | s_hdmiReadNotWrite | s_sobelReadNotWrite;
+  assign s_dataValid        = s_cpu1DataValid | s_biosDataValid | s_uartDataValid | s_sdramDataValid | s_hdmiDataValid | 
+                              s_flashDataValid | s_camDataValid | s_sobelDataValid;
+  assign s_busy             = s_sdramBusy;
+  assign s_burstSize        = s_cpu1BurstSize | s_hdmiBurstSize | s_camBurstSize | s_sobelBurstSize;
 
 
   wire        s_sobelDone;
@@ -666,68 +666,68 @@ module or1420SingleCore ( input wire         clock12MHz,
 
   wire takeSignature;
 
-sobelAccelerator #(.customId(8'hB)) sobelino (
-    .clock(s_systemClock), 
-    .camClock(camPclk), 
-    .reset(s_cpuReset), 
+  sobelAccelerator #(.customId(8'hB)) sobelino (
+      .clock(s_systemClock), 
+      .camClock(camPclk), 
+      .reset(s_cpuReset), 
+      .hsync(hsyncReg), 
+      .vsync(vsyncReg), 
+      .ciStart(s_cpu1CiStart), 
+      .validCamera(validCamera),
+      .ciN(s_cpu1CiN), 
+      .camData(grayCam),
+      .ciValueA(s_cpu1CiDataA), 
+      .ciValueB(s_cpu1CiDataB),
+      .ciResult(s_sobelResult),
+      .ciDone(s_sobelDone),
+      .requestBus(s_sobelRequest),
+      .busGrant(s_sobelGrant),
+      .beginTransactionOut(s_sobelBeginTransaction),
+      .addressDataOut(s_sobelAddressData),
+      .endTransactionOut(s_sobelEndTransaction),
+      .byteEnablesOut(s_sobelByteEnables),
+      .dataValidOut(s_sobelDataValid),
+      .burstSizeOut(s_sobelBurstSize),
+      .busyIn(s_busy),
+      .busErrorIn(s_busError),
+      .takeSignature(takeSignature)
+  );
+
+  wire        s_dHashDone;
+  wire[31:0]  s_dHashResult;
+
+  dHash #(.customId(8'hD)) hashino (
+    .reset(s_cpuReset),
+    .clock(s_systemClock),  
+    .camClock(camPclk),
     .hsync(hsyncReg), 
     .vsync(vsyncReg), 
-    .ciStart(s_cpu1CiStart), 
-    .validCamera(validCamera),
     .ciN(s_cpu1CiN), 
-    .camData(grayCam),
+    .ciStart(s_cpu1CiStart),
     .ciValueA(s_cpu1CiDataA), 
     .ciValueB(s_cpu1CiDataB),
-    .ciResult(s_sobelResult),
-    .ciDone(s_sobelDone),
-    .requestBus(s_sobelRequest),
-    .busGrant(s_sobelGrant),
-    .beginTransactionOut(s_sobelBeginTransaction),
-    .addressDataOut(s_sobelAddressData),
-    .endTransactionOut(s_sobelEndTransaction),
-    .byteEnablesOut(s_sobelByteEnables),
-    .dataValidOut(s_sobelDataValid),
-    .burstSizeOut(s_sobelBurstSize),
-    .busyIn(s_busy),
-    .busErrorIn(s_busError),
+    .ciResult(s_dHashResult),
+    .ciDone(s_dHashDone),
+    .camData(grayCam),
+    .validCamera(validCamera),
     .takeSignature(takeSignature)
-);
+  );
 
-wire        s_dHashDone;
-wire[31:0]  s_dHashResult;
+  wire        s_profileDone;
+  wire[31:0]  s_profileResult;
+  wire s_stall;
 
-dHash #(.customId(8'hD)) hashino (
-  .reset(s_cpuReset),
-  .clock(s_systemClock),  
-  .camClock(camPclk),
-  .hsync(hsyncReg), 
-  .vsync(vsyncReg), 
-  .ciN(s_cpu1CiN), 
-  .ciStart(s_cpu1CiStart),
-  .ciValueA(s_cpu1CiDataA), 
-  .ciValueB(s_cpu1CiDataB),
-  .ciResult(s_dHashResult),
-  .ciDone(s_dHashDone),
-  .camData(grayCam),
-  .validCamera(validCamera),
-  .takeSignature(takeSignature)
-);
-
-wire        s_profileDone;
-wire[31:0]  s_profileResult;
-wire s_stall;
-
-profileCi #(.customId(8'hC)) profiler
-            (.start(s_cpu1CiStart),
-            .clock(s_systemClock),
-            .reset(s_cpuReset),
-            .stall(s_stall),
-            .busIdle(s_busIdle),
-            .valueA(s_cpu1CiDataA),
-            .valueB(s_cpu1CiDataB),
-            .ciN(s_cpu1CiN),
-            .done(s_profileDone),
-            .result(s_profileResult) 
-);
+  profileCi #(.customId(8'hC)) profiler
+              (.start(s_cpu1CiStart),
+              .clock(s_systemClock),
+              .reset(s_cpuReset),
+              .stall(s_stall),
+              .busIdle(s_busIdle),
+              .valueA(s_cpu1CiDataA),
+              .valueB(s_cpu1CiDataB),
+              .ciN(s_cpu1CiN),
+              .done(s_profileDone),
+              .result(s_profileResult) 
+  );
  
 endmodule
