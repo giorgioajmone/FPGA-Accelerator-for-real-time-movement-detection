@@ -103,7 +103,7 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     generate
       for(i = 0; i < 3; i = i + 1) begin : generate_address1
         for(j = 0; j < 3; j = j + 1) begin : generate_address2
-          assign nextAddress[i * 3 + j] = addressReg[i * 3 + j] + pixelCount[(j + 2) % 3];
+          assign nextAddress[i * 3 + j] = addressReg[i * 3 + j] + columnCount[(j + 2) % 3];
         end
       end          
     endgenerate
@@ -141,21 +141,21 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     generate
       for(i = 0; i < 3; i = i + 1) begin : generate_value1
         for(j = 0; j < 3; j = j + 1) begin : generate_value2
-          assign writeDataX[i * 3 + j] = (rowCount[i] & pixelCount[j]) ? (filteredDataX[i * 3 + j]) : 
+          assign writeDataX[i * 3 + j] = (rowCount[i] & columnCount[j]) ? (filteredDataX[i * 3 + j]) : 
                                             (readDataX[i * 3 + j] + filteredDataX[i * 3 + j]);
           
-          assign writeDataY[i * 3 + j] = (rowCount[i] & pixelCount[j]) ? (filteredDataY[i * 3 + j]) : 
+          assign writeDataY[i * 3 + j] = (rowCount[i] & columnCount[j]) ? (filteredDataY[i * 3 + j]) : 
                                             (readDataY[i * 3 + j] + filteredDataY[i * 3 + j]);
           
-          assign filteredDataX[i * 3 + j] = (pixelCount[j] & (rowCount[i] | rowCount[(i + 2) % 3])) ? partialC : 
-                                              (pixelCount[(j + 2) % 3] & (rowCount[i] | rowCount[(i + 2) % 3])) ? partialA : 
-                                                (rowCount[(i + 1) % 3] & pixelCount[j]) ? partialD :
-                                                  (rowCount[(i + 1) % 3] & pixelCount[(j + 2) % 3]) ? partialB : 16'b0;
+          assign filteredDataX[i * 3 + j] = (columnCount[j] & (rowCount[i] | rowCount[(i + 2) % 3])) ? partialC : 
+                                              (columnCount[(j + 2) % 3] & (rowCount[i] | rowCount[(i + 2) % 3])) ? partialA : 
+                                                (rowCount[(i + 1) % 3] & columnCount[j]) ? partialD :
+                                                  (rowCount[(i + 1) % 3] & columnCount[(j + 2) % 3]) ? partialB : 16'b0;
                                           
-          assign filteredDataY[i * 3 + j] =  (rowCount[i] & (pixelCount[j] | pixelCount[(j + 2) % 3])) ? partialA :
-                                              (rowCount[(i + 2) % 3] & (pixelCount[j] | pixelCount[(j + 2) % 3])) ? partialC : 
-                                                (rowCount[(i + 2) % 3] & pixelCount[(j + 1) % 3]) ? partialD : 
-                                                  (rowCount[i] & pixelCount[(j + 1) % 3]) ? partialB : 16'b0;
+          assign filteredDataY[i * 3 + j] =  (rowCount[i] & (columnCount[j] | columnCount[(j + 2) % 3])) ? partialA :
+                                              (rowCount[(i + 2) % 3] & (columnCount[j] | columnCount[(j + 2) % 3])) ? partialC : 
+                                                (rowCount[(i + 2) % 3] & columnCount[(j + 1) % 3]) ? partialD : 
+                                                  (rowCount[i] & columnCount[(j + 1) % 3]) ? partialB : 16'b0;
         end
       end          
     endgenerate
@@ -163,25 +163,25 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     reg[15:0] outputY, outputX;
 
     always @(negedge camClock) begin
-      outputY   <= writeDataY[0] & {16{rowCount[2] & pixelCount[2]}} |
-                      writeDataY[1] & {16{rowCount[2] & pixelCount[0]}} |
-                      writeDataY[2] & {16{rowCount[2] & pixelCount[1]}} |
-                      writeDataY[3] & {16{rowCount[0] & pixelCount[2]}} |
-                      writeDataY[4] & {16{rowCount[0] & pixelCount[0]}} |
-                      writeDataY[5] & {16{rowCount[0] & pixelCount[1]}} |
-                      writeDataY[6] & {16{rowCount[1] & pixelCount[2]}} |
-                      writeDataY[7] & {16{rowCount[1] & pixelCount[0]}} |
-                      writeDataY[8] & {16{rowCount[1] & pixelCount[1]}}; 
+      outputY   <= writeDataY[0] & {16{rowCount[2] & columnCount[2]}} |
+                      writeDataY[1] & {16{rowCount[2] & columnCount[0]}} |
+                      writeDataY[2] & {16{rowCount[2] & columnCount[1]}} |
+                      writeDataY[3] & {16{rowCount[0] & columnCount[2]}} |
+                      writeDataY[4] & {16{rowCount[0] & columnCount[0]}} |
+                      writeDataY[5] & {16{rowCount[0] & columnCount[1]}} |
+                      writeDataY[6] & {16{rowCount[1] & columnCount[2]}} |
+                      writeDataY[7] & {16{rowCount[1] & columnCount[0]}} |
+                      writeDataY[8] & {16{rowCount[1] & columnCount[1]}}; 
           
-      outputX   <= writeDataX[0] & {16{rowCount[2] & pixelCount[2]}} |
-                      writeDataX[1] & {16{rowCount[2] & pixelCount[0]}} |
-                      writeDataX[2] & {16{rowCount[2] & pixelCount[1]}} |
-                      writeDataX[3] & {16{rowCount[0] & pixelCount[2]}} |
-                      writeDataX[4] & {16{rowCount[0] & pixelCount[0]}} |
-                      writeDataX[5] & {16{rowCount[0] & pixelCount[1]}} |
-                      writeDataX[6] & {16{rowCount[1] & pixelCount[2]}} |
-                      writeDataX[7] & {16{rowCount[1] & pixelCount[0]}} |
-                      writeDataX[8] & {16{rowCount[1] & pixelCount[1]}};
+      outputX   <= writeDataX[0] & {16{rowCount[2] & columnCount[2]}} |
+                      writeDataX[1] & {16{rowCount[2] & columnCount[0]}} |
+                      writeDataX[2] & {16{rowCount[2] & columnCount[1]}} |
+                      writeDataX[3] & {16{rowCount[0] & columnCount[2]}} |
+                      writeDataX[4] & {16{rowCount[0] & columnCount[0]}} |
+                      writeDataX[5] & {16{rowCount[0] & columnCount[1]}} |
+                      writeDataX[6] & {16{rowCount[1] & columnCount[2]}} |
+                      writeDataX[7] & {16{rowCount[1] & columnCount[0]}} |
+                      writeDataX[8] & {16{rowCount[1] & columnCount[1]}};
     end
                             
     wire[15:0] absX = ({16{outputX[15]}} ^ outputX) + outputX[15];
@@ -195,11 +195,11 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     localparam S1  = 3'b010;
     localparam S2  = 3'b100;
 
-    reg[2:0] pixelCount, nextStateP;
+    reg[2:0] columnCount, nextStateP;
     reg[2:0] rowCount, nextStateR;
 
     always @* begin
-        case(pixelCount)
+        case(columnCount)
             S0:         nextStateP <= (hsync == 1'b1 || vsync == 1'b1) ? S0 : 
                                         (validCamera == 1'b1)  ? S1 : S0;
             S1:         nextStateP <= (hsync == 1'b1 || vsync == 1'b1) ? S0 : 
@@ -220,7 +220,7 @@ module sobelAccelerator #(parameter [7:0] customId = 8'd0) (
     end
 
     always @(posedge camClock) begin
-      pixelCount <= (reset == 1'b1) ? S0 : nextStateP; 
+      columnCount <= (reset == 1'b1) ? S0 : nextStateP; 
       rowCount <= (reset == 1'b1) ? S0 : nextStateR;
     end
 

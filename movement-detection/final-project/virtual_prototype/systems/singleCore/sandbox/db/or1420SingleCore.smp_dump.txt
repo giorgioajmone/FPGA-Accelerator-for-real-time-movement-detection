@@ -1,12 +1,11 @@
 
 State Machine - |or1420SingleCore|sobelAccelerator:sobelino|stateReg
-Name stateReg.ERROR stateReg.WRITE stateReg.CLOSE stateReg.INIT stateReg.REQUEST stateReg.IDLE 
-stateReg.IDLE 0 0 0 0 0 0 
-stateReg.REQUEST 0 0 0 0 1 1 
-stateReg.INIT 0 0 0 1 0 1 
-stateReg.CLOSE 0 0 1 0 0 1 
-stateReg.WRITE 0 1 0 0 0 1 
-stateReg.ERROR 1 0 0 0 0 1 
+Name stateReg.CLOSE stateReg.INIT stateReg.REQUEST stateReg.IDLE stateReg.WRITE 
+stateReg.IDLE 0 0 0 0 0 
+stateReg.REQUEST 0 0 1 1 0 
+stateReg.INIT 0 1 0 1 0 
+stateReg.CLOSE 1 0 0 1 0 
+stateReg.WRITE 0 0 0 1 1 
 
 State Machine - |or1420SingleCore|busArbiter:arbiter|s_stateReg
 Name s_stateReg.INIT_BUS_ERROR s_stateReg.REMOVE s_stateReg.END_TRANSACTION s_stateReg.BUS_ERROR s_stateReg.SERVICING s_stateReg.WAIT_BEGIN s_stateReg.GRANT s_stateReg.IDLE 

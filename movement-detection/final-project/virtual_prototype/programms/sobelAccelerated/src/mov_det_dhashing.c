@@ -22,7 +22,7 @@ void initializeBitTable() {
 
 int countSetBits(int n) { 
   return (BitsSetTable256[n & 0xff] + BitsSetTable256[(n >> 8) & 0xff] + 
-            BitsSetTable256[(n >> 16) & 0xff] + BitsSetTable256[n >> 24]); 
+            BitsSetTable256[(n >> 16) & 0xff] + BitsSetTable256[(n >> 24) & 0xff]); 
 } 
 
 void getSignature(uint32_t *signature){
@@ -131,8 +131,8 @@ int main () {
     for(int i = 0; i < 4; i++){
         hammingDistance += countSetBits(signaturePast[i] ^ signaturePresent[i]);
     } 
-    
-    if(hammingDistance > 20) printf("Movement Detected\n");
+
+    if(hammingDistance > 30) printf("Movement Detected\n");
 
     #ifdef _profileHASHING
       asm volatile ("l.nios_rrr %[out1],r0,%[in2],0xC":[out1]"=r"(cycles):[in2]"r"(1<<8|7<<4));
